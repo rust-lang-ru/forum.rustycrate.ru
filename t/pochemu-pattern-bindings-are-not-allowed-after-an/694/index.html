@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Почему &quot;pattern bindings are not allowed after an `@`&quot;? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Почему &quot;pattern bindings are not allowed after an `@`&quot;?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Почему &quot;pattern bindings are not allowed after an `@`&quot;?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Dec 12, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Dec 12, 2018 6:50 AM">
+            <time itemprop="datePublished" datetime="2018-12-12 06:50:21 +0000">Dec 12, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <pre><code class="lang-rust">// compiles:
+// fn power_level(pos @ (_, _): (u16, u16)) -&gt; i64 { pos.0 as _ }
+
+// fails to compile: "error[E0303]: pattern bindings are not allowed after an `@`":
+fn power_level(pos @ (x, _): (u16, u16)) -&gt; i64 { pos.0 as _ }
+
+fn main() {
+    let x = power_level((1, 2));
+    println!("{}", x)
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2018&amp;gist=b3953f9cc47743fb52360b628b7be0b0" rel="nofollow noopener">Playground</a></p>
+<p>Вообще не понимаю почему такое ограничение есть. Вроде бы это Copy типы, должно бы просто скопироваться и все.</p>
+<hr>
+<p><a href="https://doc.rust-lang.org/error-index.html#E0303" rel="nofollow noopener">https://doc.rust-lang.org/error-index.html#E0303</a> - тут объяснение ошибки по коду левое какое-то, пример выше ни к какому нарушению работы с памятью не должен бы приводить.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Dec 12, 2018 7:12 AM">
+            <time itemprop="datePublished" datetime="2018-12-12 07:12:34 +0000">Dec 12, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><em><a href="https://t.me/rustlang_ru/184364" rel="nofollow noopener">https://t.me/rustlang_ru/184364</a></em></p>
+<aside class="onebox githubpullrequest">
+  <header class="source">
+      <a href="https://github.com/rust-lang/rust/pull/16053" target="_blank" rel="nofollow noopener">github.com/rust-lang/rust</a>
+  </header>
+  <article class="onebox-body">
+      <a href="https://github.com/pcwalton" target="_blank" rel="nofollow noopener">
+    <img alt="pcwalton" src="https://forum.rustycrate.ru/uploads/default/original/1X/43b77bfc71ac5497c4017f7cc3faa92e6c357580.jpeg" class="thumbnail onebox-avatar" width="90" height="90">
+  </a>
+
+<h4>
+  <a href="https://github.com/rust-lang/rust/pull/16053" target="_blank" rel="nofollow noopener">librustc: Forbid pattern bindings after `@`s, for memory safety.</a>
+</h4>
+
+<div class="date">
+  by <a href="https://github.com/pcwalton" target="_blank" rel="nofollow noopener">pcwalton</a>
+  on <a href="https://github.com/rust-lang/rust/pull/16053" target="_blank" rel="nofollow noopener">08:40PM - 28 Jul 14 UTC</a>
+</div>
+
+<div class="github-commit-stats">
+  <strong>1 commits</strong>
+  changed <strong>11 files</strong>
+  with <strong>103 additions</strong>
+  and <strong>129 deletions</strong>.
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>TLDR как я понял: в 14ом году, нарвавшись на проблемы таких конструкций со ссылками, решили не тратить время на правильную реализацию, а просто <em>временно</em> запретить все это хозяйство. Ну и до сих пор никому оно не понадобилось настолько, что бы реализовать правильный вариант.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Dec 12, 2018 11:25 AM">
+            <time itemprop="datePublished" datetime="2018-12-12 11:25:55 +0000">Dec 12, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="ozkriff" data-post="1" data-topic="694">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p>Вообще не понимаю почему такое ограничение есть. Вроде бы это Copy типы, должно бы просто скопироваться и все.</p>
+</blockquote>
+</aside>
+<p>А если не Copy, как тогда быть?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Dec 12, 2018 11:43 AM">
+            <time itemprop="datePublished" datetime="2018-12-12 11:43:58 +0000">Dec 12, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Тогда ошибка должна быть, потому что мы ж не можем взять не-Copy тип и втихую скопировать его  целиком или частично.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">F</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/freecoder" class="user-link">Alexander</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Dec 13, 2018 7:28 PM">
+            <time itemprop="datePublished" datetime="2018-12-13 19:28:06 +0000">Dec 13, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a class="mention" href="/u/ozkriff/index.html">@ozkriff</a> А можешь это в том ишью написать? Ну просто, чтобы не забывлось у них там в общем потоке.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Dec 20, 2018 11:49 AM">
+            <time itemprop="datePublished" datetime="2018-12-20 11:49:46 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спросил там про планы.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Jan 15, 2022 10:22 PM">
+            <time itemprop="datePublished" datetime="2022-01-15 22:22:28 +0000">Jan 15, 2022</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спустя три года эту штуку таки починили и стабилизировали в Rust 1.56 - <a href="https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html#new-bindings-in-binding--pattern">https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html#new-bindings-in-binding--pattern</a> - и теперь <a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2018&amp;gist=b3953f9cc47743fb52360b628b7be0b0">изначальный пример</a> вполне себе собирается и работает. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=10" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

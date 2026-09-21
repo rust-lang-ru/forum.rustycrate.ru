@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Зачем нужен Rust? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/uncategorized/1/index.html">Без категории</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Зачем нужен Rust?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Зачем нужен Rust?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/uncategorized/1" class="category-badge" style="--cat-color: #AB9364"><span class="category-bullet" aria-hidden="true"></span>Без категории</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jan 4, 2022</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ivbes" class="user-link">ivbes</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jan 4, 2022 7:25 PM">
+            <time itemprop="datePublished" datetime="2022-01-04 19:25:05 +0000">Jan 4, 2022</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://doc.rust-lang.org/nightly/book/ch15-06-reference-cycles.html" class="onebox" target="_blank" rel="noopener nofollow ugc">https://doc.rust-lang.org/nightly/book/ch15-06-reference-cycles.html</a></p>
+<p>если утечки в памяти он не предотвращает? С тем же успехом тогда можно и без него на Котлине каком-нибудь, или на Nemerle. Или на питоне, вот! У питона тоже подсчёт ссылок, так что стратегически разницы никакой.</p>
+<p>даже, допустим, что есть сборщик с циклами:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://hyperbo.la/w/cactus-harvesting/">
+  <header class="source">
+      <img src="https://hyperbo.la/favicon-32x32.png" class="site-icon" width="32" height="32">
+
+      <a href="https://hyperbo.la/w/cactus-harvesting/" target="_blank" rel="noopener nofollow ugc" title="12:00AM - 15 July 2019">hyperbo.la – 15 Jul 19</a>
+  </header>
+
+  <article class="onebox-body">
+    <img src="https://hyperbo.la/hyperbola-logo.png" class="thumbnail onebox-avatar" width="400" height="400">
+
+<h3><a href="https://hyperbo.la/w/cactus-harvesting/" target="_blank" rel="noopener nofollow ugc">hyperbo.la :: Cactus Harvesting: Cycle-Aware Reference Counting in Rust</a></h3>
+
+  <p>🌵 CactusRef lets you build cyclic data structures using strong references and knows how to deallocate unreachable cycles. You can use CactusRef to implement a doubly linked list. The CactusRef API is compatible with std::rc.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+<p>
+что мешало сделать то же самое на C++?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/margarin" class="user-link">margarin</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jan 8, 2022 8:47 AM">
+            <time itemprop="datePublished" datetime="2022-01-08 08:47:27 +0000">Jan 8, 2022</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>С тем же успехом, можно поставить вопрос “зачем нужен Kotlin”:</p>
+<ul>
+<li>появление Rust Июля 7, 2010 (11 лет назад);</li>
+<li>появление Kotlin Июля 22, 2011 (10 лет назад).</li>
+</ul>
+<p>В целом, сравнение Rust, Kotlin и Python на взаимозаменяемость - это само по себе неудачное сравнение, имхо.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jan 8, 2022 10:51 AM">
+            <time itemprop="datePublished" datetime="2022-01-08 10:51:34 +0000">Jan 8, 2022</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Зачем нужен Rust? &lt;…&gt; если утечки в памяти он не предотвращает?</p>
+</blockquote>
+<ol start="0">
+<li><img src="https://forum.rustycrate.ru/images/emoji/twitter/thinking.png?v=12" title=":thinking:" class="emoji" alt=":thinking:" loading="lazy" width="20" height="20"> каким образом отсуствие строгих гарантий предотвращения утечек памяти как-то перечеркивает все остальные фишки языка и его нужность в целом? он по прежнему имеет весьма неплохую систему типов, явные unsafe’ы, хороший инструментарий, страхует от многих бед с памятьью (согласно своему определению memory safety) и очень многих UB, тд, тп.</li>
+<li>раст старается предотвращать случайные утечки памяти насколько это возможно для системного языка - т.е., в данном случае, без обязательного толстого рантайма со сборщиком мусора, такое уж фундаментальное ограничение поставленной перед языком задачи, что поделать.</li>
+<li>учитывая отсутсвие единого определения “утечки”, никакой язык с насколько угодно навороченным рантаймом их не предотвращает целиком - только подмножества.</li>
+</ol>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ivbes" class="user-link">ivbes</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jan 15, 2022 8:20 AM">
+            <time itemprop="datePublished" datetime="2022-01-15 08:20:53 +0000">Jan 15, 2022</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я согласен с тем, что все утечки никто на данный момент не предотвращает. Но мне тупо удобнее лепить на C#, чем на Rust.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jan 15, 2022 8:50 AM">
+            <time itemprop="datePublished" datetime="2022-01-15 08:50:22 +0000">Jan 15, 2022</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Так и хорошо, пиши на C#, если твой задачи позволяют это делать.</p>
+<p>Rust же не претендует для прям универсальный язык для вообще всего - он в первую очередь нужен в местах где не подходят реализации языков со слишком толстым рантаймом.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

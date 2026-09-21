@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Компиляция openssl - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Компиляция openssl</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Компиляция openssl</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Oct 5, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/qwe8013" class="user-link">qwe8013</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Oct 5, 2018 2:19 AM">
+            <time itemprop="datePublished" datetime="2018-10-05 02:19:47 +0000">Oct 5, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Делаю websocket клиент с библиотекой ws-rs. При попытке компиляции (cargo build) сообщается, о невозможности компиляции openssl:</p>
+<pre><code class="lang-nohighlight">   Compiling openssl v0.9.24
+error: failed to run custom build command for `openssl v0.9.24`
+process didn't exit successfully: `/home/qwe8013/VSCodeProjects/DumpBinance/target/release/build/openssl-700208eb71c8ae94/build-script-build` (exit code: 101)
+--- stderr
+thread 'main' panicked at 'Unable to detect OpenSSL version', /home/qwe8013/.cargo/registry/src/github.com-1ecc6299db9ec823/openssl-0.9.24/build.rs:16:14
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+The terminal process terminated with exit code: 101
+</code></pre>
+<p>Содержимое раздела dependencies Cargo.toml следующее:</p>
+<pre><code class="lang-auto">[dependencies]
+clap = "*"
+bincode = "*"
+serde = "*"
+serde_derive = "*"
+
+[dependencies.ws]
+version = "*"
+features = ["ssl"]
+</code></pre>
+<p>Как возможно решить проблему?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/BORN2LOSE" class="user-link">Norman Ritchie</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Oct 5, 2018 2:54 AM">
+            <time itemprop="datePublished" datetime="2018-10-05 02:54:02 +0000">Oct 5, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я не сталкивался с ws-rs, но судя по карго файлу, <a href="https://github.com/housleyjk/ws-rs/blob/master/Cargo.toml#L38" rel="nofollow noopener">библиотека имеет старую версию openssl</a>.</p>
+<p>Проблема решаема в <a href="https://github.com/housleyjk/ws-rs/pull/222" rel="nofollow noopener">новой версии openssl</a>. Автор слегка не коммитит в библиотеку и видимо забросил свой профиль.<br>
+Мб следует найти форк или схожую библиотеку (в экстримальном случае собрать вручную с этим ПР’ом).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Oct 5, 2018 7:34 AM">
+            <time itemprop="datePublished" datetime="2018-10-05 07:34:08 +0000">Oct 5, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Может оно системную openssl библитотеку ждет, которой у тебя не поставлено?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/BORN2LOSE" class="user-link">Norman Ritchie</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Oct 5, 2018 8:23 AM">
+            <time itemprop="datePublished" datetime="2018-10-05 08:23:29 +0000">Oct 5, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В большинстве дистров она есть + он же пакеты устанавливает, а карго <a href="https://github.com/rust-lang/cargo/blob/master/Cargo.toml#L60" rel="nofollow noopener">завязан на openssl</a>. Если бы <code>openssl</code> не было в системе, карго не скачивал бы зависимости.</p>
+<p>Тут дело скорее в том, что в дистрибутиве <a class="mention" href="/u/qwe8013/index.html">@qwe8013</a> версия библиотеки более свежая, чем <code>openssl v0.9.24</code>.<br>
+Давнгрейдить <code>openssl</code> дурная затея, а вот обновить зависимость в <code>ws-rs</code> идея хорошая <img src="https://forum.rustycrate.ru/images/emoji/twitter/slightly_smiling_face.png?v=6" title=":slightly_smiling_face:" class="emoji" alt=":slightly_smiling_face:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Oct 5, 2018 8:25 AM">
+            <time itemprop="datePublished" datetime="2018-10-05 08:25:56 +0000">Oct 5, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Ну, в убунте, например, по-умолчанию есть просто <code>libssl</code> пакет с самой библиотекой, нужной для работы уже готовых приложений, но для разработки <code>libssl-dev</code> пакет надо ставить отдельно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/qwe8013" class="user-link">qwe8013</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Oct 5, 2018 12:49 PM">
+            <time itemprop="datePublished" datetime="2018-10-05 12:49:52 +0000">Oct 5, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Скачал проект ws-rs с гитхаба, поставил там версию openssl 0.10, после чего, при попытке сборки компилятор, что вполне ожидаемо, выдал кучу ошибок в “ws-rs/src/connection.rs”, так что придётся, видимо, юзать другую либу.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Oct 5, 2018 12:52 PM">
+            <time itemprop="datePublished" datetime="2018-10-05 12:52:24 +0000">Oct 5, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Так а системный libssl-dev (или какой там в твоей системе аналог) поставлен? Просто сишный проект с openssl получается собрать?</p>
+<p>UPD: Еще у rust-openssl есть <a href="https://github.com/sfackler/rust-openssl#vendored">https://github.com/sfackler/rust-openssl#vendored</a> - что бы он использовал не системную библиотеку, а свою собрал.</p>
+<p>UPD2: А может про версии была и правильная мысль: <a href="https://github.com/sfackler/rust-openssl/issues/987">https://github.com/sfackler/rust-openssl/issues/987</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/qwe8013" class="user-link">qwe8013</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Oct 5, 2018 6:30 PM">
+            <time itemprop="datePublished" datetime="2018-10-05 18:30:02 +0000">Oct 5, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Просто сишный проект с openssl получается собрать?</p>
+</blockquote>
+<p>Да<br>
+ОС - Arch linux</p>
+<p>Как я и сказал, заюзаю другую либу.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

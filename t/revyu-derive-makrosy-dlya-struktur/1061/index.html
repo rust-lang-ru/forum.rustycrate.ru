@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ревью: derive-макросы для структур - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Ревью: derive-макросы для структур</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Ревью: derive-макросы для структур</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Feb 6, 2020</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chernomor" class="user-link">Sergey</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Feb 6, 2020 7:31 PM">
+            <time itemprop="datePublished" datetime="2020-02-06 19:31:30 +0000">Feb 6, 2020</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Понадобилось мне сделать всякие инкрементальные счетчики в приложении. Завел несколько структур с числовыми полями под каждый тип счетчика (т.е. каждая структура содержит свой набор счетчиков). Счетчики инкрементируются локально в треде, периодически скидываются в глобальные структуры. Происходит это через сложение полей локальной структуры с соответствующими полями глобальной. Потом специальной поток конвертит структуры в строку (в формате <a href="https://github.com/statsite/statsite#protocol" rel="nofollow noopener">https://github.com/statsite/statsite#protocol</a>, но не суть) и отправляет куда надо.</p>
+<p>Поскольку счетчиков изрядное количество, накидал пару derive-макросов:</p>
+<ul>
+<li>для сложения (ну, и, чтобы два раза не вставать,  для вычитания) полей однотипных структур (<a href="https://github.com/chernomor/ops4struct" rel="nofollow noopener">https://github.com/chernomor/ops4struct</a>)</li>
+<li>для конвертации полей в hashmap&lt;string, string&gt; (<a href="https://github.com/chernomor/struct2hashmap" rel="nofollow noopener">https://github.com/chernomor/struct2hashmap</a>).</li>
+</ul>
+<p>Буду рад замечаниям и предложениям (можно и по исходной задаче)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/aka_dude" class="user-link">Andrew Andersen</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Feb 16, 2020 7:26 PM">
+            <time itemprop="datePublished" datetime="2020-02-16 19:26:59 +0000">Feb 16, 2020</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Привет! Если “входные данные” для макроса неправильные, принято возвращать <code>compile_error!(...)</code> — это позволяет компилятору указать место, где вызывается макрос. Наверное, удобно будет сделать <code>fn prepare(TokenStream) -&gt; Result&lt;TokenStream, TokenStream&gt;</code>, и возвращать <code>Err(quote!{ compile_error!("Error message") })</code> при ошибке.<br>
+Не знал, что <code>quote!</code> умеет разворачивать <code>#( ... )*</code> из итераторов <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=9" title=":slight_smile:" class="emoji" alt=":slight_smile:"><br>
+И ещё: почему у тебя идентация в 8 пробелов? Дико выглядит</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chernomor" class="user-link">Sergey</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Feb 18, 2020 6:39 PM">
+            <time itemprop="datePublished" datetime="2020-02-18 18:39:05 +0000">Feb 18, 2020</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо за совет, переделал обработку ошибок.</p>
+<p>Отступы у меня табами были (с отображением по четыре пробела). Переформатировал на пробелы.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

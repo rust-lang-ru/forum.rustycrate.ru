@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Как превратить таймаут в ошибку? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Как превратить таймаут в ошибку?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Как превратить таймаут в ошибку?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">May 11, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="May 11, 2018 9:03 AM">
+            <time itemprop="datePublished" datetime="2018-05-11 09:03:22 +0000">May 11, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Есть <code>tokio::Stream&lt;Item = u8&gt;</code> и <code>Future&lt;Item = ()&gt;</code>. Они объединены через <code>select</code>. <code>Future&lt;Item = ()&gt;</code> это глобальный таймаут. Он сейчас приходит как <code>Ok(())</code>. Как его превратить в <code>Err(TimedOut)</code> чтобы <code>select</code> прервался?</p>
+<pre><code class="lang-rust">#[derive(Debug)]
+enum Unified {
+    U8(u8),
+    Timeout(()),
+}
+...
+            let stdout = child.stdout().take().unwrap();
+            let mut timeout_reader = TimeoutReader::new(stdout, &amp;core.handle());
+            timeout_reader.set_timeout(Some(Duration::from_secs(20)));
+
+            let global_timeout = tokio_core::reactor::Timeout::new(Duration::from_secs(10), &amp;core.handle()).unwrap();
+            let timeout_stream = global_timeout.into_stream();
+            let timeout_stream = timeout_stream.map(Unified::Timeout);
+
+            ...
+            let read_stream = read_stream.map(Unified::U8);
+            let joined_stream = read_stream.select(timeout_stream);
+            let mut iter = joined_stream.wait();
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="May 11, 2018 9:18 AM">
+            <time itemprop="datePublished" datetime="2018-05-11 09:18:09 +0000">May 11, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Сделал так:</p>
+<pre><code class="lang-rust">
+            let global_timeout = poll_fn(move || -&gt; Poll&lt;Option&lt;u8&gt;, std::io::Error&gt; {
+                let timeout_poll = global_timeout.poll();
+                match timeout_poll {
+                    Ok(Async::Ready(())) =&gt; Err(std::io::Error::from(std::io::ErrorKind::TimedOut)),
+                    Ok(Async::NotReady) =&gt; Ok(Async::NotReady),
+                    Err(e) =&gt; Err(e),
+                }
+            });
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Albibek" class="user-link">Albibek</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="May 15, 2018 7:47 PM">
+            <time itemprop="datePublished" datetime="2018-05-15 19:47:29 +0000">May 15, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Достаточно сделать <code>global_timeout.then(|_|Err(()))</code></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

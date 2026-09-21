@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Многократное использование кода - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Многократное использование кода</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Многократное использование кода</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Oct 18, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/SmallNibbler" class="user-link">SmallNibbler</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Oct 18, 2019 7:29 PM">
+            <time itemprop="datePublished" datetime="2019-10-18 19:29:41 +0000">Oct 18, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Здравствуйте. Хочу сразу же извиниться, я понимаю что для кого-то ответ на мой вопрос покажется  очевидным. Но я не могу понять, как мне избежать многократного использования кода в функции “value”? Я пытаюсь использовать замыкания, но ничего из этого не выходит, так как владение “self” передаётся в замыкание и “match” выдаёт ошибку.</p>
+<pre><code>struct Cacher&lt;T,U&gt;
+    where T: Fn(U) -&gt; U
+{
+    calculation: T,
+    argument: Option&lt;U&gt;,
+    value: Option&lt;U&gt;,
+}
+
+impl&lt;T,U&gt; Cacher&lt;T,U&gt;
+    where T: Fn(U) -&gt; U, U: Copy + PartialEq
+{
+    fn new(calculation: T) -&gt; Cacher&lt;T,U&gt; {
+        Cacher {
+            calculation,
+            argument: None,
+            value: None,
+        }
+    }
+
+    fn value(&amp;mut self, arg: U) -&gt; U {
+
+        /*let mut f = |a: U| -&gt; U {
+            let v = (self.calculation)(a);
+            self.argument = Some(a);
+            self.value = Some(v);
+            v
+        };*/
+
+        match self.value {
+            Some(v) =&gt; {
+                if self.argument.unwrap() == arg { v }
+                else {
+                    let v = (self.calculation)(arg);
+                    self.argument = Some(arg);
+                    self.value = Some(v);
+                    v
+                    //f(arg)
+                }
+            },
+            None =&gt; {
+                let v = (self.calculation)(arg);
+                self.argument = Some(arg);
+                self.value = Some(v);
+                v
+            },
+        }
+    }
+}</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Oct 19, 2019 6:33 AM">
+            <time itemprop="datePublished" datetime="2019-10-19 06:33:31 +0000">Oct 19, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вариант с выносом общего кода в обычный метод не годится?</p>
+<pre><code class="lang-rust">// ...
+    fn value(&amp;mut self, arg: U) -&gt; U {
+        if let Some(v) = self.value {
+            if self.argument.unwrap() == arg {
+                v
+            } else {
+                self.f(arg)
+            }
+        } else {
+            self.f(arg)
+        }
+    }
+
+    fn f(&amp;mut self, arg: U) -&gt; U {
+        let v = (self.calculation)(arg);
+        self.argument = Some(arg);
+        self.value = Some(v);
+        v
+    }
+// ...
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=0145607287874432fc89c6d3a8586a9f" rel="nofollow noopener"><strong>Playground</strong></a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/SmallNibbler" class="user-link">SmallNibbler</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Oct 19, 2019 7:08 AM">
+            <time itemprop="datePublished" datetime="2019-10-19 07:08:06 +0000">Oct 19, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо, это подходящий вариант. Я думал что есть какой либо другой способ, сделать это в пределах одной функции. Если кто нибудь знает такой, прошу напишите, очень интересно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Oct 19, 2019 8:05 AM">
+            <time itemprop="datePublished" datetime="2019-10-19 08:05:54 +0000">Oct 19, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Что ж, во первых, само сопоставление можно упростить и просто схлопнуть две ветки, тогда ничего никуда выносить вообще не обязательно:</p>
+<pre><code class="lang-rust">    fn value(&amp;mut self, arg: U) -&gt; U {
+        match self.value {
+            Some(v) if self.argument.unwrap() == arg =&gt; v,
+            _ =&gt; {
+                let v = (self.calculation)(arg);
+                self.argument = Some(arg);
+                self.value = Some(v);
+                v
+            }
+        }
+    }
+</code></pre>
+<p>Или можно таки вмазаться замыканием, но, кмк, в этой ситуации проще просто явно в него self передавать только на время вызова, а не пытаться его захватить на все время жизни замыкания и мучаться с конфликтами ВЖ:</p>
+<pre><code class="lang-rust">    fn value(&amp;mut self, arg: U) -&gt; U {
+        let f = |this: &amp;mut Self, a: U| -&gt; U {
+            let v = (this.calculation)(a);
+            this.argument = Some(a);
+            this.value = Some(v);
+            v
+        };
+
+        if let Some(v) = self.value {
+            if self.argument.unwrap() == arg {
+                v
+            } else {
+                f(self, arg)
+            }
+        } else {
+            f(self, arg)
+        }
+    }
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/SmallNibbler" class="user-link">SmallNibbler</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Oct 19, 2019 8:30 AM">
+            <time itemprop="datePublished" datetime="2019-10-19 08:30:13 +0000">Oct 19, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Супер, кажется это то что нужно. Понял свою ошибку. Огромное спасибо.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Oct 24, 2019 10:46 AM">
+            <time itemprop="datePublished" datetime="2019-10-24 10:46:02 +0000">Oct 24, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я бы ещё отметил, что <code>self.argument.unwrap()</code> во всех реализациях мягко намекает, что более идиоматично было бы хранить не <code>argument: Option&lt;U&gt;</code> и <code>value: Option&lt;U&gt;</code>, которые всегда обязаны быть либо оба Some, либо оба None, а <code>cache: Option&lt;(U, U)&gt;</code>, который бы это гарантировал автоматически.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

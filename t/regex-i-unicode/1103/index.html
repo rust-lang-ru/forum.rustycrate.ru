@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Regex и unicode - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Regex и unicode</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Regex и unicode</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jul 22, 2020</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mks" class="user-link">mks</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jul 22, 2020 3:57 PM">
+            <time itemprop="datePublished" datetime="2020-07-22 15:57:04 +0000">Jul 22, 2020</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Добрый день.<br>
+Нахожусь в поиске библиотеки для работы с регулярками. Гугл так или иначе приводит к <a href="https://github.com/rust-lang/regex" rel="nofollow noopener">regex</a>. Её метод <strong>find_at</strong> выдаёт начало найденого текста относительно начала строки в байтах, а мне надо в символах. Например есть строка <strong>привет</strong> мне надо что бы find выдавал начало подстроки <strong>ивет</strong> со 2-го символа а не с  4-го байта. Как мне подойти к решению задачи?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/stencillogic" class="user-link">Stencillogic</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jul 22, 2020 4:33 PM">
+            <time itemprop="datePublished" datetime="2020-07-22 16:33:34 +0000">Jul 22, 2020</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Обычные строки, str и String, в rust кодируются в utf-8. Символ utf-8 (можно грубо считать что буква), имеет длину от 1 до 4 байт, в зависимости от количества единиц в начале первого байта:</p>
+<pre><code>1 байт  - 0xxxxxxx
+2 байта - 110xxxxx
+3 байта - 1110xxxx
+4 байта - 11110xxx
+</code></pre>
+<p>Т.е. чтобы получить подстроку можно отсечь n-ное количество байт, высчитав их количество по первому байту символа. Возможно уже существует какой-то небольшой крейт для этого, но можно и самому написать функцию.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jul 22, 2020 5:30 PM">
+            <time itemprop="datePublished" datetime="2020-07-22 17:30:06 +0000">Jul 22, 2020</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Тут еще вопрос - <a href="https://manishearth.github.io/blog/2017/01/14/stop-ascribing-meaning-to-unicode-code-points/">что считать символом</a>. Хз можно ли это сделать как-то красивее или эффективнее, но я бы для начала попробовал итерироваться по отступам графемных кластеров при помощи <a href="https://docs.rs/unicode-segmentation/1.6.0/unicode_segmentation/trait.UnicodeSegmentation.html#tymethod.grapheme_indices"> <code>grapheme_indices</code></a> и параллельно считать их.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mks" class="user-link">mks</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jul 22, 2020 5:35 PM">
+            <time itemprop="datePublished" datetime="2020-07-22 17:35:59 +0000">Jul 22, 2020</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Ясно, спасибо за ответы. Думал может есть путь попроще чем погружаться в тонкости unicode и кодировок. У меня задача учебная, попробую обойтись без регулярок и запрограммировать конечный автомат руками, перегнав строку в <code>Vec&lt;char&gt;</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jul 22, 2020 5:54 PM">
+            <time itemprop="datePublished" datetime="2020-07-22 17:54:39 +0000">Jul 22, 2020</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да тут не так что бы особо нюансы, вроде. Я вот что-то такое имел в виду как стартовую точку:</p>
+<pre><code class="lang-rust">use regex::Regex;
+use unicode_segmentation::UnicodeSegmentation as US;
+
+fn index_byte_to_grapheme(s: &amp;str, index: usize) -&gt; Option&lt;usize&gt; {
+    for (grapheme_i, (byte_i, _grapheme)) in US::grapheme_indices(s, true).enumerate() {
+        // dbg!((grapheme_i, byte_i, _grapheme));
+        if byte_i == index {
+            return Some(grapheme_i);
+        }
+    }
+    None
+}
+
+fn main() {
+    let s = "абвгд";
+    let re = Regex::new("вг").unwrap();
+    let mat = re.find_at(s, 0).unwrap();
+    dbg!(mat);
+    let start_grapheme_i = index_byte_to_grapheme(s, mat.start());
+    let end_grapheme_i = index_byte_to_grapheme(s, mat.end());
+    dbg!(start_grapheme_i);
+    dbg!(end_grapheme_i);
+}
+</code></pre>
+<p>(<a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=13ff968de232eb2aab6e49457a44c926"><strong>песочница</strong></a>)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/stencillogic" class="user-link">Stencillogic</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Jul 22, 2020 8:20 PM">
+            <time itemprop="datePublished" datetime="2020-07-22 20:20:06 +0000">Jul 22, 2020</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Если будете использовать только ASCII, то ASCII является подмножеством utf-8, и поэтому с ним смело можно работать как с однобайтовым char массивом. Совсем просто будет.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mks" class="user-link">mks</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Jul 22, 2020 8:25 PM">
+            <time itemprop="datePublished" datetime="2020-07-22 20:25:07 +0000">Jul 22, 2020</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="stencillogic" data-post="6" data-topic="1103">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/stencillogic/48/620_2.png" class="avatar"> stencillogic:</div>
+<blockquote>
+<p>Если будете использовать только ASCII</p>
+</blockquote>
+</aside>
+<p>Если только с ascii то понятно, мне было интересно как быть когда надо хотя бы с кирилицей работать. Сталкиваюсь с rust впервые, в других языках, таких как python или Go обычно в стандартной библиотеке есть такие вещи.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Dushistov" class="user-link">Evgeniy Dushistov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Jul 23, 2020 8:50 AM">
+            <time itemprop="datePublished" datetime="2020-07-23 08:50:27 +0000">Jul 23, 2020</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="mks" data-post="7" data-topic="1103">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/m/50afbb/48.png" class="avatar"> mks:</div>
+<blockquote>
+<p>стандартной библиотеке есть такие вещи</p>
+</blockquote>
+</aside>
+<p>Так и Rust есть, непонятно зачем <code>unicode_segmentation</code>,<br>
+можно вызвать метод  <code>char_indices</code> у <code>&amp;str</code> и понять какой char соответствует найденному смещению байтах.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Jul 23, 2020 8:57 AM">
+            <time itemprop="datePublished" datetime="2020-07-23 08:57:54 +0000">Jul 23, 2020</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="mks" data-post="7" data-topic="1103">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/m/50afbb/48.png" class="avatar"> mks:</div>
+<blockquote>
+<p>в других языках, таких как python или Go обычно в стандартной библиотеке есть такие вещи</p>
+</blockquote>
+</aside>
+<p>Если только с кириллицей надо работать и всё, то графемные кластеры тебе не актуальны и хватит работы с кодпоинтами. Как <a class="mention" href="/u/dushistov/index.html">@Dushistov</a> пишет - с этим справятся и встроенные char’ы языка.</p>
+<blockquote>
+<p>непонятно зачем <code>unicode_segmentation</code></p>
+</blockquote>
+<p>Для нормальной работы с юникодом (см ссылку на статью выше)? Например, что бы эмоджи из нескольких кодпоинтов не взрывали код - изначально же в вопросе не было обозначено, что нужна работа только с кириллицей.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

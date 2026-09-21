@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Несколько имплементаций некоторого trait, для одного и того же типа, в разных модулях - вызывают ошибку компилятора conflicting implementation for - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Несколько имплементаций некоторого trait, для одного и того же типа, в разных модулях - вызывают ошибку компилятора conflicting implementation for</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Несколько имплементаций некоторого trait, для одного и того же типа, в разных модулях - вызывают ошибку компилятора conflicting implementation for</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Aug 31, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Aug 31, 2018 3:13 PM">
+            <time itemprop="datePublished" datetime="2018-08-31 15:13:45 +0000">Aug 31, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <pre><code class="lang-auto">struct Bar(i32);
+
+mod a {
+    pub fn same_name() {} ///  isolated
+
+    use ::std::io::*;
+    impl Read for super::Bar { //clash
+        fn read(&amp;mut self, buf: &amp;mut [u8]) -&gt; Result&lt;usize&gt; {
+            Ok(0)
+        }
+    }
+}
+
+mod b {
+    pub fn same_name() {} ///  isolated
+
+    use ::std::io::*;
+    impl Read for super::Bar {  //clash
+        fn read(&amp;mut self, buf: &amp;mut [u8]) -&gt; Result&lt;usize&gt; {
+            Ok(0)
+        }
+    }
+}
+
+fn main() {
+}
+</code></pre>
+<p>пример рафинированный.</p>
+<p>два модуля a и b<br>
+с одинаковым содержимым.</p>
+<p>функции  с одинаковыми именами s в модулях изолируются и все с ними хорошо</p>
+<p>а имплементация  trait Read НЕ изолируется ??? ошибка вида</p>
+<pre><code class="lang-nohighlight">&gt; error[E0119]: conflicting implementations of trait std::io::Read for type Bar:
+&gt; --&gt; src\main.rs:20:5
+&gt;    |
+&gt;  8 | impl Read for super::Bar {
+&gt;    | ------------------------ first implementation here
+&gt; ...
+&gt; 20 | impl Read for super::Bar {
+&gt;    | ^^^^^^^^^^^^^^^^^^^^^^^^ conflicting implementation for Bar
+&gt; 
+&gt; error: aborting due to previous error
+&gt; 
+&gt; For more information about this error, try rustc --explain E0119.
+&gt; error[E0119]: conflicting implementations of trait std::io::Read for type Bar:
+&gt; --&gt; src\main.rs:20:5
+&gt;    |
+&gt;  8 | impl Read for super::Bar {
+&gt;    | ------------------------ first implementation here
+&gt; ...
+&gt; 20 | impl Read for super::Bar {
+&gt;    | ^^^^^^^^^^^^^^^^^^^^^^^^ conflicting implementation for Bar
+</code></pre>
+<p>всю голову сломал. выручайте.</p>
+<p><a href="https://github.com/rust-lang/rust/issues/53862" rel="nofollow noopener">запилил в багрепорт</a>. будем посмотреть…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Aug 31, 2018 7:00 PM">
+            <time itemprop="datePublished" datetime="2018-08-31 19:00:45 +0000">Aug 31, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да вроде все штатно - нельзя дважды для одного типа один и тот же типаж реализовать.</p>
+<p>Модули тут не понятно как помочь должны. Ты же потом в другом месте (вообще вне модулей <code>a</code> и <code>b</code>) импортируешь <code>Bar</code> и импортируешь <code>Read</code> - откуда компилятору знать какую из реализаций надо использовать?</p>
+<p>Это просто из интереса вопрос? Или <a href="https://ru.meta.stackoverflow.com/questions/709/%D0%A7%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-%D0%9E%D1%88%D0%B8%D0%B1%D0%BA%D0%B0-%D0%BC%D0%BE%D0%BB%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D0%BB%D0%B8-%D0%9E%D1%88%D0%B8%D0%B1%D0%BA%D0%B0-xy">какую-то задачу этим пытался решить</a>?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Sep 1, 2018 3:47 AM">
+            <time itemprop="datePublished" datetime="2018-09-01 03:47:26 +0000">Sep 1, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>откуда компилятору знать какую из</p>
+</blockquote>
+<p>компилятору ? да  -  его дело маленькое, просто соответствовать правилам.</p>
+<p>вот с функциям,  с одинаковыми именами, но в разных модулях, которые их изолируют, он, молодец, справился.</p>
+<blockquote>
+<p>Это просто из интереса вопрос? Или</p>
+</blockquote>
+<p>мне сейчас не до изысканий, мне рабочую версию на Rust получить хочется. И задачи стоят вполне реальные.</p>
+<p>В <strong>BlackBox</strong>  отправка и получение данных в виде потока байт происходит через Channel.<br>
+Под подобную задачу во всех языках создана инфраструктура позволяющая выстраивать цепочки обработки получаемых/отправляемых данных.</p>
+<p>В <strong>Java</strong>  это  java.io.InputStream / java.io.OutputStream<br>
+в <strong>С#</strong>  - System.IO.Stream …</p>
+<p>и вся остальная инфраструктура, обмен байтами по сети, или в файл строится опираясь на эти базовые интерфейсы, позволяя стыковать цепочки.</p>
+<p>в Rust я ожидал увидеть подобное, и увидел,<br>
+::std::io::Read<br>
+::std::io::Write</p>
+<p>попытался имплементировать … и даже все получилось.<br>
+НО(!)<br>
+В <strong>BlackBox</strong> существует два типа Channel .<br>
+Один продвинутый - с сжатием данных и байт стаффом и вычислением контрольной суммы, для работы по голому USART например по радиоканалу управления квадрокоптером.</p>
+<p>Другой простой - только со сжатием данных. Когда зашита от ошибок реализована на нижележащем уровне  Ethernet например.</p>
+<p>В Java и C# я эти варианты реализовал наследованием, В Rust соответственно подобного наследования у структур нет.</p>
+<p>Соответственно я пытаюсь сделать две реализации Read и Write для простого и продвинутого случая.</p>
+<blockquote>
+<p>откуда компилятору знать какую из реализаций надо использовать?</p>
+</blockquote>
+<p>Предполагалось положить эти имплементации в разные модули.</p>
+<p>Когда необходима простая отправку/получения - импортируем модуль с простой реализацией,  когда продвинутая - с другой.</p>
+<p>C функциями работает</p>
+<pre data-code-wrap="Rust"><code class="lang-Rust">mod a {
+    pub fn same_name() { println!("mod a") }
+}
+
+mod b {
+    pub fn same_name() { println!("mod b") }
+}
+
+fn main() {
+    {
+        use a::*;
+        same_name();
+    }
+    {
+        use b::*;
+        same_name();
+    }
+}
+</code></pre>
+<blockquote>
+<p>mod a<br>
+mod b</p>
+<p>Process finished with exit code 0</p>
+</blockquote>
+<p>Ожидал подобной диспетчеризации и в случае имплементации.<br>
+По моему логично.<br>
+Как минимум меня удивляет отсутствие межмодульной изоляции.</p>
+<blockquote>
+<p>Да вроде все штатно</p>
+</blockquote>
+<p>за ссылочку был бы благодарен.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Sep 1, 2018 5:43 AM">
+            <time itemprop="datePublished" datetime="2018-09-01 05:43:33 +0000">Sep 1, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>за ссылочку был бы благодарен.</p>
+</blockquote>
+<p>Затрудняюсь дать ссылку прям вот на конкретный ответ “почему нельзя дважды реализовать один и тот же типаж для одного и того же типа”, оно просто логически вытекает из того как работают типажи: <a href="https://doc.rust-lang.org/book/first-edition/traits.html" class="inline-onebox">Traits - The Rust Programming Language</a></p>
+<p>Ну и может само описание ошибки еще: <a href="https://doc.rust-lang.org/stable/error-index.html#E0119" class="inline-onebox">Rust error codes index - Error codes index</a></p>
+<blockquote>
+<p>Ожидал подобной диспетчеризации и в случае имплементации.</p>
+</blockquote>
+<p>Реализации типажей глобальны. Если бы модуля <code>b</code> не было, то ты бы мог импортировать в другой модуль сам типаж и саму структуру и сразу использовать факт реализации одного для другого:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">mod c {
+   use Bar;
+   use std::io::Read;
+
+    let mut b = Bar(0);
+    b.read(.....);
+}
+</code></pre>
+<p>И тут не важно где сама реализация была.</p>
+<blockquote>
+<p>C функциями работает</p>
+</blockquote>
+<p>Да, потому что в месте вызова функции тебе нужно просто что бы путь до нее был однозначен. Сделал нужный use и все.</p>
+<blockquote>
+<p>Как минимум меня удивляет отсутствие межмодульной изоляции.</p>
+</blockquote>
+<p>Если бы она была, то или я не понимаю как бы система работала (какой-то другой синтаксис и семантика импорта нужны были бы), или типажи стали бы почти бесполезны.</p>
+<blockquote>
+<p>Соответственно я пытаюсь сделать две реализации Read и Write для простого и продвинутого случая.</p>
+</blockquote>
+<p>А просто два типажа сделать не вариант?</p>
+<pre data-code-wrap="rust"><code class="lang-rust">#[derive(Debug)]
+struct Bar(pub u8);
+
+mod a {
+    use std::io;
+    use Bar;
+
+    pub trait A {
+        fn read(&amp;mut self, buf: &amp;mut [u8]) -&gt; io::Result&lt;usize&gt;;
+    }
+
+    impl A for Bar {
+        fn read(&amp;mut self, buf: &amp;mut [u8]) -&gt; io::Result&lt;usize&gt; {
+            buf[0] = 1;
+            buf[1] = self.0;
+            Ok(0)
+        }
+    }
+}
+
+mod b {
+    use std::io;
+    use Bar;
+    
+    pub trait B {
+        fn read(&amp;mut self, buf: &amp;mut [u8]) -&gt; io::Result&lt;usize&gt;;
+    }
+
+    impl B for Bar {
+        fn read(&amp;mut self, buf: &amp;mut [u8]) -&gt; io::Result&lt;usize&gt; {
+            buf[0] = 2;
+            buf[1] = self.0;
+            Ok(0)
+        }
+    }
+}
+
+fn use_a() {
+    use a::A;
+
+    let mut bar = Bar(1);
+    let mut buf = [0; 4];
+    bar.read(&amp;mut buf).unwrap();
+    println!("a: bar={:?}, buf={:?}", bar, buf);
+}
+
+fn use_b() {
+    use b::B;
+
+    let mut bar = Bar(2);
+    let mut buf = [0; 4];
+    bar.read(&amp;mut buf).unwrap();
+    println!("b: bar={:?}, buf={:?}", bar, buf);
+}
+
+fn main() {
+    use_a();
+    use_b();
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?gist=434219c8c5ebb968a93800b20d459df2&amp;version=stable&amp;mode=debug&amp;edition=2015">Playground</a></p>
+<p>UPD: На всякий добавлю еще что если для <code>Bar</code> реализовать <code>io::Read</code> и отнаследовать типажи от него же, то можно будет <a href="https://play.rust-lang.org/?gist=7e4f734901bf78ccddacabd2568db9bd&amp;version=stable&amp;mode=debug&amp;edition=2015">переопределять и использовать методы <code>io::Read</code> в <code>A</code> и <code>B</code></a>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Sep 1, 2018 6:19 AM">
+            <time itemprop="datePublished" datetime="2018-09-01 06:19:46 +0000">Sep 1, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Во первых большое спасибо за оперативные и полноценные ответы.<br>
+Я их внимательно поизучаю…</p>
+<p>а пока я сделал вот так.</p>
+<pre data-code-wrap="Rust"><code class="lang-Rust">extern "C" {
+    pub fn input_bytes(ch: *mut Channel, dst: *mut u8, dst_bytes: usize) -&gt; u32;
+}
+extern "C" {
+    pub fn output_bytes(ch: *mut Channel, src: *const u8, src_bytes: usize);
+}
+extern "C" {
+    pub fn input_bytes_adv(ch: *mut Channel, dst: *mut u8, dst_bytes: usize) -&gt; u32;
+}
+extern "C" {
+    pub fn output_bytes_adv(ch: *mut Channel, src: *const u8, src_bytes: usize);
+}
+
+#[repr(C)]
+pub struct Channel {
+    pub time: u32,
+    pub b2p: Channel_Flow,
+    pub p2b: Channel_Flow,
+    pub process: ::std::option::Option&lt;
+        unsafe extern "C" fn(pack: *mut PackBytes, id: i32) -&gt; *mut PackBytes,
+    &gt;,
+    pub bits: u16,
+}
+
+
+impl ::std::io::Read for Channel {
+    fn read(&amp;mut self, dst: &amp;mut [u8]) -&gt; Result&lt;usize, ::std::io::Error&gt; {
+        unsafe { Ok(input_bytes(self, dst.as_mut_ptr(), dst.len()) as usize) }// input_bytes !!
+    }
+}
+
+impl ::std::io::Write for Channel {
+    fn write(&amp;mut self, src: &amp;[u8]) -&gt; Result&lt;usize, ::std::io::Error&gt; {
+        unsafe { output_bytes(self, src.as_ptr(), src.len()); }
+        Ok(src.len() as usize)
+    }
+    
+    fn flush(&amp;mut self) -&gt; Result&lt;(), ::std::io::Error&gt; {
+        Ok(())
+    }
+}
+
+struct AdvChannel(Channel);
+
+impl ::std::io::Read for AdvChannel {
+    fn read(&amp;mut self, dst: &amp;mut [u8]) -&gt; Result&lt;usize, ::std::io::Error&gt; {
+        unsafe { Ok(input_bytes_adv(transmute(self), dst.as_mut_ptr(), dst.len()) as usize) } //input_bytes_adv !!
+    }
+}
+
+impl ::std::io::Write for AdvChannel {
+    fn write(&amp;mut self, src: &amp;[u8]) -&gt; Result&lt;usize, ::std::io::Error&gt; {
+        unsafe { output_bytes_adv(transmute(self), src.as_ptr(), src.len()); }
+        Ok(src.len() as usize)
+    }
+    
+    fn flush(&amp;mut self) -&gt; Result&lt;(), ::std::io::Error&gt; {
+        Ok(())
+    }
+}
+</code></pre>
+<blockquote>
+<p>Реализации типажей глобальны.</p>
+</blockquote>
+<p>хотелось бы прочитать о том, что имплементация trait для типа работает глобально, вне всяких границ модуля.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Sep 1, 2018 6:22 AM">
+            <time itemprop="datePublished" datetime="2018-09-01 06:22:51 +0000">Sep 1, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Две разные структуры тоже вполне себе решение <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=6" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Sep 1, 2018 6:31 AM">
+            <time itemprop="datePublished" datetime="2018-09-01 06:31:45 +0000">Sep 1, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>тоже вполне себе</p>
+</blockquote>
+<p>да я как то старался избегать такого решения. хотя и очевидно, что по сути  Channel  и AdvChannel  одного типа и функционально индетичны. Можно было бы в этом месте компилятору Rust   и “сахарком посыпать” чтобы избегать всяких <strong>self.0.</strong></p>
+<blockquote>
+<p>Реализации типажей глобальны. Если бы модуля  <code>b</code>  не было, то ты бы мог импортировать в другой модуль сам типаж и саму структуру и сразу использовать факт реализации одного для другого:</p>
+<pre><code class="lang-auto">mod c {
+   use Bar;
+   use std::io::Read;
+
+    let mut b = Bar(0);
+    b.read(.....);
+}
+</code></pre>
+<p>И тут не важно где сама реализация была.</p>
+</blockquote>
+<p>ну а так бы я импортировал модуль a или b  - только ту имплементацию которая в данном месте мне  нужна.</p>
+<blockquote>
+<p>Если бы она была, то или я не понимаю как бы система работала</p>
+</blockquote>
+<p>все документируется.</p>
+<p>Типа  - есть вот такая имплементация… а ещё вот такая, и такая для того чтобы выбрать импортируйте модуль а или b или с</p>
+<p>легко, НЕ преписывая кода, только переключая импортируемые модули меняем функционал</p>
+<p>в других языках это активно используется и выставляется как фича…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Sep 1, 2018 6:56 AM">
+            <time itemprop="datePublished" datetime="2018-09-01 06:56:27 +0000">Sep 1, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А вариант с двумя типажами, который я выше написал, чем тебе не нравится? Именно как ты пишешь - импортируешь тот типаж, который нужен в нужное место и пользуешься его функционалом. Захотели изменить поведение - заменили use одного типажа на другой.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Sep 1, 2018 7:05 AM">
+            <time itemprop="datePublished" datetime="2018-09-01 07:05:51 +0000">Sep 1, 2018</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>я изучаю этот пример.<br>
+внимательно перечитываю <strong>Trait Objects</strong> и <strong>Trait Object Layout</strong></p>
+<p>обязательно отвечу. на первый взгляд всё работоспособно.<br>
+Ещё раз спасибо за подсказки.<br>
+Очень ценню!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Sep 1, 2018 8:22 AM">
+            <time itemprop="datePublished" datetime="2018-09-01 08:22:57 +0000">Sep 1, 2018</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>не, что то не лезет сова на глобус.</p>
+<pre><code class="lang-auto">struct Channel(u8);
+
+impl ::std::io::Read for Channel {
+    fn read(&amp;mut self, dst: &amp;mut [u8]) -&gt; Result&lt;usize, ::std::io::Error&gt; { Ok(0) }
+}
+
+impl ::std::io::Write for Channel {
+    fn write(&amp;mut self, src: &amp;[u8]) -&gt; Result&lt;usize, ::std::io::Error&gt; { Ok(0) }
+    
+    fn flush(&amp;mut self) -&gt; Result&lt;(), ::std::io::Error&gt; { Ok(()) }
+}
+
+mod adv {
+    trait AdvWrite: ::std::io::Write {
+        fn write(&amp;mut self, src: &amp;[u8]) -&gt; Result&lt;usize, ::std::io::Error&gt;;
+        fn flush(&amp;mut self) -&gt; Result&lt;(), ::std::io::Error&gt;;
+    }
+    
+    impl AdvWrite for super::Channel {
+        fn write(&amp;mut self, src: &amp;[u8]) -&gt; Result&lt;usize, ::std::io::Error&gt; { Ok(2) }
+        
+        fn flush(&amp;mut self) -&gt; Result&lt;(), ::std::io::Error&gt; {
+            Ok(())
+        }
+    }
+    
+    trait AdvRead: ::std::io::Read { fn read(&amp;mut self, dst: &amp;mut [u8]) -&gt; Result&lt;usize, ::std::io::Error&gt;; }
+    
+    impl AdvRead for super::Channel {
+        fn read(&amp;mut self, dst: &amp;mut [u8]) -&gt; Result&lt;usize, ::std::io::Error&gt; { Ok(2) }
+    }
+}
+
+
+static mut PLAIN: Channel = Channel(0);
+static mut ADVANCED: Channel = { use adv; Channel(0) };
+
+
+fn main()
+{
+    let data:[u8;0]=[];
+    println!("{}" ,PLAIN.write(&amp;data)); // &lt;&lt;&lt;&lt; ????
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Sep 1, 2018 8:23 PM">
+            <time itemprop="datePublished" datetime="2018-09-01 20:23:35 +0000">Sep 1, 2018</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Поправил сову:</p>
+<pre><code class="lang-rust">use std::io;
+
+struct Channel(u8);
+
+impl io::Read for Channel {
+    fn read(&amp;mut self, _dst: &amp;mut [u8]) -&gt; io::Result&lt;usize&gt; {
+        Ok(0)
+    }
+}
+
+impl io::Write for Channel {
+    fn write(&amp;mut self, _src: &amp;[u8]) -&gt; io::Result&lt;usize&gt; {
+        Ok(0)
+    }
+
+    fn flush(&amp;mut self) -&gt; io::Result&lt;()&gt; {
+        Ok(())
+    }
+}
+
+mod adv {
+    use std::io;
+
+    pub trait AdvWrite: io::Write {
+        fn write(&amp;mut self, src: &amp;[u8]) -&gt; io::Result&lt;usize&gt;;
+        fn flush(&amp;mut self) -&gt; io::Result&lt;()&gt;;
+    }
+
+    impl AdvWrite for ::Channel {
+        fn write(&amp;mut self, _src: &amp;[u8]) -&gt; io::Result&lt;usize&gt; {
+            Ok(2)
+        }
+
+        fn flush(&amp;mut self) -&gt; io::Result&lt;()&gt; {
+            Ok(())
+        }
+    }
+
+    trait AdvRead: io::Read {
+        fn read(&amp;mut self, _dst: &amp;mut [u8]) -&gt; io::Result&lt;usize&gt;;
+    }
+
+    impl AdvRead for ::Channel {
+        fn read(&amp;mut self, _dst: &amp;mut [u8]) -&gt; io::Result&lt;usize&gt; {
+            Ok(2)
+        }
+    }
+}
+
+static mut CHANNEL: Channel = Channel(0);
+
+fn main() {
+    let data: [u8; 0] = [];
+    {
+        use io::Write;
+
+        unsafe {
+            println!("{:?}", CHANNEL.write(&amp;data)); // uses `impl io::Write for Channel`
+        }
+    }
+    {
+        use adv::AdvWrite;
+
+        unsafe {
+            println!("{:?}", CHANNEL.write(&amp;data)); // uses `impl AdvRead for ::Channel`
+        }
+    }
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?gist=cf5c5b80854172ae2c841b5adf3d9b8f&amp;version=stable&amp;mode=debug&amp;edition=2015">Playground</a></p>
+<p><code>use</code> типажа надо делать в месте использования переменной, а не ее объявления (т.е. можно для одного и того же объекта вызывать разные методы в разных местах).</p>
+<p>Для работы с не обернутыми ничем изменямыми статиками нужен <code>unsafe</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Sep 2, 2018 2:50 AM">
+            <time itemprop="datePublished" datetime="2018-09-02 02:50:11 +0000">Sep 2, 2018</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_11">Replying to #11</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>спасибо. образовался простор. буду думать какой вариант пригоднее</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_13"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_13" title="Sep 5, 2018 7:01 AM">
+            <time itemprop="datePublished" datetime="2018-09-05 07:01:34 +0000">Sep 5, 2018</time>
+          </a>
+          <span class="post-number">#13</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Любопытно, что если завернуть <code>impl Read</code>ы в функции, т.е. скрыть из модульного неймспейса, ошибка остается. Проверка осуществляется на уровне анализа исходного кода, а не во время компиляции?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_14"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_14" title="Sep 5, 2018 7:22 AM">
+            <time itemprop="datePublished" datetime="2018-09-05 07:22:18 +0000">Sep 5, 2018</time>
+          </a>
+          <span class="post-number">#14</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_13">Replying to #13</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://play.rust-lang.org/?gist=7283fe804c453038c705204f76bce73f&amp;version=stable&amp;mode=debug&amp;edition=2015">Попробовал завернуть в функции</a> и, вроде, все так же. Можешь показать что именно ты делал?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_15"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_15" title="Sep 5, 2018 8:39 AM">
+            <time itemprop="datePublished" datetime="2018-09-05 08:39:59 +0000">Sep 5, 2018</time>
+          </a>
+          <span class="post-number">#15</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_14">Replying to #14</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Скажите мне, что мне показалось. Как это компилится?<br>
+<a href="https://play.rust-lang.org/?gist=1c6801398567856be45ba3e522912c08&amp;version=stable&amp;mode=debug&amp;edition=2015" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?gist=1c6801398567856be45ba3e522912c08&amp;version=stable&amp;mode=debug&amp;edition=2015</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_16"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_16" title="Sep 5, 2018 9:18 AM">
+            <time itemprop="datePublished" datetime="2018-09-05 09:18:02 +0000">Sep 5, 2018</time>
+          </a>
+          <span class="post-number">#16</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_15">Replying to #15</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А чего бы примеру не работать?</p>
+<aside class="quote no-group" data-username="ozkriff" data-post="4" data-topic="521">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p>Реализации типажей глобальны.</p>
+</blockquote>
+</aside>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_17"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_17" title="Sep 5, 2018 10:05 AM">
+            <time itemprop="datePublished" datetime="2018-09-05 10:05:12 +0000">Sep 5, 2018</time>
+          </a>
+          <span class="post-number">#17</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_16">Replying to #16</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да-да, Пастернака я читал, но всё равно выглядит каким-то читом, что ли.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_18"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_18" title="Sep 5, 2018 10:09 AM">
+            <time itemprop="datePublished" datetime="2018-09-05 10:09:45 +0000">Sep 5, 2018</time>
+          </a>
+          <span class="post-number">#18</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_17">Replying to #17</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Были какие-то RFC про приватные реализации типажей, видимо вы с <a class="mention" href="/u/cheblin/index.html">@cheblin</a> этого хотите, но сейчас сходу ссылок найти не могу.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_19"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_19" title="Sep 5, 2018 10:13 AM">
+            <time itemprop="datePublished" datetime="2018-09-05 10:13:10 +0000">Sep 5, 2018</time>
+          </a>
+          <span class="post-number">#19</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_18">Replying to #18</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я хочу <em>понять</em>, не <em>зачем</em>, а <em>как</em> это сделано.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_20"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_20" title="Sep 5, 2018 10:48 AM">
+            <time itemprop="datePublished" datetime="2018-09-05 10:48:03 +0000">Sep 5, 2018</time>
+          </a>
+          <span class="post-number">#20</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_19">Replying to #19</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Как? Думаю что откуда-то отсюда надо тогда начинать в исходники закапываться:</p>
+<p><a href="https://rust-lang-nursery.github.io/rustc-guide/traits/index.html" class="onebox" target="_blank">https://rust-lang-nursery.github.io/rustc-guide/traits/index.html</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

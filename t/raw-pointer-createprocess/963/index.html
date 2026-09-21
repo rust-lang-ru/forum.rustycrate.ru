@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raw pointer CreateProcess - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Raw pointer CreateProcess</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Raw pointer CreateProcess</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Aug 1, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/qwe8013" class="user-link">qwe8013</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Aug 1, 2019 11:38 PM">
+            <time itemprop="datePublished" datetime="2019-08-01 23:38:00 +0000">Aug 1, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В общем нужно заюзать CreateProcessW и передать в STARTUPINFOW параметр lpTitle (или не передать, в зависимости от значения Option), пытался сделать так:</p>
+<pre><code class="lang-auto">...
+let cl_title: Option&lt;Vec&lt;u16&gt;&gt; = startup_info.lp_title.map(|s| OsStr::new(s).encode_wide().chain(once(0)).collect());
+...
+let mut the_startup_info: STARTUPINFOW = STARTUPINFOW
+    {
+        cb: std::mem::size_of::&lt;STARTUPINFOW&gt;() as u32,
+        lpReserved: std::ptr::null_mut(),
+        lpTitle: lp_title,
+     ...
+    }
+...
+CreateProcessW(...)
+</code></pre>
+<p>Всё запускается нормально, но в качестве заголовка окна консоли – ерунда, из чего я делаю вывод о том, что к моменту вызова CreateProcessW память освобождается, как сделать правильно?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Aug 2, 2019 8:29 AM">
+            <time itemprop="datePublished" datetime="2019-08-02 08:29:05 +0000">Aug 2, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="qwe8013" data-post="1" data-topic="963">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/q/e8c25b/48.png" class="avatar"> qwe8013:</div>
+<blockquote>
+<p>Всё запускается нормально, но в качестве заголовка окна консоли – ерунда, из чего я делаю вывод о том, что к моменту вызова CreateProcessW память освобождается, как сделать правильно?</p>
+</blockquote>
+</aside>
+<p>Предположение интересное. Не могу подтвердить, что именно это является причиной, но если оно, то решение должно быть таким:</p>
+<ol>
+<li>Создаешь <code>Box&lt;Vec&lt;u16&gt;&gt;</code> (Можешь воспользоваться <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.into_boxed_slice" class="inline-onebox" rel="noopener nofollow ugc">Vec in std::vec - Rust</a>)</li>
+<li>Получаешь указатель в хип с помощью <a href="https://doc.rust-lang.org/std/boxed/struct.Box.html#method.into_raw" class="inline-onebox" rel="noopener nofollow ugc">Box in std::boxed - Rust</a></li>
+<li>Передаешь этот указатель в STARTUPINFOW</li>
+<li>Когда процесс умирает, достаешь указатель и преобразуешь его в Box с помощью <a href="https://doc.rust-lang.org/std/boxed/struct.Box.html#method.from_raw" class="inline-onebox" rel="noopener nofollow ugc">Box in std::boxed - Rust</a>, чтобы не было утечки памяти.</li>
+</ol>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/qwe8013" class="user-link">qwe8013</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Aug 2, 2019 7:05 PM">
+            <time itemprop="datePublished" datetime="2019-08-02 19:05:33 +0000">Aug 2, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо за ответ. Глянул в отладчике, там действительно освобождается эта память:</p>
+<pre><code class="lang-auto">000000013FC75C80 | E8 3BD8FFFF   | call &lt;func_hooker-6d0ee1cb73b04f83.core::ptr::real_drop_in_place&lt;alloc::vec::Vec&lt;u16&gt;&gt;&gt;                        |
+</code></pre>
+<p>Буду пробовать с Box.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/qwe8013" class="user-link">qwe8013</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Aug 3, 2019 12:26 AM">
+            <time itemprop="datePublished" datetime="2019-08-03 00:26:50 +0000">Aug 3, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В общем сделал, как вы и советовали – с Box-ом:</p>
+<pre><code class="lang-auto">pub struct RawStr
+{
+    the_slice: Option&lt;*mut [u16]&gt;,
+    the_str: *mut u16,
+}
+
+impl RawStr
+{
+    pub fn new(the_str: Option&lt;&amp;str&gt;) -&gt; RawStr
+    {
+        match the_str
+        {
+            None =&gt; RawStr
+            {
+                the_slice: None,
+                the_str: std::ptr::null_mut(),
+            },
+
+            Some(v) =&gt;
+            {
+                let sstr = Box::into_raw(v.encode_utf16().chain(once(0)).collect::&lt;Vec&lt;u16&gt;&gt;().into_boxed_slice());
+                RawStr
+                {
+                    the_slice: Some(sstr),
+                    the_str: sstr as *mut u16,
+                }
+            }
+        }
+    }
+
+    pub fn free(self)
+    {
+        match self.the_slice
+        {
+            None =&gt; {},
+            Some(v) =&gt;
+            {
+                unsafe {Box::from_raw(v);}
+            },
+        }
+    }
+
+    pub fn get_raw(&amp;self) -&gt; *mut u16
+    {
+        self.the_str
+    }
+}
+</code></pre>
+<p>Структуру STARTUPINFO можно уничтожать сразу после создания нового процесса, не дожидаясь его завершения.<br>
+Да, и предложенный в этом посте вариант всё равно оставляет у меня чувство кривости, хотя, может быть я придираюсь – х/з.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Микрохроматические инструменты - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/projects/11/index.html">Проекты</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Микрохроматические инструменты</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Микрохроматические инструменты</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/projects/11" class="category-badge" style="--cat-color: #F7941D"><span class="category-bullet" aria-hidden="true"></span>Проекты</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jul 24, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/suhr" class="user-link">Сухарик</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jul 24, 2018 1:50 PM">
+            <time itemprop="datePublished" datetime="2018-07-24 13:50:43 +0000">Jul 24, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Категории «проекты» пока нет, но я всё же создам тему.</p>
+<p>В общем, суть моего проекта проста: создание средств для написания микрохроматической музыки. Вот список уже имеющихся программ:</p>
+<ul>
+<li>
+<a href="https://github.com/suhr/xephys" rel="nofollow noopener">xephys</a> — синт на основе цифрового волновода</li>
+<li>
+<a href="https://github.com/suhr/dieseq" rel="nofollow noopener">dieseq</a> — зародыш микрохроматического секвенсера</li>
+<li>
+<a href="https://github.com/suhr/med" rel="nofollow noopener">med</a> — штука, что отправляет MIDI</li>
+<li>
+<a href="https://github.com/suhr/xenvox" rel="nofollow noopener">xenvox</a> — зародыш виртуального терменвокса</li>
+</ul>
+<p>Некоторые вещи вынесены в проект Diaschisma:</p>
+<ul>
+<li>
+<a href="https://github.com/diaschisma/31key" rel="nofollow noopener">31key</a> — микрохроматическая экранная клавиатура</li>
+<li>
+<a href="https://github.com/diaschisma/miosc" rel="nofollow noopener">miosc</a> — протокол на основе OSC для управления синтезатором (замена MIDI)</li>
+<li>
+<a href="https://github.com/diaschisma/mimi" rel="nofollow noopener">mimi</a> — утилита, преобразующая MIDI в miosc</li>
+</ul>
+<p>Планируются:</p>
+<ul>
+<li>modalik — микрохроматический модальный синтезатор с возможностью создания негармонических тембров. Подобный <a href="https://www.youtube.com/watch?v=hYBr7Mwp7oY" rel="nofollow noopener">2032</a>, но свободный и более гибкий</li>
+</ul>
+<h2>Разработка</h2>
+<p>Часть проектов упирается в больную проблему инфраструктуры раста: GUI. Ясно, что создание полноценного графического тулкита не является сколь-либо подъёмной для меня задачей. Я хотел обойтись чем-то простым и топорным, но даже создание такого является не самой простой задачей, и у меня до сих пор нет чёткого видения как это сделать.</p>
+<p>Некоторые вещи требуют знаний в области обработки сигналов. Мне повезло получить некоторые смежные знания, но у меня нет опыта в работе со звуком. К счастью, многое можно легко найти, к несчастью, некоторое найти куда сложнее.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="6 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          6
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jul 24, 2018 4:10 PM">
+            <time itemprop="datePublished" datetime="2018-07-24 16:10:56 +0000">Jul 24, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Перенес в раздел “Проекты” <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=5" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BlackBox- генератор исходного кода (JAVA, C#, C) + Rust обработки бинарного протокола Вашего распределенного приложения - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/projects/11/index.html">Проекты</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">BlackBox- генератор исходного кода (JAVA, C#, C) + Rust обработки бинарного протокола Вашего распределенного приложения</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">BlackBox- генератор исходного кода (JAVA, C#, C) + Rust обработки бинарного протокола Вашего распределенного приложения</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/projects/11" class="category-badge" style="--cat-color: #F7941D"><span class="category-bullet" aria-hidden="true"></span>Проекты</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Aug 6, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Aug 6, 2018 4:26 PM">
+            <time itemprop="datePublished" datetime="2018-08-06 16:26:07 +0000">Aug 6, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Всех приветствую!</p>
+<p>Не буду долго расписывать о своем проекте <strong><a href="https://github.com/cheblin/BlackBox" rel="nofollow noopener">BlackBox</a></strong>, достаточно много уже <a href="https://habr.com/post/410297/" rel="nofollow noopener">написано</a>.<br>
+Собственно проект развивается, уже появились и работают вложенные типы…  собрался писать версию под С++ и на половину уже написал, но…<br>
+Случайно углубился в <strong>Rust</strong> и понял. Похоже версию на С++ можно уже <strong>НЕ</strong> писать. поскольку это, более <strong>Не</strong> актуально.</p>
+<p>В процессе низкоуровневого программирования регулярно задумывался относительно проблем с которыми так успешно справляется <strong>Rust</strong>.</p>
+<p>И поскольку одновременно активно использую другие высокоуровневые языки, собственно кодогенератор <strong>BlackBox</strong> написан на <strong>SCALA</strong>, мое вхождение в <strong>Rust</strong> пока проходит легко и непринужденно.</p>
+<p>Уже начал первые наброски кода.<br>
+Скорее всего сначала все  будет “кальками” с С / С# версий, но с Вашей помощью надеюсь это быстро устранить.</p>
+<p>Сразу отвечу на некоторые очевидные вопросы.</p>
+<p>Q: Это что переизобретение <strong>SerDe</strong>?<br>
+A: Нет. Это два совершенно разных идеологических подхода. В чем отличие предлагаю выяснять самостоятельно. Я готов отвечать на вопросы, но пересказывать написанное… зачем?</p>
+<p>Q: Бинарный протокол <strong>BlackBox</strong> это какой то стандарт? Что то типа  Ethernet?<br>
+A: Нет. Протокол действительно бинарный и высокооптимизированный, Но каждый раз пересоздается под конкретный проект. Метаинформация о протоколе хранится у участников обмена. Без неё разобрать протокол не реально.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="4 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          4
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Aug 9, 2018 12:28 PM">
+            <time itemprop="datePublished" datetime="2018-08-09 12:28:14 +0000">Aug 9, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Честно попытался переписать,  уже отлаженные и проверенные в боях, библиотеки поддержки протокола написанные на С.<br>
+Некоторые моменты мне понравились, но в целом не очень.</p>
+<p>к примеру, <a href="https://github.com/cheblin/BlackBox_LEDBlink_Demo/blob/master/Examples/STM8/BlackBox/BitUtils.h" rel="noopener nofollow ugc">выдержка из моей библиотеки на С</a>: получение упакованных, в максимально поддерживаемый на платформе примитив, битов из байтового массива, начиная с заданного бита на заданную длину в битах</p>
+<pre data-code-wrap="C"><code class="lang-C">INLINER UMAX get_bits(const uint8_t* src, size_t bit, size_t bits)
+{
+	src += bit &gt;&gt; 3;
+	bit &amp;= 7;
+	if (sizeof(UMAX) &lt; bits &gt;&gt; 3) bits = sizeof(UMAX) &lt;&lt; 3;
+	else if (bit + bits &lt; 9) return *src &gt;&gt; bit &amp; Ol[bits];
+	UMAX dst = 0;
+	memcpy(&amp;dst, src, bit + bits &gt;&gt; 3); 
+	dst &gt;&gt;= bit;                      
+	src += bit + bits &gt;&gt; 3;
+	bit = bit + bits &amp; 7; 
+	if (0 &lt; bit) dst |= (UMAX)(*src &amp; Ol[bit]) &lt;&lt; bits - bit;
+	return dst;
+}
+</code></pre>
+<p>на Rust это примерно грубо будет выглядеть так (код НЕ рабочий!!!)</p>
+<pre data-code-wrap="Rust"><code class="lang-Rust">fn get_bits(&amp;self, bits: Range&lt;usize&gt;) -&gt; u64 {
+		let src = &amp;self[bits.start &gt;&gt; 3..];
+		let bit = bits.start &amp; 7;
+		let mut bits = bits.end - bits.start;
+		
+		if 8 &lt; bits &gt;&gt; 7 { bits = 8 &lt;&lt; 3; } else if bit + bits &lt; 9 { src[0] &gt;&gt; bit &amp; Ol[bits]; }
+		
+		let mut dst = 0u64;
+		
+		unsafe {
+			use std::mem::transmute;
+			let dd = transmute::&lt;&amp;mut u64, &amp;mut u8&gt;(&amp;mut dst);
+			
+			use std::ptr::copy_nonoverlapping;
+			copy_nonoverlapping(src.as_ptr(), dd, bit + bits &gt;&gt; 3);
+		}
+		
+		dst &gt;&gt;= bit;        
+		let src = &amp;src[bit + bits &gt;&gt; 3..];
+		let bit = bit + bits &amp; 7; 
+		if 0 &lt; bit { dst |= ((src[0] &amp; Ol[bit]) as u64) &lt;&lt; bits - bit; }
+		
+		dst
+	}
+</code></pre>
+<p>получается не очень… посмотрел как гуру Rust делают например в <a href="https://github.com/Geal/nom/blob/master/src/bits.rs" rel="noopener nofollow ugc">проекте NOM</a></p>
+<pre data-code-wrap="Rust"><code class="lang-Rust">#[macro_export]
+macro_rules! take_bits (
+  ($i:expr, $t:ty, $count:expr) =&gt; (
+    {
+      use $crate::lib::std::result::Result::*;
+      use $crate::{Needed,IResult};
+
+      use $crate::lib::std::ops::Div;
+      use $crate::lib::std::convert::Into;
+      //println!("taking {} bits from {:?}", $count, $i);
+      let (input, bit_offset) = $i;
+      let res : IResult&lt;(&amp;[u8],usize), $t&gt; = if $count == 0 {
+        Ok(( (input, bit_offset), (0 as u8).into()))
+      } else {
+        let cnt = ($count as usize + bit_offset).div(8);
+        if input.len() * 8 &lt; $count as usize + bit_offset {
+          //println!("returning incomplete: {}", $count as usize + bit_offset);
+          $crate::need_more($i, Needed::Size($count as usize))
+        } else {
+          let mut acc:$t            = (0 as u8).into();
+          let mut offset: usize     = bit_offset;
+          let mut remaining: usize  = $count;
+          let mut end_offset: usize = 0;
+
+          for byte in input.iter().take(cnt + 1) {
+            if remaining == 0 {
+              break;
+            }
+            let val: $t = if offset == 0 {
+              (*byte as u8).into()
+            } else {
+              (((*byte as u8) &lt;&lt; offset) as u8 &gt;&gt; offset).into()
+            };
+
+            if remaining &lt; 8 - offset {
+              acc += val &gt;&gt; (8 - offset - remaining);
+              end_offset = remaining + offset;
+              break;
+            } else {
+              acc += val &lt;&lt; (remaining - (8 - offset));
+              remaining -= 8 - offset;
+              offset = 0;
+            }
+          }
+          Ok(( (&amp;input[cnt..], end_offset) , acc))
+        }
+      };
+      res
+    }
+  );
+);
+</code></pre>
+<p>сделано макросом… почему? смысл ускользает…</p>
+<p>этот код удивил</p>
+<pre data-code-wrap="Rust"><code class="lang-Rust">            if remaining &lt; 8 - offset {
+              acc += val &gt;&gt; (8 - offset - remaining);
+              end_offset = remaining + offset;
+              break;
+            } else {
+              acc += val &lt;&lt; (remaining - (8 - offset));
+              remaining -= 8 - offset;
+              offset = 0;
+            }
+</code></pre>
+<p>почему не …</p>
+<pre data-code-wrap="Rust"><code class="lang-Rust">            if remaining &lt; 8 - offset {
+              acc += val &gt;&gt; (8 - offset - remaining);
+              end_offset = remaining + offset;
+              break;
+            }
+
+              acc += val &lt;&lt; (remaining - (8 - offset));
+              remaining -= 8 - offset;
+              offset = 0;
+</code></pre>
+<p>но наибольшая засада этого  кода в производительности,<br>
+на каждый вынутый из источника байт смещается на свое место, перед добавлением в итоговый аккумулятор.<br>
+в то время как разумнее сначала набить байтами аккумулятор, а потом все сместить разом, как это сделано у меня.</p>
+<p>и это только одно место, куда я зацепился глазом.</p>
+<p>ещё</p>
+<p>иногда, для лучшей читабельности люблю делать вот так на С</p>
+<pre data-code-wrap="C"><code class="lang-C">if ((bits &amp;= 7) == 0 || (v = bytes[last] &amp; 0xFF &amp; Ol[bits]) == 0) return -1;
+</code></pre>
+<p>почему бы оператору &amp;= на Rust не возвратить итоговое значение bits , м???<br>
+да, я могу переписать под себя, но я пытаюсь понято сакральный смысл стандартной библиотеки.<br>
+может я чего то не догоняю ?</p>
+<p>итог:</p>
+<blockquote>
+<p>я думал будет хорошо, а вышло не очень…</p>
+</blockquote>
+<p>отказался от мысли переписывать библиотеку поддержки протокола с С на Rust.</p>
+<p>На Rust будет генерироваться исходный код  обработки специфичный для проекта заказчика и содержащий метаинформацию протокола,<br>
+А с С библиотекой он будет взаимодействовать через код сгенеренный bindgen-ом .<br>
+Как и код на С++ , только там генерировать ничего ненужно.</p>
+<p>из плюсов данного решения: будет одна неизменная библиотека на С которая применима как для проектов на С, так и для С++ и Rust.</p>
+<blockquote>
+<p>любовная лодка разбилась о быт…</p>
+</blockquote>
+<p>ну и ладно.</p>
+<p>stay tuned!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Aug 10, 2018 10:08 AM">
+            <time itemprop="datePublished" datetime="2018-08-10 10:08:07 +0000">Aug 10, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>binggen завелся и исполнил свое предназначение. не сразу, но…</p>
+<p>тем кто будет использовать:</p>
+<ul>
+<li>
+<p>если в процессе генерации обнаружатся ошибки и чтение мануала не помогает, попробуйте разные тулчейны.<br>
+мне помогло.</p>
+</li>
+<li>
+<p>выставляйте .layout_tests(false) иначе результат получается ужастно замусоренным.</p>
+</li>
+</ul>
+<p>приступаю к написанию собственно кодогенератора  Rust.  за основу возьму скорее всего C# версию. но вероятно это не сильно поможет, настолько Rust не похож на остальные языки.</p>
+<p>stay tuned!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Aug 13, 2018 4:39 PM">
+            <time itemprop="datePublished" datetime="2018-08-13 16:39:05 +0000">Aug 13, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В Rust  - почти всё с чем пришлось столкнуться,  ужасно сыро (идеально для ржавчины ? <img src="https://forum.rustycrate.ru/images/emoji/twitter/neutral_face.png?v=5" title=":neutral_face:" class="emoji" alt=":neutral_face:">).</p>
+<p>пример  bindgen</p>
+<pre><code class="lang-auto">let _bindings = bindgen::Builder::default()
+        .header("D:\\BlackBox\\Generator\\Code\\C\\BitsUtil.h")
+        .header("D:\\BlackBox\\Generator\\Code\\C\\Host.h")
+        .....
+</code></pre>
+<p>если добавление header -ов поменять местами - bindgen  упадет.<br>
+если переключиться на gnu toolchain - bindgen  упадет.<br>
+если в С коде попадутся совершенно невинные магические комбинации кода -  bindgen  упадет.<br>
+…</p>
+<p>компилятор молча компилирует, и даже файл black_box.lib и все сопутствующие появляется… но компилятор Rust не может его открыть … мрак.<br>
+отложил пока.<br>
+обнаружилось кое что поважнее…</p>
+<p>желание не переписывать С-шный код и работать с ним через FFi это конечно хорошо, но не в случае с inline функциями.<br>
+а у меня при генерации кода они активно используются.  поскольку полученный пакет это обычный байтовый массив, а предложенные пользователю интерфейсы в виде удобных полей - это куча микро функций типа</p>
+<pre><code class="lang-auto">fn get_bytes(src: &amp;[u8], byte: usize, bytes: usize) -&gt; u64 
+fn set_bytes(src: u64, bytes: usize, dst: &amp;mut [u8], byte: usize)
+fn set_bits(src: u64, bits: usize, dst: &amp;mut [u8], bit: usize)
+fn get_bits(src: &amp;[u8], bit: usize, bits: usize) -&gt; u64
+</code></pre>
+<p>и если они на Rust будут не инлайнами  -  это плохо.<br>
+поэтому ту часть С функций, которая будет использована на стороне сгенеренного Rust кода придется переписать на Rust.</p>
+<p>что и сделал.</p>
+<p>было на С</p>
+<pre><code class="lang-auto">const uint8_t         Ol[]    = {0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff};
+const uint8_t         lO[]    = {0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff};
+#define INLINER   inline;
+
+INLINER UMAX get_bits(const uint8_t* src, size_t bit, size_t bits)
+{
+	src += bit &gt;&gt; 3;
+	bit &amp;= 7;
+	if (sizeof(UMAX) &lt; bits &gt;&gt; 3) bits = sizeof(UMAX) &lt;&lt; 3;
+	else if (bit + bits &lt; 9) return *src &gt;&gt; bit &amp; Ol[bits];
+	UMAX dst = 0;
+	memcpy(&amp;dst, src, bit + bits &gt;&gt; 3); 
+	dst &gt;&gt;= bit;                      
+	src += bit + bits &gt;&gt; 3;
+	bit = bit + bits &amp; 7; 
+	if (0 &lt; bit) dst |= (UMAX)(*src &amp; Ol[bit]) &lt;&lt; bits - bit;
+	return dst;
+}
+
+INLINER void set_bits(UMAX src, size_t bits, uint8_t* dst, size_t bit)
+{
+	dst += bit &gt;&gt; 3;
+	bit &amp;= 7;
+	if (8 &lt; bit + bits)
+	{
+		if (bit) 
+		{
+			*dst = *dst &amp; Ol[bit] |  (src &amp; Ol[  8 - bit]) &lt;&lt; bit;  
+			dst++;                  
+			src &gt;&gt;= 8 - bit;      
+			bits -= 8 - bit;       
+		}
+		memcpy(dst, &amp;src, bits &gt;&gt; 3); 
+		if (bits &amp; 7)               
+		{
+			dst += bits &gt;&gt; 3;               
+			*dst = *dst &amp; lO[8 - (bits &amp; 7)] | ((uint8_t*)&amp;src)[(bits &gt;&gt; 3)]  &amp; Ol[bits &amp; 7]; 
+		}
+	}
+	else * dst = *dst &amp; (Ol[bit] | lO[8 - bit - bits]) | (src &amp; Ol[bits]) &lt;&lt; bit;
+}
+
+
+INLINER UMAX get_bytes(uint8_t* src, size_t byte, size_t bytes)
+{
+#ifdef   UINT64_MAX
+	int32_t hi = 0;
+#endif
+	int32_t lo = 0;
+	switch (bytes)
+	{
+#ifdef   UINT64_MAX
+	case 8:
+		hi |= (src[byte + 7] &amp; 0xFF) &lt;&lt; 24;
+	case 7:
+		hi |= (src[byte + 6] &amp; 0xFF) &lt;&lt; 16;
+	case 6:
+		hi |= (src[byte + 5] &amp; 0xFF) &lt;&lt; 8;
+	case 5:
+		hi |= src[byte + 4] &amp; 0xFF;
+#endif
+	case 4:
+		lo |= (src[byte + 3] &amp; 0xFF) &lt;&lt; 24;
+	case 3:
+		lo |= (src[byte + 2] &amp; 0xFF) &lt;&lt; 16;
+	case 2:
+		lo |= (src[byte + 1] &amp; 0xFF) &lt;&lt; 8;
+	case 1:
+		lo |= src[byte] &amp; 0xFF;
+	}
+	return
+#ifdef   UINT64_MAX
+	(hi &amp; 0xFFFFFFFFLL) &lt;&lt; 32 |
+#endif
+		lo &amp; 0xFFFFFFFFLL;
+}
+
+INLINER int32_t set_bytes(const UMAX src, const size_t bytes, uint8_t* dst, const size_t byte)
+{
+#ifdef   UINT64_MAX
+	uint32_t hi = (uint32_t)(src &gt;&gt; 32);
+#endif
+	uint32_t lo = (uint32_t)(src &amp; 0xFFFFFFFFL);
+	switch (bytes)
+	{
+#ifdef   UINT64_MAX
+	case 8:
+		dst[byte + 7] = hi &gt;&gt; 24;
+	case 7:
+		dst[byte + 6] = hi &gt;&gt; 16;
+	case 6:
+		dst[byte + 5] = hi &gt;&gt; 8;
+	case 5:
+		dst[byte + 4] = hi &amp; 0xFF;
+#endif
+	case 4:
+		dst[byte + 3] = lo &gt;&gt; 24;
+	case 3:
+		dst[byte + 2] = lo &gt;&gt; 16;
+	case 2:
+		dst[byte + 1] = lo &gt;&gt; 8;
+	case 1:
+		dst[byte] = lo &amp; 0xFF;
+	}
+	return byte + bytes;
+}
+
+</code></pre>
+<p>стало на Rust</p>
+<pre><code class="lang-auto">use std::mem::transmute;
+use std::ptr::copy_nonoverlapping;
+
+const Ol: [u64; 9] = [0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff];
+const lO: [u64; 9] = [0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff];
+
+#[inline(always)]
+fn set_bytes(src: u64, bytes: usize, dst: &amp;mut [u8], byte: usize) { unsafe { copy_nonoverlapping(transmute::&lt;&amp;u64, &amp;u8&gt;(&amp;src), dst[byte..].as_mut_ptr(), bytes); } }
+
+#[inline(always)]
+fn get_bytes(src: &amp;[u8], byte: usize, bytes: usize) -&gt; u64 {
+	let mut dst = 0u64;
+	unsafe { copy_nonoverlapping(src[byte..].as_ptr(), transmute::&lt;&amp;mut u64, &amp;mut u8&gt;(&amp;mut dst), bytes); }
+	dst
+}
+#[inline(always)]
+fn set_bits(src: u64, bits: usize, dst: &amp;mut [u8], bit: usize) {
+	let mut src = src;
+	let dst = &amp;mut dst[bit &gt;&gt; 3..];
+	let bit = bit &amp; 7;
+	let mut bits = bits;
+	
+	if 8 &lt; bit + bits
+		{
+			let dst = if 0 &lt; bit 
+				{
+					dst[0] = (dst[0] as u64 &amp; Ol[bit] |  (src &amp; Ol[ 8 - bit ]) &lt;&lt; bit) as u8;
+					src &gt;&gt;= 8 - bit; 
+					bits -= 8 - bit; 
+					&amp;mut dst[1..]
+				} else { dst };
+			
+			set_bytes(src, bits &gt;&gt; 3, dst, 0);
+			
+			if 0 &lt; bits &amp; 7 
+				{
+					let dst = &amp;mut dst[bits &gt;&gt; 3..]; 
+					dst[0] = (dst[0] as u64 &amp; lO[8 - (bits &amp; 7)]  |  ((src &gt;&gt; ((bits &gt;&gt; 3) &lt;&lt; 3)) &amp; 0xFF)  &amp;  Ol[bits &amp; 7]) as u8; 
+				}
+		} else { dst[0] = (dst[0] as u64 &amp; (Ol[bit] | lO[8 - bit - bits]) | (src as u64 &amp; Ol[bits]) &lt;&lt; bit) as u8; }
+}
+
+#[inline(always)]
+fn get_bits(src: &amp;[u8], bit: usize, bits: usize) -&gt; u64 {
+	let src = &amp;src[bit &gt;&gt; 3..];
+	let bit = bit &amp; 7;
+	let mut bits = bits;
+	
+	if 8 &lt; bits &gt;&gt; 7 { bits = 8 &lt;&lt; 3; } else if bit + bits &lt; 9 { return (src[0] &gt;&gt; bit) as u64 &amp; Ol[bits]; }
+	
+	let mut dst = get_bytes(src, 0, bit + bits &gt;&gt; 3);
+	
+	dst &gt;&gt;= bit;
+	let src = &amp;src[bit + bits &gt;&gt; 3..];
+	let bit = bit + bits &amp; 7;
+	if 0 &lt; bit { dst |= ((src[0] as u64 &amp; Ol[bit])) &lt;&lt; bits - bit; }
+	
+	dst
+}
+
+extern crate rand;
+
+#[cfg(test)]
+#[test]
+fn it_works() {
+	use rand::prelude::*;
+	let mut rng = thread_rng();
+	let mut buff = [0; 1000];
+	
+	for i in 0..100000
+		{
+			let val = rng.gen::&lt;u64&gt;();
+			let len = rng.gen_range(1, 8);
+			let pos = rng.gen_range(0, buff.len() - len);
+			let expected = val &amp; ((1u64 &lt;&lt; (len * 8)) - 1);
+			
+			
+			set_bytes(val, len, buff.as_mut(), pos);
+			assert!(expected == get_bytes(&amp;buff, pos, len), "val == get_bytes( &amp;buff, {} , {} )", pos, len);
+			assert!(expected == get_bits(&amp;buff, pos * 8, len * 8), " val == get_bits( &amp;buff, {} , {} )", pos, len);
+			
+			for i in buff.iter_mut() { *i = 0; }
+			
+			set_bits(val, len * 8, buff.as_mut(), pos * 8);
+			assert!(expected == get_bytes(&amp;buff, pos, len), "2 val == get_bytes( &amp;buff, {} , {} )", pos, len);
+			assert!(expected == get_bits(&amp;buff, pos * 8, len * 8), "2 val == get_bits( &amp;buff, {} , {} )", pos * 8, len * 8);
+			//println!("val={} , pos={}, len={}", val, pos, len);
+			
+			
+			let len = rng.gen_range(1, 64);
+			let pos = rng.gen_range(0, buff.len() * 8 - len);
+			let expected = val &amp; ((1u64 &lt;&lt; len) - 1);
+			
+			for i in buff.iter_mut() { *i = 0; }
+			
+			set_bits(val, len, buff.as_mut(), pos);
+			assert_eq!(expected, get_bits(&amp;buff, pos, len), " val == get_bits( &amp;buff, {} , {} )", pos, len);
+		}
+}
+</code></pre>
+<p>все тесты пройдены.<br>
+предложения / замечания ?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Aug 28, 2018 1:13 PM">
+            <time itemprop="datePublished" datetime="2018-08-28 13:13:33 +0000">Aug 28, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>моё решение</p>
+<pre><code class="lang-auto">#[repr(C)]
+pub struct Meta { //in PackBytes.data content  metainformation 
+    pub id: u16,
+    pub _2: u32,
+    pub _4: u32,
+    pub _8: u32,
+    pub BITS_lenINbytes_bits: u16,
+    pub field_0_bit: u32,
+    pub packMinBytes: u32,
+    pub fields_count: u16,
+}
+
+
+static meta: Meta = Meta { //some embedded meta information
+    id: 78, // pack id
+    _2: 0,
+    _4: 0,
+    _8: 0,
+    BITS_lenINbytes_bits: 0,
+    field_0_bit: 0,
+    packMinBytes: 0,// pack min length in bytes
+    fields_count: 0,
+};
+
+pub struct PackBytes {
+    pub meta: &amp;'static Meta,///immutable !!!
+    pub  data: [u8; 0],
+}
+
+impl PackBytes {
+    #[inline]
+    pub fn new(opt_bytes: isize) -&gt; PackBytes {
+        if opt_bytes &lt; 0 { return PackBytes { meta: &amp;meta, data: [] }; }
+        
+        unsafe {
+            let tmp: &amp;mut &amp;Meta = transmute(&amp;mut [0u8; 45]);
+            *tmp = &amp;meta;//bypass immutability
+            let ret: PackBytes = transmute(tmp);
+            ret
+        }
+    }
+    
+    
+    #[inline]
+    pub fn slice(&amp;self) -&gt; &amp;mut [u8] {
+        unsafe {
+            let len = {
+                //some code to extract len from data by means of meta
+                2
+            };
+            
+            let tmp: &amp;mut u8 = transmute(self.data.as_ptr());
+            
+            ::std::slice::from_raw_parts_mut(tmp, len)
+        }
+    }
+}
+
+
+fn main()
+{
+    let tt = PackBytes::new(-1);
+    let dd = PackBytes::new(100);
+    dd.slice()[0] = 23;
+    
+    println!("{:?}", dd.slice()[0]);
+}
+</code></pre>
+<p>пока вроде работает.</p>
+<p>однако мои  программистские шаблоны похоже треснули. объясняю:</p>
+<p>при обмене информацией, достаточно часто  возникает потребность в “пустых” пакетах. Кроме собственного id они не содержат в себе какой либо информации.<br>
+Информацией является факт их получение.</p>
+<p>Поскольку такие пакеты неизменны, то при запросе нового подобного пакета для отправки, разумно не создавать нового пакета, а выдавать один и тот же синглтон.</p>
+<p>в С практически нет namespace увы, увы, а в более развитых языках они есть, и например, в Java/С#  такой утилитарный пакет, в одном экземпляре, разумно хранить в виде статической константы внутри описания поля.</p>
+<pre><code class="lang-java">public  abstract class PackBytes
+    {
+        public final Meta   meta; 
+        public       byte[] data;
+
+        public static final PackBytes pack=new PackBytes();
+}
+</code></pre>
+<p>такое решение позволяло не загрязнять общее пространство имен. каждый пакет в своем namespace хранил свое барахло.</p>
+<p><strong>а в Rust нет статик полей(!!!). жесть.</strong></p>
+<p>неужели  придется “захламлять” все пространство как в С???.</p>
+<p>пока вижу выход только один. В версии под Rust под пакет будет выделятся модуль<br>
+и уже внутри namespace модуля все принадлежащее пакету.</p>
+<p>примерно так</p>
+<pre><code class="lang-auto">pub mod Pack {
+  pub struct Bytes {
+      pub meta: &amp;'static Meta,///immutable !!!
+      pub  data: [u8; 0],
+  }
+
+pub static pack:Bytes = Bytes { meta: &amp;meta, data: [] };
+}
+</code></pre>
+<p>так что при переписывании кода с Java / С# (возможно даже и с С++) в некоторых случаях</p>
+<p><strong>class == mod</strong></p>
+<p>а не <strong>srtuct</strong> как это может показаться</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/suhr" class="user-link">Сухарик</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Aug 29, 2018 12:29 AM">
+            <time itemprop="datePublished" datetime="2018-08-29 00:29:27 +0000">Aug 29, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p><strong>class == mod</strong><br>
+а не <strong>struct</strong> как это может показаться</p>
+</blockquote>
+<p>Что довольно осмысленно, структура это данные, а не единица инкапсуляции.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Aug 29, 2018 6:25 AM">
+            <time itemprop="datePublished" datetime="2018-08-29 06:25:36 +0000">Aug 29, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Что-то не то вы тут делаете. Добавил <code>println!("{:?}", dd.meta.id);</code> При каждом запуске выводятся разные значения. Похоже что <code>dd.meta</code> указывает куда-то в нераспределенную память.</p>
+<p>По-моему вот тут жесть какакя-то творится:</p>
+<pre><code class="lang-auto">let tmp: &amp;mut &amp;Meta = transmute(&amp;mut [0u8; 45]);
+</code></pre>
+<p>Вы преобразуете ссылку <strong>на локальный массив</strong> в ссылку <strong>на ссылку на Meta</strong>.</p>
+<pre><code class="lang-auto">*tmp = &amp;meta;//bypass immutability
+</code></pre>
+<p>Здесь вы фактически в этот локальный массив загнали ссылку на статические данные <code>&amp;meta</code>.</p>
+<pre><code class="lang-auto">let ret: PackBytes = transmute(tmp);
+</code></pre>
+<p>А теперь все это преобразуется в <code>PackBytes</code>? Эта структура должна быть <code>#[repr(C)]</code> видимо.<br>
+В результате у вас ссылка в этой структуре( <code>PackBytes::meta</code> ) указывает куда-то в стек где был этот локальный массив, в который ранее загнали ссылку на статик <code>meta</code>.</p>
+<hr>
+<p>А почему не хотите lazy_static использовать? Такое решение будет очень не безопасным. Например тесты Rust может в разных потоках запускать. Я так понял это внешний интерфейс библиотеки? А если пользователь будет <code>PackBytes::new()</code> из разных потоков запускать?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vitvakatu" class="user-link">Илья Богданов</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Aug 29, 2018 12:25 PM">
+            <time itemprop="datePublished" datetime="2018-08-29 12:25:45 +0000">Aug 29, 2018</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я странный разработчик - я очень не люблю возится с низкоуровневыми вещами и перекладывать байты из одной ссылки в другую. (это кстати не значит что я это делать не умею, я просто не люблю)</p>
+<p>И приведенный в этом треде код просто вводит меня в почти первобытный ужас.</p>
+<ol>
+<li>Он небезопасный. unsafe настолько много, что возникает вопрос, зачем вообще это писать на Rust, компилятор просто не способен такой код провалидировать и никак не поможет.</li>
+<li>Он просто тяжело читается. Похоже, вы не используете rustfmt, не документируете свой код, задаете “плохие” имена переменных (“плохие” - это значит по имени переменной нельзя понять, для чего она нужна)</li>
+<li>Он выполняет странные вещи, вероятно, в попытках “оптимизировать” программу. Я не буду объяснять, почему преждевременная оптимизация без бенчмарков - плохая идея.</li>
+</ol>
+<p>Я никогда не стану использовать библиотеку, код которой внушает мне опасения (и в данном случае, похоже, они не напрасны, <a class="mention" href="/u/ibuzpe9/index.html">@IBUzPE9</a> продемонстрировал очевидную небезопасность по памяти).</p>
+<p>Я много раз видел, как опытные разработчики меняют язык, но не меняют свой стиль программирования. Что нормально в С (и в принципе допустимо в embedded-разработке) - плохая идея в Rust. Пока что я вижу низкоуровневый и небезопасный С код с другими ключевыми словами.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Aug 29, 2018 12:41 PM">
+            <time itemprop="datePublished" datetime="2018-08-29 12:41:34 +0000">Aug 29, 2018</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>let tmp: &amp;mut &amp;Meta = transmute(&amp;mut [0u8; 45]);</p>
+</blockquote>
+<p>да, тут косяк. я заметил и хотел совсем удалить это сообщение, но оно не удалилось… не судьба видать.</p>
+<p>массивов с динамической длинной в Rusе нет. поэтому будет std::alloc</p>
+<p>вот как правильно</p>
+<pre data-code-wrap="Rust"><code class="lang-Rust">impl PackBytes {
+    #[inline]
+    pub fn new(meta: &amp;Meta, bytes: isize) -&gt; PackBytes {
+        unsafe {
+            let layout = std::alloc::Layout::from_size_align(::std::mem::size_of::&lt;PackBytes&gt;() + (if bytes &lt; 0 { 0 } else { bytes as usize }) as usize, 1).expect("Bad layout");
+            
+            let tmp: &amp;mut &amp;Meta = transmute(std::alloc::alloc_zeroed(layout));
+            *tmp = meta;//bypass immutabilit
+            let ret: PackBytes = transmute(tmp);
+            ret
+        }
+    }
+}
+</code></pre>
+<p>спасибо за замечания.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Aug 29, 2018 1:13 PM">
+            <time itemprop="datePublished" datetime="2018-08-29 13:13:08 +0000">Aug 29, 2018</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Все почти правильно написали.</p>
+<blockquote>
+<p>Я много раз видел</p>
+</blockquote>
+<p>да, я только, только  начал писать на Rust. о чем упомянул во первых строках…</p>
+<blockquote>
+<ol>
+<li>Он небезопасный. unsafe настолько много, что возникает вопрос, зачем вообще это писать на Rust, компилятор просто не способен такой код провалидировать и никак не поможет.</li>
+</ol>
+</blockquote>
+<p>приведенный выше код это <em><strong>код буфер</strong></em>  в black_box-sys - библиотеке  обертке, которая была  сгенерирована bindgen  по нативными  библиотеками BlackBox.  Всё <a href="https://kornel.ski/rust-sys-crate" rel="noopener nofollow ugc">делаю по мануалам</a> поэтому да, низкий уровень, не удивительно.</p>
+<p>в комплекте будет поставлятся ещё один crate  - <strong>black_box</strong> в котором уже будет Rust, только Rust и ничего кроме… и полностью сгенерированный.</p>
+<blockquote>
+<p>Я не буду объяснять, почему преждевременная оптимизация без бенчмарков - плохая идея.</p>
+</blockquote>
+<p>я пишу библиотеку и не могу себе позволять то, что  могут позволить себе мои высокоуровневые пользователи.</p>
+<blockquote>
+<p>Я никогда не стану использовать библиотеку, код которой внушает мне опасения (и</p>
+</blockquote>
+<p>правильно сделаете.<br>
+поэтому помимо самого <a href="https://github.com/cheblin/MAVLink2BlackBox_Demo/blob/master/ASLUAV/InC/MicroAirVehicle/MicroAirVehicle.h" rel="noopener nofollow ugc">сгенерированного кода</a> , который поставляется пользователю, еще генерируется <a href="https://github.com/cheblin/MAVLink2BlackBox_Demo/blob/master/ASLUAV/InC/MicroAirVehicle/Test.c" rel="noopener nofollow ugc">куча тестов</a> через которые этот код прогоняется и один из пройденых тестов также высылется  +<br>
+генерируется и высылается образец правильного использования <a href="https://github.com/cheblin/MAVLink2BlackBox_Demo/blob/master/ASLUAV/InC/MicroAirVehicle/Demo.c" rel="noopener nofollow ugc">сгенерированого API</a></p>
+<hr>
+<p>еще раз:<br>
+я в самом начале пути написания кодогенератора для RUST,  задача осложняется тем  что я только - только начал понимать язык.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_13"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_13" title="Jan 13, 2019 2:37 PM">
+            <time itemprop="datePublished" datetime="2019-01-13 14:37:56 +0000">Jan 13, 2019</time>
+          </a>
+          <span class="post-number">#13</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_12">Replying to #12</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>пройдена первая веха.<br>
+проект в первый раз успешно сгенерировался и  скомпилировался,</p>
+<p>это не значит, что он полностью готов.<br>
+это значит, что с архитектурой в целом наступила полная ясность. теперь на очереди кодогенерация Тестов и примера использования сгенерированного кода.</p>
+<p>И,<br>
+затем,<br>
+отладка.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_14"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_14" title="Feb 24, 2019 2:59 AM">
+            <time itemprop="datePublished" datetime="2019-02-24 02:59:08 +0000">Feb 24, 2019</time>
+          </a>
+          <span class="post-number">#14</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>пройдена вторая веха<br>
+кодогенератор начал генерировать  исходники тестов по сгенерированному коду. и они компилируются! <img src="https://forum.rustycrate.ru/images/emoji/twitter/sunglasses.png?v=6" title=":sunglasses:" class="emoji" alt=":sunglasses:"><br>
+а это значит что сгенрированое API в порядке и можно переходить к следущему этапу - отладке.</p>
+<p>после завершения отладки, когда начнут без ошибок отрабатывать все сгенерированные тесты по сгенерированному коду, останется дописать генератор кода демонстрации использования получившегося API<br>
+и затем, внедренить кодогенератор на языке Rust в общую инфраструктуру дистрибуции сгенерированного кода.</p>
+<p>stay tuned!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_15"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_15" title="Apr 5, 2019 12:06 PM">
+            <time itemprop="datePublished" datetime="2019-04-05 12:06:22 +0000">Apr 5, 2019</time>
+          </a>
+          <span class="post-number">#15</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Всё. Готово! Rust кодогенератор работает!</p>
+<p>Правда произошел небольшой трип, отсюда и временная задержка.<br>
+Уж больно руки чесались применить идеи Rust на кодогенерации под С.<br>
+Думал, ну, вот тут, чуть изменить, и вот тут подкрутить…<br>
+не не вышло.</p>
+<p>Плюнул, переписал кодогенерацию под С, практически с нуля. И уже отладил! Всё работает</p>
+<p>Вернулся на Rust и сегодня вечером добился того, что версия под Rust прошла таки тесты !</p>
+<p>Общая архитектура понятна, сейчас нужно разобрать “строительные леса” причесать код,</p>
+<p>Планирую вернуться и пересмотреть, с учётом новых знаний, кодогенерацию JAVA и С#.</p>
+<p>И можно будет деплоить все на сервере кодогенерации.<br>
+Самое сложное позади. И это радует</p>
+<p>Очень вовремя я нырнул в Rust, узнал очень много нового.</p>
+<p>Доволен как слон!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="6 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          6
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_16"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_16" title="Apr 10, 2019 3:12 PM">
+            <time itemprop="datePublished" datetime="2019-04-10 15:12:22 +0000">Apr 10, 2019</time>
+          </a>
+          <span class="post-number">#16</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_15">Replying to #15</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А Rust-версия сейчас работает автономно или по-прежнему завязана на библиотеку на C?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_17"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_17" title="May 3, 2019 4:23 PM">
+            <time itemprop="datePublished" datetime="2019-05-03 16:23:21 +0000">May 3, 2019</time>
+          </a>
+          <span class="post-number">#17</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_16">Replying to #16</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>связана с С библиотекой.</p>
+<p>более того с ней ЖЕ  связаны кодогенерация на С, Rust и C++ в процессе создания (  грешен знаю )</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_18"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_18" title="May 13, 2019 7:01 AM">
+            <time itemprop="datePublished" datetime="2019-05-13 07:01:59 +0000">May 13, 2019</time>
+          </a>
+          <span class="post-number">#18</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_17">Replying to #17</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>… ибо согрешил.</p>
+<p>в смысле сделал кодогенерацию для С++.<br>
+сколько у меня крови линковщик попил  своими подробными, и вместе с этим совершенно бессмысленными сообщениями… и это в генерируемом тестовом проекте, в котором около 15 000 строк.</p>
+<p>ух, сейчас уже всё компилируется.</p>
+<p>отладка,</p>
+<p>по полученному в итоге API кодогенерация образца правильного использования API.</p>
+<p>на этом точно ВСЁ.</p>
+<p>хотелось бы ещё swift конечно… но ладно…</p>
+<p>а вот и первые тестовые пакеты пролетели<br>
+<div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/db120b722f8c403a829e2cc6f895e5432f538ccc.png" data-download-href="https://forum.rustycrate.ru/uploads/default/db120b722f8c403a829e2cc6f895e5432f538ccc" title="57610590-af23f880-75a3-11e9-9520-3ffff83b235a.png"><img src="https://forum.rustycrate.ru/uploads/default/original/1X/db120b722f8c403a829e2cc6f895e5432f538ccc.png" alt="image" width="668" height="500" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/db120b722f8c403a829e2cc6f895e5432f538ccc_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">57610590-af23f880-75a3-11e9-9520-3ffff83b235a.png</span><span class="informations">856×640 68.9 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_19"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_19" title="May 13, 2019 11:53 AM">
+            <time itemprop="datePublished" datetime="2019-05-13 11:53:59 +0000">May 13, 2019</time>
+          </a>
+          <span class="post-number">#19</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_18">Replying to #18</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>невероятно… но<br>
+я отладил! все пакеты залетали! фантастика.<br>
+осталось красоту навести, чтоб документация пользователя вставлялась…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_20"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_20" title="May 26, 2019 12:40 PM">
+            <time itemprop="datePublished" datetime="2019-05-26 12:40:18 +0000">May 26, 2019</time>
+          </a>
+          <span class="post-number">#20</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_19">Replying to #19</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>на волне быстрого успеха С++ решил таки не откладывая, реализовать возможность импорта экспорта из формата BlackBox в пользовательскую модель данных…</p>
+<p>это на тот случай, если у клиента уже есть своя сложившаяся модель и хочется просто прикрутить BlackBox как обработчик протокола либо как способ сериализации/десериализации данных в файл.</p>
+<p>думал, а ща, по-быстрому… в итоге  - две недели Карл!!!.. но работает!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_21"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_21" title="Jul 13, 2019 4:53 AM">
+            <time itemprop="datePublished" datetime="2019-07-13 04:53:01 +0000">Jul 13, 2019</time>
+          </a>
+          <span class="post-number">#21</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_20">Replying to #20</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вернулся на новом витке, уже после того как С,С++, и Rust за спиной, к  кодогенерации для JAVA… посмотрел я на всё ЭТО…<br>
+попробовал изобразить желаемое и отложил.</p>
+<p><strong>JAVA убога и мертва</strong></p>
+<p>из ценного там только библиотеки и JVM</p>
+<p>решил, что если и делать кодогенерацию для JVM то на Scala например. И тут вспомнил как я аж в 2012 году активно интересовался и двигал Kotlin…</p>
+<p>посмотрел какое там состояние дел. а там прогресс!!!</p>
+<p>и все мои хотелки прям прекрасно ложатся на  язык. и… сделал кодогенератор для Kotlin.</p>
+<p>всё оказалось очень и очень красиво.</p>
+<p>на новом витке переходим к пересмотру кодогенерации на C#</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_22"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Majestio" class="user-link">Олег</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_22" title="Jan 23, 2020 2:48 PM">
+            <time itemprop="datePublished" datetime="2020-01-23 14:48:21 +0000">Jan 23, 2020</time>
+          </a>
+          <span class="post-number">#22</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_21">Replying to #21</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Камарады!<br>
+В Си-шных исходниках по-фэншую вместо цифры 7 нужно использовать выражение<br>
+(CHAR_BIT - 1). Ну и с остальными константами поосторожнее. Хотя, может быть, это уже атавизм <img src="https://forum.rustycrate.ru/images/emoji/twitter/roll_eyes.png?v=9" title=":roll_eyes:" class="emoji" alt=":roll_eyes:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

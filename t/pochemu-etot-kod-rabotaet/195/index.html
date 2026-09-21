@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Почему этот код работает? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Почему этот код работает?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Почему этот код работает?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Apr 2, 2017</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Apr 2, 2017 4:14 PM">
+            <time itemprop="datePublished" datetime="2017-04-02 16:14:44 +0000">Apr 2, 2017</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Имеется код</p>
+<pre><code>fn translate_char(c: &amp;char) -&gt; char{
+    if c.is_numeric(){  return *c; }
+    match c {
+        &amp;'Н' =&gt; 'V',
+        &amp;'П' =&gt; 'Z',
+        _ =&gt; panic!("Can't translate char {}", c),
+    }
+}
+</code></pre>
+<p>Ссылки на уровне ассемблера - это же указатели, так? В моем понимании match должна сравнить по указателям, но она сравнивает по содержимому. Как так? Магия какая-то.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Apr 2, 2017 6:47 PM">
+            <time itemprop="datePublished" datetime="2017-04-02 18:47:54 +0000">Apr 2, 2017</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Точно, это <img src="https://forum.rustycrate.ru/images/emoji/twitter/sparkles.png?v=5" title=":sparkles:" class="emoji" alt=":sparkles:">магия:sparkles:. Это заклинание называется <em>pattern matching</em>.<br>
+<code>match</code> ничего не сравнивает, он сопоставляет шаблону.  Слева от стрелок находится не значение c которым сравнивается переменная, а шаблон которому сопоставляется значение переменной <code>c</code>.<br>
+Ссылки можно разбирать так же как и структуры (<a href="http://rurust.github.io/rust_book_ru/src/patterns.html#%D0%94%D0%B5%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F" rel="nofollow noopener">Деструктуризация</a>).<br>
+Этот код полностью эквивалентен вашему примеру:</p>
+<pre><code class="lang-auto">    match *c {
+        'Н' =&gt; 'V',
+        'П' =&gt; 'Z',
+        _ =&gt; panic!("Can't translate char {}", c),
+    }
+</code></pre>
+<p>К тому же в Rust операция сравнения (<code>trait Eq</code>) переопределена для ссылок и других указателей <code>Box</code>, <code>Rc</code>, <code>Arc</code>. Этот код выведет <code>true</code>:</p>
+<pre><code class="lang-auto">    let a = 'A';
+    let b = 'A';
+    println!("{}", &amp;a == &amp;b);
+</code></pre>
+<p>Чтобы узнать на одно место указывают ссылки или нет, нужно преобразовать их в сырые указатели (<code>raw ptr</code>):</p>
+<pre><code class="lang-auto">    let a = 'A';
+    let b = 'A';
+    println!("{}", &amp;a as *const char == &amp;b as *const char);
+</code></pre>
+<p>P.S. Ссылки не тоже самое, что ассемблерные указатели. Например, размеры ссылок на <code>Sized</code> и <code>!Sized</code> типы отличаются.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Apr 3, 2017 5:46 AM">
+            <time itemprop="datePublished" datetime="2017-04-03 05:46:43 +0000">Apr 3, 2017</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="onebox stackexchange">
+  <header class="source">
+      <a href="https://stackoverflow.com/questions/2908357/how-does-pattern-matching-work-behind-the-scenes-in-f" target="_blank">stackoverflow.com</a>
+  </header>
+  <article class="onebox-body">
+      <a href="https://stackoverflow.com/users/324992/kryptic" target="_blank">
+    <img alt="Kryptic" src="https://www.gravatar.com/avatar/d019d323498a5a8ff860fd0a8c0de8a3?s=128&amp;d=identicon&amp;r=PG" class="thumbnail onebox-avatar" width="128" height="128">
+  </a>
+<h4>
+  <a href="https://stackoverflow.com/questions/2908357/how-does-pattern-matching-work-behind-the-scenes-in-f" target="_blank">How does pattern matching work behind the scenes in F#?</a>
+</h4>
+
+<div class="tags">
+  <strong>algorithm, f#, functional-programming, pattern-matching</strong>
+</div>
+
+<div class="date">
+  asked by
+  
+  <a href="https://stackoverflow.com/users/324992/kryptic" target="_blank">
+    Kryptic
+  </a>
+  on <a href="https://stackoverflow.com/questions/2908357/how-does-pattern-matching-work-behind-the-scenes-in-f" target="_blank">08:39PM - 25 May 10 UTC</a>
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>тут про F#, но суть того как выполняется сопоставление с образцом примерно та же</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

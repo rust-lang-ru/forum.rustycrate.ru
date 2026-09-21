@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Как в структуру в хипе засунуть str без копирования? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Как в структуру в хипе засунуть str без копирования?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Как в структуру в хипе засунуть str без копирования?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Apr 11, 2017</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Apr 11, 2017 8:56 PM">
+            <time itemprop="datePublished" datetime="2017-04-11 20:56:50 +0000">Apr 11, 2017</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Имеется следующий код</p>
+<pre><code>extern crate xmltree;
+
+use xmltree::Element;
+use std::collections::HashMap;
+
+struct S1&lt;'a&gt; {
+    name: &amp;'a str,
+}
+
+trait HasName{
+    fn print_name(&amp;self);
+}
+
+impl&lt;'a&gt; HasName for S1&lt;'a&gt;{
+    fn print_name(&amp;self){
+        println!("{}", self.name);
+    }
+}
+
+fn create_obj&lt;'a&gt;(e:&amp;'a Element, map: &amp;'a mut HashMap&lt;i32, Box&lt;HasName&gt;&gt;){
+    let n = e.attributes.get("name").unwrap();
+    map.insert(1, Box::new(S1{name:n}));
+}
+
+fn main() {
+    let mut map:HashMap&lt;i32, Box&lt;HasName&gt;&gt; = HashMap::new();
+//тут чтение внешнего xml и вызов create_obj
+}
+</code></pre>
+<p>Допустим, копию строки создавать не хочется.<br>
+Я предполагаю, что внутри main область видимости моей хэшмапы и распарсенного xml. И, как я это понимаю, я указал это дав область видимости: &amp;'a mut HashMap&lt;i32, Box&gt;<br>
+То есть, я это понимаю так: Box, которым владеет моя хэшмапа не будет жить дольше хэшмапы. Значит, и структура  которую бокс хранит не будет жить дольше. А значит, и str который в структуре не будет жить дольше.<br>
+Следовательно, должно же прокатить.<br>
+Но компилятор ругается, что не может вывести область видимости имени, которое достается из Element. Хотя, для элемента указана эта область - и она  тоже 'a. То есть, должно же компилиться.<br>
+Но выдает такое:</p>
+<pre><code>error[E0495]: cannot infer an appropriate lifetime for autoref due to conflicting requirements
+  --&gt; src/main.rs:21:26
+   |
+21 |     let n = e.attributes.get("name").unwrap();
+   |                          ^^^
+   |
+note: first, the lifetime cannot outlive the lifetime 'a as defined on the body at 20:73...
+  --&gt; src/main.rs:20:74
+   |
+20 |   fn create_obj&lt;'a&gt;(e:&amp;'a Element, map: &amp;'a mut HashMap&lt;i32, Box&lt;HasName&gt;&gt;){
+   |  __________________________________________________________________________^ starting here...
+21 | |     let n = e.attributes.get("name").unwrap();
+22 | |     map.insert(1, Box::new(S1{name:n}));
+23 | | }
+   | |_^ ...ending here
+note: ...so that reference does not outlive borrowed content
+  --&gt; src/main.rs:21:13
+   |
+21 |     let n = e.attributes.get("name").unwrap();
+   |             ^^^^^^^^^^^^
+   = note: but, the lifetime must be valid for the static lifetime...
+note: ...so that expression is assignable (expected std::boxed::Box&lt;HasName + 'static&gt;, found std::boxed::Box&lt;HasName&gt;)
+  --&gt; src/main.rs:22:19
+   |
+22 |     map.insert(1, Box::new(S1{name:n}));
+   |                   ^^^^^^^^^^^^^^^^^^^^</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Apr 12, 2017 6:31 AM">
+            <time itemprop="datePublished" datetime="2017-04-12 06:31:25 +0000">Apr 12, 2017</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Попробуйте вот так:</p>
+<pre><code class="lang-auto">fn create_obj&lt;'a,'b&gt;(e:&amp;'a Element, map: &amp;'b mut HashMap&lt;i32, Box&lt;HasName+'a&gt;&gt;)
+</code></pre>
+<p>Конструкция <code>Trait+'t</code> позволяет задать время жизни объекта для которого реализован типаж <code>Trait</code>. Второе вж <code>'b</code> нужно чтобы Раст не думал что данные, передаваемые в функцию, заимствуют друг друга.</p>
+<p>Приятного знакомства с <code>borrowchecker</code>-ом <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=5" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Apr 12, 2017 11:05 AM">
+            <time itemprop="datePublished" datetime="2017-04-12 11:05:07 +0000">Apr 12, 2017</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Откомпилилось!!!</p>
+<p>Где вы прочитали,  что можно Конструкция Trait+'t ? Я вроде всю книгу вдоль и поперек исчитал уже до дыр - и там такого не было. Видимо, пропустил, все же.</p>
+<blockquote>
+<p>Второе вж 'b нужно чтобы Раст не думал что данные, передаваемые в функцию, заимствуют друг друга.</p>
+</blockquote>
+<p>Вроде, компилится и без 'b, хотя вызвать еще не пытался.</p>
+<blockquote>
+<p>Приятного знакомства с borrowchecker-ом <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+</blockquote>
+<p>Да, спасибо. Чувствую, не последний раз спрашивать приходится.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Apr 12, 2017 12:05 PM">
+            <time itemprop="datePublished" datetime="2017-04-12 12:05:54 +0000">Apr 12, 2017</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Сам не помню уже. Тоже в книге этого не нашел.<br>
+Вот пара вопросов на stackoverflow на эту тему:<br>
+<aside class="onebox stackexchange">
+  <header class="source">
+      <a href="https://stackoverflow.com/questions/25959075/why-explicit-lifetime-bound-required-for-boxt-in-struct" target="_blank" rel="nofollow noopener">stackoverflow.com</a>
+  </header>
+  <article class="onebox-body">
+      <a href="https://stackoverflow.com/users/3994266/eugene-zemtsov" target="_blank" rel="nofollow noopener">
+    <img alt="Eugene Zemtsov" src="https://www.gravatar.com/avatar/e7f84b29e7bdff6b1748d47e049710ab?s=128&amp;d=identicon&amp;r=PG&amp;f=1" class="thumbnail onebox-avatar" width="128" height="128">
+  </a>
+<h4>
+  <a href="https://stackoverflow.com/questions/25959075/why-explicit-lifetime-bound-required-for-boxt-in-struct" target="_blank" rel="nofollow noopener">Why "explicit lifetime bound required" for Box&lt;T&gt; in struct?</a>
+</h4>
+
+<div class="tags">
+  <strong>rust, rust-obsolete</strong>
+</div>
+
+<div class="date">
+  asked by
+  
+  <a href="https://stackoverflow.com/users/3994266/eugene-zemtsov" target="_blank" rel="nofollow noopener">
+    Eugene Zemtsov
+  </a>
+  on <a href="https://stackoverflow.com/questions/25959075/why-explicit-lifetime-bound-required-for-boxt-in-struct" target="_blank" rel="nofollow noopener">12:16PM - 21 Sep 14 UTC</a>
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+<br>
+<aside class="onebox stackexchange">
+  <header class="source">
+      <a href="https://stackoverflow.com/questions/27790168/explicit-lifetime-declarations-in-trait-objects-held-by-structs" target="_blank" rel="nofollow noopener">stackoverflow.com</a>
+  </header>
+  <article class="onebox-body">
+      <a href="https://stackoverflow.com/users/1043636/arien-malec" target="_blank" rel="nofollow noopener">
+    <img alt="Arien Malec" src="https://www.gravatar.com/avatar/926a7e9d35a01745fc3e1cfeed30349e?s=128&amp;d=identicon&amp;r=PG" class="thumbnail onebox-avatar" width="128" height="128">
+  </a>
+<h4>
+  <a href="https://stackoverflow.com/questions/27790168/explicit-lifetime-declarations-in-trait-objects-held-by-structs" target="_blank" rel="nofollow noopener">Explicit lifetime declarations in trait objects held by structs</a>
+</h4>
+
+<div class="tags">
+  <strong>rust, lifetime</strong>
+</div>
+
+<div class="date">
+  asked by
+  
+  <a href="https://stackoverflow.com/users/1043636/arien-malec" target="_blank" rel="nofollow noopener">
+    Arien Malec
+  </a>
+  on <a href="https://stackoverflow.com/questions/27790168/explicit-lifetime-declarations-in-trait-objects-held-by-structs" target="_blank" rel="nofollow noopener">12:17AM - 06 Jan 15 UTC</a>
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Apr 18, 2017 8:44 AM">
+            <time itemprop="datePublished" datetime="2017-04-18 08:44:30 +0000">Apr 18, 2017</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Нашел упоминание о времени жизни трейт-объектов во второй редакции Rust Book:<br>
+<a href="http://rust-lang.github.io/book/second-edition/ch19-02-advanced-lifetimes.html#lifetimes-in-trait-objects" class="onebox" target="_blank" rel="nofollow noopener">http://rust-lang.github.io/book/second-edition/ch19-02-advanced-lifetimes.html#lifetimes-in-trait-objects</a></p>
+<p>Да и вся глава рекомендуется к ознакомлению, там довольно интересный случай с временами жизни разбирается.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Apr 18, 2017 9:01 AM">
+            <time itemprop="datePublished" datetime="2017-04-18 09:01:37 +0000">Apr 18, 2017</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>спасибо, пошел читать.<br>
+Этот долбанный borrow checker…никогда еще технология мне не давалась так тяжело.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

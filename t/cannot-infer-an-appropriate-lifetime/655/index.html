@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cannot infer an appropriate lifetime - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Cannot infer an appropriate lifetime</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Cannot infer an appropriate lifetime</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Nov 20, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Nov 20, 2018 3:10 PM">
+            <time itemprop="datePublished" datetime="2018-11-20 15:10:20 +0000">Nov 20, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>for autoref due to conflicting requirements</p>
+<p>собственно код: <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=2cac758c957e574d1560544cf337496b" rel="nofollow noopener">https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=2cac758c957e574d1560544cf337496b</a></p>
+<p>не пойму где ошибся.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Nov 21, 2018 5:51 AM">
+            <time itemprop="datePublished" datetime="2018-11-21 05:51:56 +0000">Nov 21, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А в трейте <code>RawHoldingRegisters</code> точно лайфтайм нужен? Если его убрать все будет работать.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Nov 21, 2018 11:30 AM">
+            <time itemprop="datePublished" datetime="2018-11-21 11:30:22 +0000">Nov 21, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Дело в том что при реализации, RawData будет мутабельным заимствованием RawHoldingRegister, а поскольку RawHoldingRegister является ассоциативным типом, то время жизни нужно задекларировать</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Nov 21, 2018 11:56 AM">
+            <time itemprop="datePublished" datetime="2018-11-21 11:56:19 +0000">Nov 21, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Можно конечно добавить вж в <code>HoldingRegisters</code>:</p>
+<pre><code class="lang-auto">pub trait HoldingRegisters&lt;'a&gt; {
+    fn get&lt;A: Into&lt;u16&gt;&gt;(&amp;'a mut self, addr: A) -&gt; Result&lt;u16&gt;;
+</code></pre>
+<p>Из примера необходимость такого засорения лайфтаймами не очевидна.</p>
+<p>Еще можно можно поменять методы в <code>HoldingRegisters</code> так чтобы они принимали <code>self</code> вместо <code>&amp;mut self</code> и делать имплементацию для <code>&amp;'a mut T</code>.</p>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=4955661ce88897b3e2c4cfcb292d1129" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=4955661ce88897b3e2c4cfcb292d1129</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Nov 21, 2018 7:24 PM">
+            <time itemprop="datePublished" datetime="2018-11-21 19:24:51 +0000">Nov 21, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Сделал такой вариант</p>
+<pre><code class="lang-auto">pub trait HoldingRegisters {
+    fn get&lt;A: Into&lt;u16&gt;&gt;(&amp;mut self, addr: A) -&gt; Result&lt;u16&gt;;
+    fn gets&lt;A: Into&lt;u16&gt;, D: From&lt;u16&gt;&gt;(&amp;mut self, start_addr: A, buff: &amp;mut [D]) -&gt; Result&lt;()&gt;;
+    fn set&lt;A: Into&lt;u16&gt;, D: Into&lt;u16&gt;&gt;(&amp;mut self, addr: A, data: D) -&gt; Result&lt;()&gt;;
+    fn sets&lt;A: Into&lt;u16&gt;, D: Into&lt;u16&gt; + Copy&gt;(&amp;mut self, start_addr: A, buff: &amp;[D]) -&gt; Result&lt;()&gt;;
+}
+
+pub trait RawHoldingRegisters&lt;'a&gt; {
+    type Data: RawData + 'a;
+    fn put&lt;A: Into&lt;u16&gt;&gt;(&amp;mut self, start_addr: A, registers: u16, bytes: u8) -&gt; Self::Data;
+    fn pop&lt;A: Into&lt;u16&gt;&gt;(&amp;mut self, start_addr: A, registers: u16) -&gt; Self::Data;
+}
+
+pub trait RawData {
+    fn query(&amp;mut self) -&gt; Result&lt;&amp;mut Self&gt;;
+    fn as_slice(&amp;self) -&gt; &amp;[u8];
+    fn as_mut_slice(&amp;mut self) -&gt; &amp;mut [u8];
+}
+
+impl&lt;'a, T&gt; HoldingRegisters for T where T: RawHoldingRegisters&lt;'a&gt; {
+    fn get&lt;A: Into&lt;u16&gt;&gt;(&amp;mut self, addr: A) -&gt; Result&lt;u16&gt; {
+        Ok(BigEndian::read_u16(self.pop(addr, 1).query()?.as_slice()))
+    }
+
+    fn gets&lt;A: Into&lt;u16&gt;, D: From&lt;u16&gt;&gt;(&amp;mut self, _start_addr: A, _buff: &amp;mut [D]) -&gt; Result&lt;()&gt; {
+        Ok(())
+    }
+
+    fn set&lt;A: Into&lt;u16&gt;, D: Into&lt;u16&gt;&gt;(&amp;mut self, _addr: A, _data: D) -&gt; Result&lt;()&gt; {
+        Ok(())
+    }
+
+    fn sets&lt;A: Into&lt;u16&gt;, D: Into&lt;u16&gt; + Copy&gt;(&amp;mut self, _start_addr: A, _buff: &amp;[D]) -&gt; Result&lt;()&gt; {
+        Ok(())
+    }
+}
+</code></pre>
+<p>но теперь проблема с реализацией:</p>
+<pre><code class="lang-auto">struct Device {
+    buffer: [u8; 16],
+}
+
+struct Data&lt;'a&gt; {
+    own: &amp;'a mut Device,
+}
+
+impl&lt;'a&gt; RawData for Data&lt;'a&gt; {
+    fn query(&amp;mut self) -&gt; Result&lt;&amp;mut Self&gt; {
+        Ok(self)
+    }
+    
+    fn as_slice(&amp;self) -&gt; &amp;[u8] {
+        &amp;self.own.buffer[..]
+    }
+    
+    fn as_mut_slice(&amp;mut self) -&gt; &amp;mut [u8] {
+        &amp;mut self.own.buffer[..]
+    }
+}
+
+impl&lt;'a&gt; RawHoldingRegisters&lt;'a&gt; for Device {
+    type Data = Data&lt;'a&gt;;
+    fn put&lt;A: Into&lt;u16&gt;&gt;(&amp;mut self, start_addr: A, registers: u16, bytes: u8) -&gt; Self::Data {
+        Data{own: self}
+    }
+    
+    fn pop&lt;A: Into&lt;u16&gt;&gt;(&amp;mut self, start_addr: A, registers: u16) -&gt; Self::Data {
+        Data{own: self}
+    }
+}
+</code></pre>
+<p>ошибка:</p>
+<pre><code class="lang-auto">error[E0495]: cannot infer an appropriate lifetime for lifetime parameter `'a` due to conflicting requirements
+  --&gt; src/lib.rs:69:9
+   |
+69 |         Data{own: self}
+   |         ^^^^
+   |
+note: first, the lifetime cannot outlive the anonymous lifetime #1 defined on the method body at 68:5...
+  --&gt; src/lib.rs:68:5
+   |
+68 | /     fn put&lt;A: Into&lt;u16&gt;&gt;(&amp;mut self, start_addr: A, registers: u16, bytes: u8) -&gt; Self::Data {
+69 | |         Data{own: self}
+70 | |     }
+   | |_____^
+note: ...so that reference does not outlive borrowed content
+  --&gt; src/lib.rs:69:19
+   |
+69 |         Data{own: self}
+   |                   ^^^^
+note: but, the lifetime must be valid for the lifetime 'a as defined on the impl at 66:6...
+  --&gt; src/lib.rs:66:6
+   |
+66 | impl&lt;'a&gt; RawHoldingRegisters&lt;'a&gt; for Device {
+   |      ^^
+   = note: ...so that the types are compatible:
+           expected RawHoldingRegisters&lt;'a&gt;
+              found RawHoldingRegisters&lt;'_&gt;
+</code></pre>
+<p>код целиком - <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=76f9690f35bb0b324c26969f5ba5cca4" rel="nofollow noopener">https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=76f9690f35bb0b324c26969f5ba5cca4</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Nov 22, 2018 5:36 AM">
+            <time itemprop="datePublished" datetime="2018-11-22 05:36:15 +0000">Nov 22, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Два варианта:</p>
+<ul>
+<li><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=d0c0f63eef764e6118e34a4fda3690e4" rel="nofollow noopener">Убрать ссылки в методах типажей + имплементация для ссылки на тип</a></li>
+<li><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=f74a36d65133e9f16fee5bae992c68fa" rel="nofollow noopener">Добавить время жизни в остальные типажи</a></li>
+</ul>
+<hr>
+<p>Пока не реализуют <a href="https://github.com/rust-lang/rfcs/pull/1598" rel="nofollow noopener">Generic Associated Types</a> придется обходится подобными костылями.</p>
+<hr>
+<p>Нашел <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=ef8ada9648b31aaf0b0b9be41b5d355f" rel="nofollow noopener">еще одно решение</a>, но оно совсем уже хитро вывернутое.<br>
+Суть в том что мы убираем ассоциированный тип в типаже <code>RawHoldingRegisters</code>, а возвращаемое значение задаем через ассоциированный тип нового типажа <code>DeviceObject&lt;'_&gt;</code>. Это позволяет избежать засорения временами жизни с помощью <a href="https://stackoverflow.com/a/35595491/5138648" rel="nofollow noopener">Higher Ranked Trait Bound</a>:</p>
+<pre><code class="lang-auto">pub trait RawHoldingRegisters: for&lt;'a&gt; DeviceObject&lt;'a&gt; { ... }
+</code></pre>
+<p>Вот статья в которой описан похожий метод:<br>
+<a href="https://lukaskalbertodt.github.io/2018/08/03/solving-the-generalized-streaming-iterator-problem-without-gats.html" rel="nofollow noopener">Solving the Generalized Streaming Iterator Problem without GATs</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Nov 22, 2018 11:27 AM">
+            <time itemprop="datePublished" datetime="2018-11-22 11:27:47 +0000">Nov 22, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>отличная статья,<br>
+спасибо за помощь!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Nov 22, 2018 2:12 PM">
+            <time itemprop="datePublished" datetime="2018-11-22 14:12:27 +0000">Nov 22, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вопрос по специализации:<br>
+в коде уже было <code>impl HoldingRegisters for Device</code>, и когда появилась <code>impl RawHoldingRegisters for Device</code></p>
+<p>компилятор выдал ошибку:</p>
+<pre><code class="lang-auto">error[E0119]: conflicting implementations of trait `HoldingRegisters` for type `Device`:
+  --&gt; src/lib.rs:85:1
+   |
+26 | impl&lt;T&gt; HoldingRegisters for T where T: RawHoldingRegisters {
+   | ----------------------------------------------------------- first implementation here
+...
+85 | impl HoldingRegisters for Device {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ conflicting implementation for `Device`
+</code></pre>
+<p>вроде бы ни чего не нарушено, поскольку <code>HoldingRegisters</code> был реализован для <code>T</code>:<br>
+<code>impl&lt;T&gt; HoldingRegisters for T where T: RawHoldingRegisters</code>,<br>
+но не был реализован для конкретного <code>Device</code>,<br>
+или специализация работает не до конца полностью?</p>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=205bcab667296263632f77b3ab765561" rel="nofollow noopener">код</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">F</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/freecoder" class="user-link">Alexander</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Nov 24, 2018 6:57 AM">
+            <time itemprop="datePublished" datetime="2018-11-24 06:57:37 +0000">Nov 24, 2018</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А с каких пор специализация вообще работает? ) Её же как небыло, так и нет.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Nov 25, 2018 7:55 AM">
+            <time itemprop="datePublished" datetime="2018-11-25 07:55:31 +0000">Nov 25, 2018</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А это разве не то:</p>
+<pre><code class="lang-auto">Now, this works quite well when specializing a blanket impl with an impl for a concrete type:
+
+impl&lt;T&gt; SomeTrait for T { /* default fns */ }
+impl SomeTrait for SomeType { /* specialized fns */ }
+
+</code></pre>
+<p><a href="http://aturon.github.io/2018/04/05/sound-specialization/" rel="nofollow noopener">отсюда</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">F</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/freecoder" class="user-link">Alexander</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Nov 26, 2018 9:01 AM">
+            <time itemprop="datePublished" datetime="2018-11-26 09:01:07 +0000">Nov 26, 2018</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Неа, это не то. В этой серии статей идет обсуждение о решении проблем реализации специализации и об эргономике предлагаемых решений. До, собственно, самой реалиизации еще дело не дошло: <a href="https://github.com/rust-lang/rust/issues/31844" rel="nofollow noopener">https://github.com/rust-lang/rust/issues/31844</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ускорить цикл for - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Ускорить цикл for</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Ускорить цикл for</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Nov 11, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/deepred" class="user-link">deepred</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Nov 11, 2018 6:02 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 18:02:08 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>И снова здраствуйте, сейчас мне нужно как можно лучше оптимизировать(ускорить?) данный код:</p>
+<pre><code class="lang-rust">for (index,value) in vector.iter().enumerate() {
+     if value == "1.0" {
+          do_something(index);
+      }
+}
+</code></pre>
+<p>Сейчас я получаю такой результат по времени: 114 миллисикунд когда длинна вектора равна 14.Но размер вектора может быть в разы больше и хотелось бы узнать, как можно это все ускорить, и возможно ли это вообще?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Nov 11, 2018 6:03 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 18:03:49 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Нужен полностью код бенчмарков + параметры запуска. И параметры твоего железа не помешали бы, раз конкретное время работы указываешь.</p>
+<p>UPD: В общем-то, это ж просто цикл с условием - без знания дополнительной информации по задче с точки зрения кода хз что тут особо улучшать.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/deepred" class="user-link">deepred</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Nov 11, 2018 6:05 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 18:05:43 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Сейчас просто использую крейт time для того что бы засечь время со старта и конца вычислений, в основном результат именно 100-120 миллисекунд.<br>
+Параметры такие:<br>
+– CPU: Intel Core i5-4460 @ 4x 3.4GHz<br>
+– GPU: GeForce GTX 760<br>
+– RAM: 8GB</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Nov 11, 2018 6:07 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 18:07:02 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>На всякий случай, дежурный вопрос: с <code>--release</code> флагом запускаешь же, да?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/deepred" class="user-link">deepred</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Nov 11, 2018 6:08 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 18:08:05 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да с релиз и еще немного погуглил и решил LTO в релизе включить.<br>
+Задача в том что бы определить есть ли нужное value в векторе и если есть то добавить его в hashmap, точнее его индекс</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Nov 11, 2018 6:09 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 18:09:16 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="deepred" data-post="3" data-topic="633">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/d/e9bcb4/48.png" class="avatar"> deepred:</div>
+<blockquote>
+<p>Сейчас просто использую крейт time для того что бы засечь время со старта и конца вычислений</p>
+</blockquote>
+</aside>
+<p>Руками такие мелкие вещи замерять черевато, для этого есть штуки вроде</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://github.com/bheisler/criterion.rs">
+  <header class="source">
+      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" width="32" height="32">
+
+      <a href="https://github.com/bheisler/criterion.rs" target="_blank" rel="noopener">GitHub</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/344;"><img src="https://opengraph.githubassets.com/d6193bfe90d86c8bd581375366f17e286f8d35ffaa584b3c117a495394d2a506/bheisler/criterion.rs" class="thumbnail" width="690" height="345"></div>
+
+<h3><a href="https://github.com/bheisler/criterion.rs" target="_blank" rel="noopener">GitHub - bheisler/criterion.rs: Statistics-driven benchmarking library for Rust</a></h3>
+
+  <p>Statistics-driven benchmarking library for Rust. Contribute to bheisler/criterion.rs development by creating an account on GitHub.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://github.com/bluss/bencher">
+  <header class="source">
+      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" width="32" height="32">
+
+      <a href="https://github.com/bluss/bencher" target="_blank" rel="noopener">GitHub</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/344;"><img src="https://opengraph.githubassets.com/059512e81a3fcb32c6cb646758d121b172b9f2e84bba8c6fbab62dfdc5ab9df4/bluss/bencher" class="thumbnail" width="690" height="345"></div>
+
+<h3><a href="https://github.com/bluss/bencher" target="_blank" rel="noopener">GitHub - bluss/bencher: bencher is just a port of the libtest (unstable)...</a></h3>
+
+  <p>bencher is just a port of the libtest (unstable) benchmark runner to Rust stable releases. `cargo bench` on stable. "Not a better bencher!" = No feature development. Go build a better sta...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Nov 11, 2018 6:10 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 18:10:57 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="deepred" data-post="5" data-topic="633">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/d/e9bcb4/48.png" class="avatar"> deepred:</div>
+<blockquote>
+<p>Задача в том что бы определить есть ли нужное value в векторе и если есть то добавить его в hashmap, точнее его индекс</p>
+</blockquote>
+</aside>
+<p>В ручном цикле тогда вряд ли смыл особый есть, можно взять <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.position" class="inline-onebox">Iterator in std::iter - Rust</a>, но думаю что на скорости работы оно не скажется.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/deepred" class="user-link">deepred</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Nov 11, 2018 6:17 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 18:17:26 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>bencher показал результат в 117,27 миллисекунд</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/webdesus" class="user-link">Denis Kurilenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Nov 11, 2018 7:24 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 19:24:23 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А ты уверен что у тебя проблема в for? и как он у тебя формируется?<br>
+У меня получились следующие цифры:</p>
+<pre><code>for test                time:   [30.951 ns 31.011 ns 31.119 ns]                      
+                        change: [-98.483% -98.448% -98.410%] (p = 0.00 &lt; 0.05)
+                        Performance has improved.
+Found 15 outliers among 100 measurements (15.00%)
+  3 (3.00%) low severe
+  1 (1.00%) high mild
+  11 (11.00%) high severe
+</code></pre>
+<p>Меня смущает, то что ты написал:</p>
+<pre><code>if value == "1.0" {
+</code></pre>
+<p>Хотя тут у тебя явно должно быть:</p>
+<p><code>if value == &amp;"1.0" {</code></p>
+<p>Мой вектор:</p>
+<pre><code> let vector = vec![
+    "1.0", "2.0", "3.0", "4.0", "5.0", "6.0", "7.0", "8.0", "9.0", "10.0", "11.0", "12.0",
+    "13.0", "14.0",
+];</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/webdesus" class="user-link">Denis Kurilenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Nov 11, 2018 7:30 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 19:30:11 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я тестировал библиотекой <a href="https://github.com/japaric/criterion.rs" rel="nofollow noopener">criterion.rs</a>, которую выше <a class="mention" href="/u/ozkriff/index.html">@ozkriff</a> рекомендовал.</p>
+<p>Мой код:</p>
+<pre><code>#[macro_use]
+extern crate criterion;
+
+use criterion::Criterion;
+
+fn test_for() -&gt; usize {
+    let vector = vec![
+        "1.0", "2.0", "3.0", "4.0", "5.0", "6.0", "7.0", "8.0", "9.0", "10.0", "11.0", "12.0",
+        "13.0", "14.0",
+    ];
+    let mut result: usize = 0;
+    for (index, value) in vector.iter().enumerate() {
+        if value == &amp;"1.0" {
+            result += index;
+        }
+    }
+    return result;
+}
+
+fn criterion_benchmark(c: &amp;mut Criterion) {
+    c.bench_function("for test", |b| b.iter(|| test_for()));
+}
+
+criterion_group!(benches, criterion_benchmark);
+criterion_main!(benches)
+</code></pre>
+<p>У тебя либо ошибка в тестирование, либо проблема в другом месте, но 114 ms это слишком много для массива с 14тью элементами</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/deepred" class="user-link">deepred</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Nov 11, 2018 8:14 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 20:14:57 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Поэтому и задал вопрос как ускорить, сам не знаю почему так долго выполняется, да и тот код привел как пример, у меня там немного по другому, там tuple Enum матчится</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/webdesus" class="user-link">Denis Kurilenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Nov 11, 2018 8:19 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 20:19:42 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_11">Replying to #11</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А что метод do_something делает? мне кажется в нем у тебя проблема. For в любом случае работать должен быстро, проблема либо в итерации(ты на каждой итерации что то сложное делаешь), либо замеры не правильно делаешь. попробуй все таки протестировать библиотекой которую выше привели. <img src="https://forum.rustycrate.ru/images/emoji/twitter/wink.png?v=6" title=":wink:" class="emoji" alt=":wink:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_13"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/sese" class="user-link">Serg</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_13" title="Nov 11, 2018 9:24 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 21:24:35 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#13</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://play.rust-lang.org/?version=stable&amp;mode=release&amp;edition=2015&amp;gist=7969e36dfefc40c8366243909960be7f" rel="nofollow noopener">https://play.rust-lang.org/?version=stable&amp;mode=release&amp;edition=2015&amp;gist=7969e36dfefc40c8366243909960be7f</a></p>
+<p>там скорее всего чтото в дусомсинг</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_14"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_14" title="Nov 11, 2018 10:05 PM">
+            <time itemprop="datePublished" datetime="2018-11-11 22:05:03 +0000">Nov 11, 2018</time>
+          </a>
+          <span class="post-number">#14</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Во-первых, надо выкладывать полный код бенчей.<br>
+Во-вторых, бенч функции <code>test_for</code> не имеет смысла, т.к. внутри нее идет создание <code>vec!</code>, что есть затратная операция, ибо приходится аллоцировать память в хипе. Функция, которую ты бенчишь, должна быть максимально короткой и делать только то, что ты бенчишь. Т.е. она должна по ссылке принимать уже сформированный массив (ну или слайс), и возвращать <code>result: usize</code>.<br>
+В-третьих, ты должен сказать нам порядок размера твоего массива, для которого ты пишешь эту функцию. Если это… 1000 элементов и вызываешь эту функцию раз в секунду, забей на оптимизацию. Если это 1М элементов и будешь вызывать каждую миллисекунду, то это уже хороший кандидат на оптимизацию.<br>
+В-четвертых, почему это массив строк, да которые еще и выглядят как флоаты?<br>
+В-пятых, будут ли флоаты отсортированы? Каков порядок элементов?</p>
+<p>3 пункт очень важен. Если у тебя там 100 элементов, то не стоит тратить на эту “оптимизацию” время.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_15"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/irbis" class="user-link">Alexander Irbis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_15" title="Nov 12, 2018 1:23 AM">
+            <time itemprop="datePublished" datetime="2018-11-12 01:23:56 +0000">Nov 12, 2018</time>
+          </a>
+          <span class="post-number">#15</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_11">Replying to #11</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я бы к этому вопросу подошёл вот так:<br>
+<a href="https://play.rust-lang.org/?version=stable&amp;mode=release&amp;edition=2015&amp;gist=854695818058ca1ce6a916c6e357f0ef" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?version=stable&amp;mode=release&amp;edition=2015&amp;gist=854695818058ca1ce6a916c6e357f0ef</a></p>
+<p>А дальше уже можно разбираться что и почему тормозит, и каковы будут последствия в разных условиях.</p>
+<p>Кстати, для меня оказалось сюрпризом, что один println! томозит как три десятка аллокаций: век живи - век учись…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_16"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_16" title="Nov 12, 2018 2:53 AM">
+            <time itemprop="datePublished" datetime="2018-11-12 02:53:56 +0000">Nov 12, 2018</time>
+          </a>
+          <span class="post-number">#16</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_15">Replying to #15</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group quote-modified" data-username="irbis" data-post="15" data-topic="633">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/irbis/48/60_2.png" class="avatar"> irbis:</div>
+<blockquote>
+<p>Я бы к этому вопросу подошёл вот так:<br>
+<a href="https://play.rust-lang.org/?version=stable&amp;amp;mode=release&amp;amp;edition=2015&amp;amp;gist=854695818058ca1ce6a916c6e357f0ef" class="inline-onebox" rel="noopener nofollow ugc">Rust Playground</a></p>
+<p>А дальше уже можно разбираться что и почему тормозит, и каковы будут последствия в разных условиях.</p>
+</blockquote>
+</aside>
+<p>Это плохой бенч. Смотри в сторону стандартного бенчмаркинга или Criterion. Следует прогревать кеши перед замерами, замерять не 1 итерацию, а несколько итераций, с одними и теми же аргументами. Смысла в <code>println!</code> внутри бенчмарка нет. Инициализация вектора сделана неправильно, <code>let v: Vec&lt;String&gt; = (0..n).map(|n| format!("{}.0", n + 1)).collect();</code> - это означает, что в нем только 1 элемент, а надо протестировать отсутствие элемента, когда все элементы - “1.0”… и т.д. Ну и дождаться от автора поста ответов на уже предоставленную информацию.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_17"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/deepred" class="user-link">deepred</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_17" title="Nov 12, 2018 5:19 AM">
+            <time itemprop="datePublished" datetime="2018-11-12 05:19:48 +0000">Nov 12, 2018</time>
+          </a>
+          <span class="post-number">#17</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_12">Replying to #12</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я bencher’ом тестировал. do_something(index) кладет в HashMap индекс этого value</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_18"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/deepred" class="user-link">deepred</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_18" title="Nov 12, 2018 5:22 AM">
+            <time itemprop="datePublished" datetime="2018-11-12 05:22:52 +0000">Nov 12, 2018</time>
+          </a>
+          <span class="post-number">#18</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Если быть точным, то вот что выполняется:</p>
+<pre><code class="lang-rust">            match value {
+                Operation::MakeLabel(label_id) =&gt; {
+                    labeled.insert(label_id, index);
+                },
+                _operation =&gt; {}
+            };
+</code></pre>
+<p><a class="mention" href="/u/kpp/index.html">@kpp</a> дело в том что вектор может быть размером от нуля до нескольких тысяч, хотя возможно и не стоит сильно беспокоиться о такой скорости в 0.1c ибо эта программа просто для себя, но все же хотелось бы что бы все было побыстрее</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_19"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_19" title="Nov 12, 2018 5:53 AM">
+            <time itemprop="datePublished" datetime="2018-11-12 05:53:51 +0000">Nov 12, 2018</time>
+          </a>
+          <span class="post-number">#19</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>На основе того что было выше накидал дуболомный вариант с HashMap, который и вектор внутри себя выделяет, и HashMap выделяет, и еще строчку клонирует при сохранении:</p>
+<p><code>$ cat Cargo.toml</code>:</p>
+<pre data-code-wrap="toml"><code class="lang-toml">[package]                                          
+name = "criterion_test"                            
+version = "0.1.0"                                  
+authors = ["Andrey Lesnikov &lt;ozkriff@gmail.com&gt;"]  
+edition = "2018"                                   
+
+[dependencies]                                     
+
+[dev-dependencies]                                 
+criterion = "0.2"                                  
+
+[[bench]]                                          
+name = "my_benchmark"                              
+harness = false                                    
+</code></pre>
+<p><code>$ cat benches/my_benchmark.rs</code>:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">#[macro_use]                                       
+extern crate criterion;                            
+
+use std::collections::HashMap;                     
+
+use criterion::Criterion;                          
+
+fn f() -&gt; u64 {                                    
+    let vector = vec![                             
+        "1.0", "2.0", "3.0", "4.0", "5.0", "6.0", "7.0", "8.0", "9.0", "10.0", "11.0", "12.0",         
+        "13.0", "14.0",                            
+    ];                                             
+    let mut map: HashMap&lt;usize, String&gt; = HashMap::new();                                              
+    for (index, value) in vector.iter().enumerate() {                                                  
+        if value == &amp;"1.0" {                       
+            map.insert(index, value.to_string());  
+        }                                          
+    }                                              
+    map.len() as _                                 
+}                                                  
+
+fn criterion_benchmark(c: &amp;mut Criterion) {        
+    c.bench_function("fib 20", |b| b.iter(|| f()));                                                    
+}                                                  
+
+criterion_group!(benches, criterion_benchmark);    
+criterion_main!(benches);                          
+</code></pre>
+<pre><code class="lang-plaintext">$ cargo bench                                      
+    Finished release [optimized] target(s) in 0.09s
+     Running target/release/deps/criterion_test-b6d4e6c476bc742b                                       
+
+running 0 tests                                    
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out                             
+
+     Running target/release/deps/my_benchmark-a2c6c11db5814243                                         
+Gnuplot not found, disabling plotting              
+fib 20                  time:   [222.39 ns 226.60 ns 231.63 ns]                                        
+                        change: [+0.1911% +1.9279% +3.9791%] (p = 0.04 &lt; 0.05)                         
+                        Change within noise threshold.                                                 
+Found 11 outliers among 100 measurements (11.00%)  
+  11 (11.00%) high severe                          
+</code></pre>
+<blockquote>
+<p><code>time:   [222.39 ns 226.60 ns 231.63 ns]</code></p>
+</blockquote>
+<p>И время тут измеряется <strong>наносекундами</strong> все еще.</p>
+<aside class="quote no-group" data-username="deepred" data-post="18" data-topic="633">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/d/e9bcb4/48.png" class="avatar"> deepred:</div>
+<blockquote>
+<p>0.1c</p>
+</blockquote>
+</aside>
+<p>Это абсурдно долго для просто цикла с парочкой выделений памяти. Поэтому, собственно, пытаемся получить от тебя полный код того как ты меряешь, потому что 90% что у тебя ошибка в подходе к измерению времени, т.е. это все совсем не вопрос оптимизации кода.</p>
+<hr>
+<p>UPD: Даже если внутри тестируемой функции взять и выделить вектор из десяти тысяч строк, речь все равно идет и <code>us</code>, т.е. микросекундах:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">let vector: Vec&lt;&amp;str&gt; = ["1.0", "2.0", "3.0"].into_iter().cycle().map(|s| *s).take(10_000).collect();
+</code></pre>
+<p><code>time:   [625.98 us 634.95 us 649.10 us]</code></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_20"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/deepred" class="user-link">deepred</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_20" title="Nov 12, 2018 6:12 AM">
+            <time itemprop="datePublished" datetime="2018-11-12 06:12:18 +0000">Nov 12, 2018</time>
+          </a>
+          <span class="post-number">#20</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_19">Replying to #19</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Полный код такой:</p>
+<pre><code class="lang-rust">
+    pub fn sort_lables(hashmap: &amp;mut HashMap&lt;usize,usize&gt;, operations: Vec&lt;Operation&gt;)
+    {
+        for (index,value) in operations.iter().enumerate() {
+            match value {
+                Operation::MakeLabel(label_id) =&gt; {
+                    hashmap.insert(label_id, index);
+                },
+                _operation =&gt; {}
+          };
+         }
+    }
+
+
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+  <nav class="pagination" role="navigation" aria-label="Post pages">
+    
+
+    <span class="pagination-info">Page 1 of 2</span>
+
+    
+    <a href="/t/uskorit-czikl-for/633/2.html" class="pagination-next" rel="next">Next</a>
+    
+  </nav>
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

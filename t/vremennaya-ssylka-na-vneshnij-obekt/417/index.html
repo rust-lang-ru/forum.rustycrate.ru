@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Временная ссылка на внешний объект - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Временная ссылка на внешний объект</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Временная ссылка на внешний объект</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jul 19, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/nlinker" class="user-link">Nick Linker</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jul 19, 2018 1:37 PM">
+            <time itemprop="datePublished" datetime="2018-07-19 13:37:58 +0000">Jul 19, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Привет.</p>
+<p>Есть некоторая игра, состояние которой описывается структурой <code>GameState</code>. Искусственные игроки (боты) ходят по-очереди, что-то вычисляют и результатом вычислений является какой-то <code>Move</code>, поведение ботов описывается простым трейтом <code>Bot</code>:</p>
+<pre><code class="lang-auto">#[derive(Clone, Copy, Eq, PartialEq, Debug)]
+pub enum Move {
+    Right, Up, Left, Down, Stop,
+}
+
+// the bot is mutable agent that makes a decision about the move
+trait Bot {
+    fn reset(&amp;mut self);
+    fn do_move(&amp;mut self, game_state: &amp;GameState) -&gt; Move;
+}
+</code></pre>
+<p>Реализация <code>do_move</code> может быть достаточно сложной, и в этой реализации множеству различных функций нужен доступ к этому <code>game_state</code>. Теоретически можно протянуть <code>game_state</code> как параметр во все функции, но это очень громоздко. Поэтому хочется сохранить <code>game_state</code> в состоянии бота пока работает функция <code>do_move</code>. Делаю так:</p>
+<pre><code class="lang-auto">struct Bot1 {
+    my_gs: *const GameState,
+}
+
+impl Bot for Bot1 {
+    fn reset(&amp;mut self) {
+        self.my_gs = null();
+        println!("reset gs={:?}", self.my_gs);
+    }
+
+    fn do_move(&amp;mut self, gs: &amp;GameState) -&gt; Move {
+        ///////////////////////////////////////
+        self.my_gs = gs; // setup the reference
+        ///////////////////////////////////////
+
+        // some bot logic goes here
+        let the_move = if self.find_closest_empty(&amp;Point(0, 0)).is_some() {
+            Move::Left
+        } else {
+            Move::Right
+        };
+
+        ///////////////////////////////////////
+        self.my_gs = null(); // clear it back
+        ///////////////////////////////////////
+        the_move
+    }
+}
+</code></pre>
+<p>Теперь внутри алгоритма выбора хода (в данном случае это <code>find_closest_empty</code>) доступ к состянию игры можно сделать просто:</p>
+<pre><code class="lang-auto">    fn find_closest_empty(&amp;self, _src: &amp;Point) -&gt; Option&lt;Point&gt; {
+        // guaranteed to exist since we have initialized
+        let my_gs = unsafe { &amp;*self.my_gs }; // OMG unsafe
+
+        println!("inside find_closest_empty gs={:?}", my_gs);
+        None
+    }
+</code></pre>
+<p>Но это решение мне ужасно не нравится из-за <code>unsafe</code>. <img src="https://forum.rustycrate.ru/images/emoji/twitter/unamused.png?v=5" title=":unamused:" class="emoji" alt=":unamused:"><br>
+Передавать в <code>do_move</code>  <code>Rc&lt;GameState&gt;</code> не хотелось бы, поскольку я хочу сохранить свободу у вызывающего кода решать какое именно состояние туда передать - тот же объект, или может какой-то другой (хотя может я что-то не учёл и <code>Rc</code> тут годится).<br>
+Какие у меня есть варианты?<br>
+Спасибо.</p>
+<p><a href="https://play.rust-lang.org/?gist=dcc0f55f7b6c870169035b869b012fa8&amp;version=stable&amp;mode=debug&amp;edition=2015" rel="nofollow noopener">Этот пример на playground</a><br>
+<a href="https://play.rust-lang.org/?gist=6f6472a06947bcfefc0c5b73caca8035&amp;version=stable&amp;mode=debug&amp;edition=2015" rel="nofollow noopener">Расширенный пример с рандомами и GameState как матрицей ячеек</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jul 19, 2018 1:46 PM">
+            <time itemprop="datePublished" datetime="2018-07-19 13:46:33 +0000">Jul 19, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Теоретически можно протянуть game_state как параметр во все функции, но это очень громоздко.</p>
+</blockquote>
+<p>Я для Zemeroth в итоге решил не париться и таки просто везде протащить состояние:</p>
+<pre><code class="lang-plaintext">$ git grep 'state: &amp;State' | wc -l
+98
+</code></pre>
+<p>Громоздко, но зато любимая растом “явность” во все поля. Пока живой, код в целом нахожу вполне поддерживаемым.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jul 19, 2018 2:11 PM">
+            <time itemprop="datePublished" datetime="2018-07-19 14:11:46 +0000">Jul 19, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://gitter.im/ruRust/easy?at=5b509948cad358639d66985d">Альтернативное предложение из чата</a>:</p>
+<blockquote>
+<p>Roman Akberov <span class="mention">@RomanAkberov</span> 16:59<br>
+Почему бы не сделать прокси-тип BotMove и все методы дать ему?<br>
+&lt;…&gt;<br>
+Он будет жить только на время хода.</p>
+<p>Nick Linker <a class="mention" href="/u/nlinker/index.html">@nlinker</a> 17:01<br>
+его инициализировать GameState…</p>
+<p>Roman Akberov <span class="mention">@RomanAkberov</span> 17:01<br>
+Угу</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/nlinker" class="user-link">Nick Linker</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jul 19, 2018 5:55 PM">
+            <time itemprop="datePublished" datetime="2018-07-19 17:55:10 +0000">Jul 19, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Получилось неплохо. Вкратце выкусил спец структуру для алгоритма <code>Bot1Alg</code>:</p>
+<pre><code class="lang-auto">struct Bot1Alg&lt;'a&gt; {
+    gs: &amp;'a GameState,
+}
+
+impl&lt;'a&gt; Bot1Alg&lt;'a&gt; {
+    fn find_closest_empty(&amp;self, src: &amp;Point) -&gt; Option&lt;Point&gt; {
+        // guaranteed to exist since we have initialized
+        let m = self.gs.height;
+        let n = self.gs.width;
+
+        let Point(oi, oj) = src;
+
+        let bounded = |p: &amp;Point| {
+            let Point(mut i, mut j) = *p;
+            if 0 &lt;= i &amp;&amp; i &lt; m &amp;&amp; 0 &lt;= j &amp;&amp; j &lt; n { *p } else {
+                i = if i &lt; 0 { 0 } else if i &gt; m - 1 { m - 1 } else { i };
+                j = if j &lt; 0 { 0 } else if j &gt; n - 1 { n - 1 } else { j };
+                Point(i, j)
+            }
+        };
+
+        // explore the field around the point with radius 0, 1, etc
+        for r in 1..(m + n) {
+            for k in 0..r {
+                let ps = [
+                    Point(oi - k, oj + r - k),
+                    Point(oi - r + k, oj - k),
+                    Point(oi + k, oj - r + k),
+                    Point(oi + r - k, oj + k),
+                ];
+                let opt = ps.iter()
+                    .map(bounded)
+                    .find(|p| self.gs.cells[p.0 as usize][p.1 as usize] == Cell::Empty);
+                if opt.is_some() {
+                    return opt;
+                }
+            }
+        }
+        None
+    }
+}
+</code></pre>
+<p>И в <code>do_move</code> просто делаем так:</p>
+<pre><code class="lang-auto">    fn do_move(&amp;mut self, gs: &amp;GameState) -&gt; Move {
+        let alg = Bot1Alg { gs };
+
+        // some bot logic goes here
+        ...
+        alg.find_closest_empty(&amp;Point(i, j))
+        ...
+    }
+</code></pre>
+<p><a href="https://play.rust-lang.org/?gist=6f6472a06947bcfefc0c5b73caca8035&amp;version=stable&amp;mode=debug&amp;edition=2015" rel="nofollow noopener">Полный код можно запустить здесь</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

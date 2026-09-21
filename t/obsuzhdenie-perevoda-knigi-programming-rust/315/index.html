@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Обсуждение перевода книги Programming Rust - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/meta/8/index.html">Мета</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Обсуждение перевода книги Programming Rust</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Обсуждение перевода книги Programming Rust</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/meta/8" class="category-badge" style="--cat-color: #92278F"><span class="category-bullet" aria-hidden="true"></span>Мета</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Feb 3, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/andreevlex" class="user-link">Alexander Andreev</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Feb 3, 2018 8:02 AM">
+            <time itemprop="datePublished" datetime="2018-02-03 08:02:06 +0000">Feb 3, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В январе 2018 г. вышла книга<br>
+<a href="https://dmkpress.com/catalog/computer/programming/978-5-97060-236-2/" rel="nofollow noopener">Программирование на языке Rust. Цветное издание</a></p>
+<p>Изучение оглавления показало, что технические термины в переводе очень отличаются от принятых в сообществе.<br>
+В издательство было направлено письмо с замечаниями на перевод.<br>
+Был получен ответ.</p>
+<p>Fedor Logachev<br>
+<span class="mention">@not-fl3</span><br>
+янв. 28 19:15<br>
+<a class="mention" href="/u/andreevlex/index.html">@andreevlex</a> они ответили!</p>
+<p>Терминология, сложившаяся в сообществе, - не всегда самая лучшая терминология. Вообще говоря, я стараюсь принимать ее во внимание, но учитываю и более широкий контекст, а также специфику материала. Значительная часть терминологии в Rust крутится вокруг товарно-грузовых метафор, и я хотел по возможности сохранить это в переводе, с одной стороны, не скатываясь в вульгаризмы, неприемлемые в технической литературе (например, box - коробка или ящик, crate - решетчатый ящик), а, с другой, не подменяя уникальные для Rust термины менее специфичными, употребляемыми в других языках и продуктах</p>
+<p>Конкретно:</p>
+<p>box - бокс, а не упаковка (при таком употреблении многие фразы текста звучат гораздо лучше)</p>
+<p>crate - крейт, а не контейнер (этот вариант мне вообще не нравится, т. к. употребляется совсем в других смыслах; здесь, скорее, подошло бы слово “пакет”, но я его сознательно отверг)</p>
+<p>Слово “generic” я перевел “универсальный”, а не “обобщенный”, решив, что 1) оно лучше подходит в данном случае и 2) что термин, принятый в Java, понятен широкому кругу читателей.</p>
+<p>Перевод trait как “типаж” мне вообще непонятен, он не наводит ни на какие метафоры. “Характеристика” гораздо лучше, понятнее и употребительнее.</p>
+<p>Перевод irrefutable как “безусловный” (вместо “неотвержимый”) не согласуется с употреблением этого слова в других контекстах и не является словарным (хотя последнее - не самый серьезный аргумент).</p>
+<p>А вот с переводом slice как “срезка”, а не “срез”, я, пожалуй, лопухнулся. Хотя встречаются оба варианта, “срез” - гораздо чаще. И это действительно стоит исправить в следующем издании, пройдясь контекстно по тексту.</p>
+<p>С уважением,<br>
+А. Слинкин</p>
+<p>Предлагаю обсудить</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/BORN2LOSE" class="user-link">Norman Ritchie</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Feb 3, 2018 6:03 PM">
+            <time itemprop="datePublished" datetime="2018-02-03 18:03:48 +0000">Feb 3, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="andreevlex" data-post="1" data-topic="315">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/andreevlex/48/101_2.png" class="avatar"> andreevlex:</div>
+<blockquote>
+<p>Предлагаю обсудить</p>
+</blockquote>
+</aside>
+<p>Что именно ? <img src="https://forum.rustycrate.ru/images/emoji/twitter/nerd_face.png?v=12" title=":nerd_face:" class="emoji" alt=":nerd_face:" loading="lazy" width="20" height="20"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/andreevlex" class="user-link">Alexander Andreev</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Feb 4, 2018 6:14 AM">
+            <time itemprop="datePublished" datetime="2018-02-04 06:14:41 +0000">Feb 4, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Может уже купили книгу и рассказать о качестве перевода, чтобы отправить замечания в издательства.<br>
+Ведь это первое русское издание на бумаге.</p>
+<p>Я купил себе книгу.<br>
+Она  в жестком переплете.<br>
+Примеры исходного кода цветные, как в редакторе.<br>
+Я до сих пор не встречал книжку по программированию в цвете <img src="https://forum.rustycrate.ru/images/emoji/twitter/sunglasses.png?v=5" title=":sunglasses:" class="emoji" alt=":sunglasses:"></p>
+<p>Собственно думаю данная информация поможет интересующимся принять решение о покупке.</p>
+<p>Кто хорошо знает английский, эта тема не для Вас <img src="https://forum.rustycrate.ru/images/emoji/twitter/wink.png?v=5" title=":wink:" class="emoji" alt=":wink:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Feb 4, 2018 6:30 AM">
+            <time itemprop="datePublished" datetime="2018-02-04 06:30:50 +0000">Feb 4, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я вроде как рад выходу русскоязычной бумажной книжки по ржавчине, но при этом, скорее всего, полностью ее проигнорирую из-за всех, гм, особенностей перевода.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/andreevlex" class="user-link">Alexander Andreev</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Feb 4, 2018 7:30 AM">
+            <time itemprop="datePublished" datetime="2018-02-04 07:30:03 +0000">Feb 4, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я тоже думал об особенностях, но решил попробовать.<br>
+Тираж книги всего 200 экз<br>
+Так что если будут сильные расхождения в описании терминов буду информировать издательство о недочетах.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Feb 4, 2018 7:49 AM">
+            <time itemprop="datePublished" datetime="2018-02-04 07:49:40 +0000">Feb 4, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>“Тираж книги всего 200 экз” - ?!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/andreevlex" class="user-link">Alexander Andreev</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Feb 4, 2018 8:01 AM">
+            <time itemprop="datePublished" datetime="2018-02-04 08:01:23 +0000">Feb 4, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>да у меня так написано на самой последней странице</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/bmusin" class="user-link">Булат</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Feb 5, 2018 9:44 AM">
+            <time itemprop="datePublished" datetime="2018-02-05 09:44:55 +0000">Feb 5, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Наверное, стоит закрыть тему, раз перевод уже есть?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/delitrem" class="user-link">delitrem</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Feb 24, 2018 7:48 PM">
+            <time itemprop="datePublished" datetime="2018-02-24 19:48:38 +0000">Feb 24, 2018</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Купил эту книгу (оригинал купил ещё раньше), как только узнал о её существовании. Если кратко, саму книгу держать в руках очень приятно, обложка качественная, страницы из плотной ослепительно белой бумаги. По сравнению с книгой по haskell (автор Душкин Р.В.) этого же издания, купленной 10+ лет назад — как небо и земля. И вообще, впервые вижу книгу с подсветкой синтаксиса. А теперь о грустном. Не мне судить о принятых в сообществе терминологии (новичок), поэтому напишу о других найденных косяках. Не то, чтобы я grammar nazi, но книга реально изобилует явными ошибками и опечатками (даже на обложке!). В нескольких местах обнаружено сбившееся форматирование исходного кода. Надеюсь, в следующих изданиях данные косяки будут исправлены.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">J</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/java1cprog" class="user-link">Anatolij</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Oct 7, 2018 12:52 PM">
+            <time itemprop="datePublished" datetime="2018-10-07 12:52:22 +0000">Oct 7, 2018</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Нашел в vk полезную информацию, кто хочет купить данную книгу подешевле - в складчину. - <a href="https://vk.com/search?c%5Bper_page%5D=40&amp;c%5Bq%5D=%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%B0%20%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5%20Rust.%20%D0%A6%D0%B2%D0%B5%D1%82%D0%BD%D0%BE%D0%B5%20%D0%B8%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5&amp;c%5Bsection%5D=statuses&amp;w=wall-145587400_1456" rel="nofollow noopener">Ссылка</a>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Использование *const T and *mut T - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Использование *const T and *mut T</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Использование *const T and *mut T</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Oct 2, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Oct 2, 2018 12:49 PM">
+            <time itemprop="datePublished" datetime="2018-10-02 12:49:51 +0000">Oct 2, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Пришел к следующему выводу, во всех случаях, когда все под вашем контролем, и вы  можете уверено гарантировать  правильность использования указателей, (например когда это часть внутренней кухни вашей библиотеки)</p>
+<p>использование сырых *const T and *mut T не только вредно, но и полезно. <img src="https://forum.rustycrate.ru/images/emoji/twitter/wink.png?v=6" title=":wink:" class="emoji" alt=":wink:"><br>
+особенно это касается static переменных.</p>
+<p>а вот внешние интерфейсы, где возможны не подконтрольные вариации, наоборот использование *const T and *mut T лучше избегать</p>
+<p>вот такое “открытие” нуба.<br>
+было бы интересно услышать возражения,</p>
+<p>если у кого нибудь есть какие-то подобные, очевидно-не очевидные, наблюдения… делитесь</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Oct 2, 2018 12:59 PM">
+            <time itemprop="datePublished" datetime="2018-10-02 12:59:03 +0000">Oct 2, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Весь мой опыт толсто намекает мне, что чего-то нетривиальное уверенно гарантировать, если компилятор (или еще что автоматическое) меня не подстраховывает, я не особо могу. Даже если речь идет чисто о внутренностях какой-то моей библиотеки. Использование сырых указателей лишает львиной доли преимуществ ржавчины, так что если без них реально решить поставленную задачу, то лучше их и не расчехлять лишний раз.</p>
+<blockquote>
+<p>использование сырых *const T and *mut T … полезно … особенно это касается static переменных.</p>
+</blockquote>
+<p>Тут хочется подробнее про решаемую задачу и сравнение с безопасным вариантом.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Oct 2, 2018 1:24 PM">
+            <time itemprop="datePublished" datetime="2018-10-02 13:24:50 +0000">Oct 2, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>дополню:</p>
+<p>static  - поскольку они существуют все время работы программы И это<br>
+либо однопоточное приложение (что бывает часто)<br>
+либо  этот статик упрятан в локальное хранилище потока, если приложение многопоточное.</p>
+<p>просто я написал код и наличие проверок вынуждало делать кучу оберток, которые просто не нужны… лишком все тривиально.</p>
+<p>переписал на указателях  - код существенно упростился.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Oct 2, 2018 1:31 PM">
+            <time itemprop="datePublished" datetime="2018-10-02 13:31:37 +0000">Oct 2, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А примеры кода до и после можешь показать? Обычно меня всякие вспомогательные функции и <code>?</code> выручали, но может и правда в этой ситуации оправдано.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Oct 4, 2018 5:14 PM">
+            <time itemprop="datePublished" datetime="2018-10-04 17:14:57 +0000">Oct 4, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>всё. тема инициализации static стала не актуальной.<br>
+решение, c минимальными  издержками, найдено…</p>
+<pre><code class="lang-auto"># ![feature(untagged_unions)]
+
+union Static&lt;T&gt;  {
+	uninited: (),
+	inited: T,
+}
+
+// Resources:
+static mut FOO: Static&lt;FOO_TYPE&gt; = Static{ uninited: () };
+
+fn main() {
+    let foo = get_FOO_TYPE(...);
+    unsafe { FOO = Static{ inited: foo }; }
+}
+
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Oct 5, 2018 7:36 AM">
+            <time itemprop="datePublished" datetime="2018-10-05 07:36:50 +0000">Oct 5, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А уже готовый <a href="https://github.com/rust-lang-nursery/lazy-static.rs">https://github.com/rust-lang-nursery/lazy-static.rs</a> почему не подходит?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Oct 9, 2018 1:14 PM">
+            <time itemprop="datePublished" datetime="2018-10-09 13:14:00 +0000">Oct 9, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>У меня есть такой код получение/установки значений полей Toml, который я не знаю как реализовать без сырых указателей:</p>
+<pre><code class="lang-auto">fn set_toml(toml: &amp;mut Value, path: impl AsRef&lt;str&gt;, value: Value) -&gt; Result&lt;(), Error&gt; {
+    let mut cursor = toml as *mut Value;
+    let path_vec = path.as_ref()
+        .split(unsafe { SEPARATOR })
+        .collect::&lt;Vec&lt;&amp;str&gt;&gt;();
+    let mut next_iter = path_vec.iter().skip(1);
+
+    // проверяем структуру
+    for (current, next) in path_vec.iter().map(|current| (current, next_iter.next())) {
+        // Если есть следующий элемент то создаем "папку"
+        if let Some(next) = next {
+            if let Ok(index) = current.parse::&lt;usize&gt;() {
+                if let Value::Array(ref mut array) = unsafe { &amp;mut *cursor } {
+                    let empty = if let Ok(_) = next.parse::&lt;usize&gt;() {
+                        Value::Array(Vec::new())
+                    } else {
+                        Value::Table(BTreeMap::new())
+                    };
+                    for _ in array.len()..index + 1 {
+                        array.push(empty.clone());
+                    }
+                    cursor = &amp;mut array[index] as *mut Value;
+                } else {
+                    return Err(ErrorKind::RedefineTypeError(current.to_string()).into());
+                }
+            } else {
+                if let Value::Table(ref mut table) = unsafe { &amp;mut *cursor } {
+                    if !table.contains_key(&amp;current.to_string()) {
+                        if let Ok(_) = next.parse::&lt;usize&gt;() {
+                            table.insert(current.to_string(), Value::Array(Vec::new()));
+                        } else {
+                            table.insert(current.to_string(), Value::Table(BTreeMap::new()));
+                        }
+                    }
+                    cursor = table.get_mut(&amp;current.to_string()).unwrap() as *mut Value;
+                } else {
+                    return Err(ErrorKind::RedefineTypeError(current.to_string()).into());
+                }
+            }
+        // Если следующего элемента нет создаем "файл"
+        } else {
+            match unsafe { &amp;mut *cursor } {
+                Value::Array(ref mut array) =&gt; match current.parse::&lt;usize&gt;() {
+                    Ok(index) =&gt; {
+                        for _ in array.len()..index + 1 {
+                            array.push(value.clone());
+                        }
+                        if !array[index].same_type(&amp;value) {
+                            return Err(ErrorKind::RedefineTypeError(current.to_string()).into());
+                        }
+                        array[index] = value.clone();
+                    }
+                    Err(err) =&gt; {
+                        return Err(ErrorKind::IndexParseError(current.to_string(), err).into());
+                    }
+                },
+                Value::Table(ref mut table) =&gt; {
+                    if let Some(old) = table.get(&amp;current.to_string()) {
+                        if !old.same_type(&amp;value) {
+                            return Err(ErrorKind::RedefineTypeError(current.to_string()).into());
+                        }
+                    }
+                    table.insert(current.to_string(), value.clone());
+                }
+                _ =&gt; {
+                    return Err(ErrorKind::RedefineTypeError(current.to_string()).into());
+                }
+            }
+        }
+    }
+    Ok(())
+}
+
+fn get_toml&lt;'a&gt;(toml: &amp;'a Value, path: impl AsRef&lt;str&gt;) -&gt; Result&lt;Option&lt;&amp;'a Value&gt;, Error&gt; {
+    let mut cursor = toml;
+    let path_vec = path.as_ref()
+        .split(unsafe { SEPARATOR })
+        .collect::&lt;Vec&lt;&amp;str&gt;&gt;();
+    let mut next_iter = path_vec.iter().skip(1);
+
+    for (current, next) in path_vec.iter().map(|current| (current, next_iter.next())) {
+        if let Some(_) = next {
+            match cursor {
+                Value::Array(array) =&gt; {
+                    if let Ok(index) = current.parse::&lt;usize&gt;() {
+                        if index &lt; array.len() {
+                            cursor = &amp;array[index];
+                        } else {
+                            return Ok(None);
+                        }
+                    } else {
+                        return Ok(None);
+                    }
+                }
+                Value::Table(table) =&gt; {
+                    if let Some(index) = table.get(&amp;current.to_string()) {
+                        cursor = index;
+                    } else {
+                        return Ok(None);
+                    }
+                }
+                _ =&gt; {
+                    return Ok(None);
+                }
+            }
+        } else {
+            match cursor {
+                Value::Array(array) =&gt; {
+                    if let Ok(index) = current.parse::&lt;usize&gt;() {
+                        if index &lt; array.len() {
+                            return Ok(Some(&amp;array[index]));
+                        } else {
+                            return Ok(None);
+                        }
+                    } else {
+                        return Ok(None);
+                    }
+                }
+                Value::Table(table) =&gt; {
+                    if let Some(index) = table.get(&amp;current.to_string()) {
+                        return Ok(Some(index));
+                    } else {
+                        return Ok(None);
+                    }
+                }
+                _ =&gt; {
+                    return Ok(None);
+                }
+            }
+        }
+    }
+    Ok(None)
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Oct 9, 2018 5:07 PM">
+            <time itemprop="datePublished" datetime="2018-10-09 17:07:08 +0000">Oct 9, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://play.rust-lang.org/?gist=ba3c340fd23177c22661c47185f1a452&amp;version=stable&amp;mode=debug&amp;edition=2015" rel="nofollow noopener">Так вроде получается</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="3 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          3 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Oct 10, 2018 10:43 AM">
+            <time itemprop="datePublished" datetime="2018-10-10 10:43:41 +0000">Oct 10, 2018</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо. А могло быть такое, что старая версия компилятора ругалась borrow-checker’ом?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Oct 10, 2018 10:58 AM">
+            <time itemprop="datePublished" datetime="2018-10-10 10:58:37 +0000">Oct 10, 2018</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А нет!<br>
+Не понимаю почему в плейграунде этот код компилируется, но у меня такая ошибка:</p>
+<pre><code class="lang-auto">error[E0499]: cannot borrow `cursor.0` as mutable more than once at a time
+   --&gt; config/src/lib.rs:142:37
+    |
+142 |                 if let Value::Array(ref mut array) = cursor {
+    |                                     ^^^^^^^^^^^^^ mutable borrow starts here in previous iteration of loop
+...
+201 | }
+    | - mutable borrow ends here
+
+error[E0506]: cannot assign to `cursor` because it is borrowed
+   --&gt; config/src/lib.rs:151:21
+    |
+142 |                 if let Value::Array(ref mut array) = cursor {
+    |                                     ------------- borrow of `cursor` occurs here
+
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Oct 10, 2018 11:12 AM">
+            <time itemprop="datePublished" datetime="2018-10-10 11:12:18 +0000">Oct 10, 2018</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>а что это за магия:<br>
+<code>if let Value::Array(ref mut array) = { cursor }</code><br>
+vs<br>
+<code>if let Value::Array(ref mut array) = cursor</code></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Oct 10, 2018 12:22 PM">
+            <time itemprop="datePublished" datetime="2018-10-10 12:22:45 +0000">Oct 10, 2018</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_11">Replying to #11</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Это перемещение содержимого <code>cursor</code> в неявную временную переменную.<br>
+В принципе можно написать так:</p>
+<pre><code class="lang-auto">let t = cursor;
+if let Value::Array(ref mut array) = t {
+    //...
+    cursor = &amp;mut array[index];
+}
+</code></pre>
+<p>или немного короче:</p>
+<pre><code class="lang-auto">
+if let Value::Array(ref mut array) = {let t = cursor; t} {
+    //...
+    cursor = &amp;mut array[index];
+}
+</code></pre>
+<p>Теперь <code>array</code> заимствует не <code>cursor</code> а временную переменную <code>t</code>. И мы можем записать новое значение в <code>cursor</code>.</p>
+<hr>
+<p>Вот небольшая статья про эту магию:<br>
+<a href="https://bluss.github.io/rust/fun/2015/10/11/stuff-the-identity-function-does/" class="onebox" target="_blank" rel="nofollow noopener">https://bluss.github.io/rust/fun/2015/10/11/stuff-the-identity-function-does/</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_13"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_13" title="Oct 10, 2018 12:46 PM">
+            <time itemprop="datePublished" datetime="2018-10-10 12:46:09 +0000">Oct 10, 2018</time>
+          </a>
+          <span class="post-number">#13</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_12">Replying to #12</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо.<br>
+Я посмотрел 2018-edition это исправляет.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

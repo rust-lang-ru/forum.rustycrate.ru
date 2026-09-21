@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Специализация: она вроде есть или все-таки ее нет? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Специализация: она вроде есть или все-таки ее нет?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Специализация: она вроде есть или все-таки ее нет?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Dec 20, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Dec 20, 2018 12:53 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 12:53:32 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>начну с конца -  в стандартной библиотеке есть типаж <a href="https://doc.rust-lang.org/std/convert/trait.From.html" rel="nofollow noopener">From</a>, у которого есть такие реализации:</p>
+<pre><code class="lang-auto">impl From&lt;Box&lt;str&gt;&gt; for String
+impl&lt;'a&gt; From&lt;&amp;'a str&gt; for String
+impl&lt;'a&gt; From&lt;Cow&lt;'a, str&gt;&gt; for String
+
+</code></pre>
+<p>и там-же есть общая реализация:</p>
+<pre><code class="lang-auto">impl&lt;T&gt; From&lt;T&gt; for T
+</code></pre>
+<p>и в системной библиотеке это работает, а у меня почему-то нет:</p>
+<pre><code class="lang-auto">pub trait GetterExt&lt;T&gt; {
+    type Err;
+    fn get_value(&amp;self, path: impl AsRef&lt;str&gt;) -&gt; Result&lt;Option&lt;T&gt;, Self::Err&gt;;
+}
+
+impl&lt;T: FromStr&gt; GetterExt&lt;T&gt; for Value {
+    type Err = T::Err;
+    fn get_value(&amp;self, path: impl AsRef&lt;str&gt;) -&gt; Result&lt;Option&lt;T&gt;, T::Err&gt; {
+        let mut cursor = self;
+        for name in path.as_ref().split(unsafe { SEPARATOR }) {
+            println!("{}", name);
+            match cursor.get(name) {
+                Some(next) =&gt; {
+                    cursor = next;
+                }
+                None =&gt; {
+                    return Ok(None);
+                }
+            }
+        }
+
+        format!("{}", cursor).as_str().parse().map(|v| Some(v))
+    }
+}
+
+impl GetterExt&lt;f64&gt; for Value {
+    type Err = ();
+    fn get_value(&amp;self, path: impl AsRef&lt;str&gt;) -&gt; Result&lt;Option&lt;f64&gt;, Self::Err&gt; {
+        let mut cursor = self;
+        for name in path.as_ref().split(unsafe { SEPARATOR }) {
+            println!("{}", name);
+            match cursor.get(name) {
+                Some(next) =&gt; {
+                    cursor = next;
+                }
+                None =&gt; {
+                    return Ok(None);
+                }
+            }
+        }
+
+        Ok(cursor.as_float())
+    }
+}
+
+</code></pre>
+<p>ошибка:</p>
+<pre><code class="lang-auto">error[E0119]: conflicting implementations of trait `GetterExt&lt;f64&gt;` for type `toml::value::Value`:
+  --&gt; config/src/lib.rs:61:1
+   |
+41 | impl&lt;T: FromStr&gt; GetterExt&lt;T&gt; for Value {
+   | --------------------------------------- first implementation here
+...
+61 | impl GetterExt&lt;f64&gt; for Value {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ conflicting implementation for `toml::value::Value`
+
+</code></pre>
+<p>я чего-то не врубаюсь - что все-таки можно сейчас, а что нельзя?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Dec 20, 2018 1:00 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 13:00:03 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="onebox githubissue">
+  <header class="source">
+      <a href="https://github.com/rust-lang/rust/issues/31844" target="_blank" rel="nofollow noopener">github.com/rust-lang/rust</a>
+  </header>
+  <article class="onebox-body">
+    <a href="https://github.com/nikomatsakis" rel="nofollow noopener">
+<img src="https://forum.rustycrate.ru/uploads/default/original/1X/0160748f85fd31eba48a5bea20e1034acc77e9b1.jpeg" class="thumbnail onebox-avatar" width="96" height="96">
+</a>
+
+<h4><a href="https://github.com/rust-lang/rust/issues/31844" target="_blank" rel="nofollow noopener">Issue: Tracking issue for specialization (RFC 1210)</a></h4>
+
+<div class="date" style="margin-top:10px;">
+	<div class="user" style="margin-top:10px;">
+	opened by <a href="https://github.com/nikomatsakis" target="_blank" rel="nofollow noopener">nikomatsakis</a>
+	on <a href="https://github.com/rust-lang/rust/issues/31844" target="_blank" rel="nofollow noopener">2016-02-23</a>
+	</div>
+	<div class="user">
+	</div>
+</div>
+
+<pre class="content" style="white-space: pre-wrap;">This is a tracking issue for specialization (rust-lang/rfcs#1210).
+Major implementation steps:
+ Land #30652 =)
+ Restrictions around lifetime dispatch (currently a soundness hole)
+...</pre>
+
+<div class="labels">
+ 	<span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">A-traits</span>
+ 	<span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">B-RFC-approved</span>
+ 	<span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">B-RFC-implemented</span>
+ 	<span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">B-unstable</span>
+ 	<span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">C-tracking-issue</span>
+ 	<span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">T-lang</span>
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>Насколько я знаю, специализацию еще не стабилизировали, но стандартной библиотеке разрешено использовать всякие ночные штуки, в том числе и <code>#![feature(specialization)]</code>. Подозреваю, в этом дело.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Dec 20, 2018 1:22 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 13:22:45 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>читал + <a href="https://github.com/rust-lang/rust/pull/30652" rel="nofollow noopener">Implement RFC 1210: impl specialization</a>,<br>
+все равно не понятно в каком сейчас это состоянии <img src="https://forum.rustycrate.ru/images/emoji/twitter/frowning.png?v=6" title=":frowning:" class="emoji" alt=":frowning:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Dec 20, 2018 1:43 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 13:43:11 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="chessnokov" data-post="1" data-topic="705">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chessnokov/48/164_2.png" class="avatar"> chessnokov:</div>
+<blockquote>
+<p>impl&lt;T: FromStr&gt; GetterExt&lt;T&gt; for Value {</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="chessnokov" data-post="1" data-topic="705">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chessnokov/48/164_2.png" class="avatar"> chessnokov:</div>
+<blockquote>
+<p>impl GetterExt&lt;f64&gt; for Value {</p>
+</blockquote>
+</aside>
+<p><code>FromStr</code> реализован для <code>f64</code>, о чем тебе и говорит компилятор, что для него <code>T: FromStr</code> и <code>f64</code> выглядят одинаково, ибо <code>f64: FromStr</code></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Dec 20, 2018 1:45 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 13:45:25 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Разве не в этом и есть суть специализации? Выделить среди конкурирующих реализаций более специфичную.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Dec 20, 2018 1:45 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 13:45:43 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p><code>FromStr</code>  реализован для  <code>f64</code></p>
+</blockquote>
+<p>согласен. Но вопрос про специализацию.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Dec 20, 2018 1:46 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 13:46:00 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Попробуй паттерн newtype.</p>
+<aside class="quote no-group quote-modified" data-username="chessnokov" data-post="6" data-topic="705" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chessnokov/48/164_2.png" class="avatar"> chessnokov:</div>
+<blockquote>
+<blockquote>
+<p><code>FromStr</code> реализован для <code>f64</code></p>
+</blockquote>
+<p>согласен. Но вопрос про специализацию.</p>
+</blockquote>
+</aside>
+<p>Думай как компилятор. Вот ты создаешь функцию:</p>
+<pre><code class="lang-auto">fn do_smt&lt;T: FromStr&gt;(t: T) {
+}
+</code></pre>
+<p>И внутри нее вызываешь общую <code>GetterExt&lt;T&gt;</code>. Что в данном случае должен сделать компилятор, когда и f64 и <code>T: FromStr</code> - это один и тот же T?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Dec 20, 2018 1:51 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 13:51:10 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Потому что вот это специализация:</p>
+<pre><code class="lang-auto">use std::str::FromStr;
+
+trait MyTrait&lt;T&gt; {
+    fn nothing();
+}
+
+struct MyStruct {
+    
+}
+
+struct B {
+    
+}
+
+impl MyTrait&lt;B&gt; for MyStruct {
+    fn nothing() {}
+}
+
+impl&lt;T: FromStr&gt; MyTrait&lt;T&gt; for MyStruct {
+    fn nothing() {}
+}
+
+fn main() {
+
+}
+</code></pre>
+<p>А то, что пытаешься сделать ты - конфликтная специализация)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Dec 20, 2018 1:52 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 13:52:07 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>попробовал, не помогает <img src="https://forum.rustycrate.ru/images/emoji/twitter/frowning.png?v=6" title=":frowning:" class="emoji" alt=":frowning:"><br>
+Я помню что-то про специализацию пробегало, надо рилиз-ноутах поискать,<br>
+по-моему что-то связанное с <code>to_owned</code></p>
+<p>вот нашел - <a href="https://blog.rust-lang.org/2016/05/26/Rust-1.9.html#rolling-out-use-of-specialization" rel="nofollow noopener">Announcing Rust 1.9</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Dec 20, 2018 1:58 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 13:58:18 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Специализация как-то так должна выглядеть:</p>
+<pre><code class="lang-rust">#![feature(specialization)]
+
+trait A {
+    fn f(&amp;self);
+}
+
+impl&lt;T&gt; A for T {
+    default fn f(&amp;self) {
+        println!("default");
+    }
+}
+
+struct S1;
+
+impl A for S1 {
+    fn f(&amp;self) {
+        println!("special case");
+    }
+}
+
+struct S2;
+
+fn main() {
+    S1.f(); // special case
+    S2.f(); // default
+}
+</code></pre>
+<p>Вроде, решили что <code>default</code> требуется указывать для “родительской” реализации всегда.</p>
+<p><a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2015&amp;gist=0ade4889e034b0a3bf685ae2362f2caa" rel="nofollow noopener">Playground</a></p>
+<hr>
+<p><a class="mention" href="/u/chessnokov/index.html">@chessnokov</a> в чем именно у тебя вопрос-то? Ночная версия специализации работает в целом как в рфц и описано было. До стабилизации этой фиче еще далековато, в задаче выше есть список пустых чекбоксов со ссылками.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Dec 20, 2018 1:58 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 13:58:37 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Ну да, но это требует <code>#![feature(specialization)]</code> и специального указания <code>default fn</code>, чтобы у компилятора было дерево выбора. <a class="mention" href="/u/chessnokov/index.html">@chessnokov</a>, думай как компилятор, и всё будет ОК! =)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Dec 20, 2018 2:03 PM">
+            <time itemprop="datePublished" datetime="2018-12-20 14:03:52 +0000">Dec 20, 2018</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Теперь все понятно, в stable специализации пока нет.<br>
+Спасибо.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

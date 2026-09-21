@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Подход к версионированию межрелизного кода - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/offtopic/12/index.html">Оффтопик</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Подход к версионированию межрелизного кода</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Подход к версионированию межрелизного кода</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/offtopic/12" class="category-badge" style="--cat-color: #B3B5B4"><span class="category-bullet" aria-hidden="true"></span>Оффтопик</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jan 28, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jan 28, 2019 2:31 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 14:31:37 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>У меня тут глуповатый вопрос в голове застрял, я хз даже как его толком загуглить.</p>
+<p>Вот пишу я библиотеку. Комичу чего-то там в нее. Потом решаю что настало время выпустить версию 3.0 - делаю в гите тег, меняю в Cargo.toml версию на 3.0.</p>
+<p>Потом я продолжаю работать над библиотекой, комитя новые штуки. А версия в Cargo.toml так и остается 3.0, даже если я внес уже кучу несовместимых изменений. И только вот в момент среза 4.0 я меняю версию.</p>
+<p>Вроде, во всей раст экосистеме вижу что люди так работают, но это вот точно правильный подход все? Может надо после выпуска 3.0 в коде первым же комитом менять что это уже <code>4.0.0-alpha.0</code> или <code>4.0.0-draft.0</code> какой-нибудь?</p>
+<p>Киньтесь мыслями-ссылками-ликбезами, пожалуйста.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Revertron" class="user-link">Revertron</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jan 28, 2019 2:41 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 14:41:05 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хороший вопрос.<br>
+Мне кажется, это не только в Расте так работают.<br>
+Другого решения не видел, к сожалению.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jan 28, 2019 2:44 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 14:44:47 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="ozkriff" data-post="1" data-topic="773">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p>Вроде, во всей раст экосистеме вижу что люди так работают, но это вот точно правильный подход все? Может надо после выпуска 3.0 в коде первым же комитом менять что это уже <code>4.0.0-alpha.0</code> или <code>4.0.0-draft.0</code> какой-нибудь?</p>
+</blockquote>
+</aside>
+<p>А почему ты решил, что ты должен сразу же менять на <code>4.0.0-alpha.0</code> или <code>4.0.0-draft.0</code>? Может быть так, что сразу после релиза ты обнаружил багу внутри кода, которая не затрагивает API, тогда ты пушишь фикс, создаешь новый тег 3.0.1, и пушишь в крейтс 3.0.1</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jan 28, 2019 2:48 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 14:48:57 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да, и правда. Ну тогда сразу после выпуска <code>3.0.0</code> надо хз вообще на что версию менять. В ветках работать отдельных? )</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">F</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/funkill" class="user-link">Funkill</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jan 28, 2019 2:49 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 14:49:04 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Возможно работу над новой версией вести в отдельной ветке и от неё уже делать альфы/беты/rc, а в момент релиза - сливать с мастером, как предлагает git flow. В таком случае и семантическое версионирование будет соблюдаться, и код новой версии не будет смешан с кодом старой.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Jan 28, 2019 2:57 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 14:57:21 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо, пойду gitflow перечитаю как именно они этот вопрос предлагают решать.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Jan 28, 2019 3:07 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 15:07:15 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="ozkriff" data-post="4" data-topic="773" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p>Ну тогда сразу после выпуска <code>3.0.0</code> надо хз вообще на что версию менять.</p>
+</blockquote>
+</aside>
+<p>Зачем менять? Не забывай, что ты код пишешь в svc, а релизишь в крейтс. Конечному пользователю должно быть вообще пофигу на то, что у тебя внутри svc творится на текущий момент.</p>
+<p>Альфы используют тогда, когда есть некий код, похожий на рабочий, но надо проверить, рабочий он или нет. Тогда выпускают альфу, просят пользователей протестировать, а потом уже релизят окончательную версию.</p>
+<p>Хорошие примеры такого подхода: futures-preview <a href="https://crates.io/crates/futures-preview/0.3.0-alpha.12" rel="noopener nofollow ugc"> 0.3.0-alpha.12 </a></p>
+<p>Антипримеры (релизнули без проверок): futures 0.1 → 0.2 (в итоге отозвали версию) , nom 3 → 4 (получилось <a href="https://github.com/Geal/nom/issues/839" rel="noopener nofollow ugc">непонятно что</a>)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Jan 28, 2019 3:11 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 15:11:58 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Например, потому что я не использую <a href="http://crates.io">crates.io</a>, а пилю какую-то закрытую систему библиотек, которые живут в закрытых репах, составляя иерархию зависимостей.</p>
+<p>В целом оно все функциональных неудобств не так что бы много/часто создает, просто пытаюсь понять как филосовски/идиологически можно синхронизировать захардкоженную в код версию и гибкую/ветвящуюся сущность VCS. Странно это как-то, что в коде написано 3.0, а он уже ни разу не 3.0. Но, может, не нужно и пытаться вообще таким заниматься, а то бюрократией захлестнет.</p>
+<aside class="quote no-group" data-username="kpp" data-post="7" data-topic="773">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/kpp/48/333_2.png" class="avatar"> kpp:</div>
+<blockquote>
+<p>Альфы используют тогда, когда есть некий код, похожий на рабочий, но надо проверить, рабочий он или нет. Тогда выпускают альфу, просят пользователей протестировать, а потом уже релизят окончательную версию.</p>
+</blockquote>
+</aside>
+<p>Ага. Там выше вариант с <code>...-draft</code> еще был, это уже по семантике ближе будет, но тоже хз.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Jan 28, 2019 3:17 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 15:17:45 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="ozkriff" data-post="8" data-topic="773">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p>Странно это как-то, что в коде написано 3.0, а он уже ни разу не 3.0</p>
+</blockquote>
+</aside>
+<p>Тогда распиливай на master и develop.<br>
+Ветку для мержа PR делаешь develop, а релиз кода происходит через мерж develop в master + tag</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Jan 28, 2019 6:07 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 18:07:28 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://gitter.im/ruRust/offtopic?at=5c4f3d91ca428b064517f89a">Из гиттера</a>:</p>
+<blockquote>
+<p>Kai Ren <a class="mention" href="/u/tyranron/index.html">@tyranron</a>:<br>
+…<br>
+Я понимаю это так:</p>
+<ol>
+<li>У нас есть релизнутая версия 3.0.0, коммит с тегов, все дела.</li>
+<li>Последующими коммитами (или PR’ами) версия бампается в заисимости от того, какие изменения несутся с точки зрения semver. Если patch, то на 3.0.1-dev, если тянет на ап minor version по semver, то бампается на 3.1.0-dev, и если ап major version, то 4.0.0-dev, соотвественно.</li>
+<li>Перед релизом делается релизный коммит, в котором приводится в порядок ченджлог, наводится остальной марафет, в том числе и в Cargo.toml с версии убирается приставка -dev. И вешается сверху Git tag соотвествующий. Сюда же могут идти и всякие alpha/beta как пре-релизы.</li>
+</ol>
+<p>Минус только в том, что нужно думать о semver каждый раз, когда коммитишь в master. Но тоже, смотря с какой стороны на это смотреть, это может быть и плюс.</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/snuk182" class="user-link">Serhii Plyhun</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Jan 28, 2019 6:28 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 18:28:06 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Если нужно поддерживать некогда релизнутые версии патчами, лучше ветвить вместо тегов. Из очевидных недостатков - больше геморроя с черрипиками важных патчей.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vitvakatu" class="user-link">Илья Богданов</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Jan 28, 2019 10:19 PM">
+            <time itemprop="datePublished" datetime="2019-01-28 22:19:46 +0000">Jan 28, 2019</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_11">Replying to #11</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Ветвить то в любом случае придется, но ветку можно создать в любой момент, сразу это делать смысла не много.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_13"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/snuk182" class="user-link">Serhii Plyhun</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_13" title="Jan 29, 2019 8:17 AM">
+            <time itemprop="datePublished" datetime="2019-01-29 08:17:18 +0000">Jan 29, 2019</time>
+          </a>
+          <span class="post-number">#13</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="onebox stackexchange">
+  <header class="source">
+      <a href="https://stackoverflow.com/questions/11807501/tags-vs-branches-in-git" target="_blank" rel="nofollow noopener">stackoverflow.com</a>
+  </header>
+  <article class="onebox-body">
+      <a href="https://stackoverflow.com/users/230202/antpaw" target="_blank" rel="nofollow noopener">
+    <img alt="antpaw" src="https://forum.rustycrate.ru/uploads/default/original/1X/e0cc1f1cac43d14c36bfe46fdfa045f8e8c2020c.png" class="thumbnail onebox-avatar" width="128" height="128">
+  </a>
+<h4>
+  <a href="https://stackoverflow.com/questions/11807501/tags-vs-branches-in-git" target="_blank" rel="nofollow noopener">tags vs branches in git</a>
+</h4>
+
+<div class="tags">
+  <strong>git, deployment, tags, branch</strong>
+</div>
+
+<div class="date">
+  asked by
+  
+  <a href="https://stackoverflow.com/users/230202/antpaw" target="_blank" rel="nofollow noopener">
+    antpaw
+  </a>
+  on <a href="https://stackoverflow.com/questions/11807501/tags-vs-branches-in-git" target="_blank" rel="nofollow noopener">09:32AM - 04 Aug 12 UTC</a>
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_14"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/QuarkDoe" class="user-link">Quark Doe</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_14" title="Jan 30, 2019 12:05 PM">
+            <time itemprop="datePublished" datetime="2019-01-30 12:05:36 +0000">Jan 30, 2019</time>
+          </a>
+          <span class="post-number">#14</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="Revertron" data-post="2" data-topic="773" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/revertron/48/486_2.png" class="avatar"> Revertron:</div>
+<blockquote>
+<p>Другого решения не видел, к сожалению.</p>
+</blockquote>
+</aside>
+<p>Вопрос в том как обрабатывает зависимости Cargo.</p>
+<p>У Мавена для Явы есть понятие “SNAPSHOT”, роллин версия. Т.е. версия 1.0-SNAPSHOT она выше 0.9 и ниже 1.0</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_15"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/QuarkDoe" class="user-link">Quark Doe</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_15" title="Jan 30, 2019 12:26 PM">
+            <time itemprop="datePublished" datetime="2019-01-30 12:26:17 +0000">Jan 30, 2019</time>
+          </a>
+          <span class="post-number">#15</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Как вариант использовать tag и перемещать его при коммите.</p>
+<pre><code class="lang-auto">[dependencies]
+rand = { git = "https://github.com/user/crate", tag = "1.0-rolling" }
+</code></pre>
+<p>Ну а со стороны библиотеки делать</p>
+<pre><code class="lang-auto">git tag -f "1.0-rolling"
+
+git push --force origin 1.0-rolling
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

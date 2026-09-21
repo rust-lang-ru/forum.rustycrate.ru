@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Обедающие философы - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Обедающие философы</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Обедающие философы</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Mar 20, 2017</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/doomkin" class="user-link">Павел</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Mar 20, 2017 8:41 PM">
+            <time itemprop="datePublished" datetime="2017-03-20 20:41:44 +0000">Mar 20, 2017</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В книге <a href="http://rurust.github.io/rust_book_ru/" rel="nofollow noopener">Язык программирования Rust</a> в главе <a href="http://rurust.github.io/rust_book_ru/src/dining-philosophers.html" rel="nofollow noopener">4.3 Обедающие философы</a> в Arch Linux на ядре 4.10.3-1-ARCH выполнение кода, скомпилированного в rustc 1.16.0</p>
+<pre><code class="lang-auto">use std::thread;
+use std::time::Duration;
+use std::sync::{Mutex, Arc};
+
+struct Philosopher {
+    name:  String,
+    left:  usize,
+    right: usize,
+}
+
+impl Philosopher {
+    fn new(name: &amp;str, left: usize, right: usize) -&gt; Philosopher {
+        Philosopher {
+            name: name.to_string(),
+            left: left,
+            right: right,
+        }
+    }
+
+    fn eat(&amp;self, table: &amp;Table) {
+        let _left = table.forks[self.left].lock().unwrap();
+        thread::sleep(Duration::from_millis(150));
+        let _right = table.forks[self.right].lock().unwrap();
+
+        println!("{} начала есть.", self.name);
+        
+        thread::sleep(Duration::from_millis(1000));
+        
+        println!("{} закончила есть.", self.name);
+    }
+}
+
+struct Table {
+    forks: Vec&lt;Mutex&lt;()&gt;&gt;,
+}
+
+fn main() {
+    let table = Arc::new(Table { forks: vec![
+        Mutex::new(()),
+        Mutex::new(()),
+        Mutex::new(()),
+        Mutex::new(()),
+        Mutex::new(()),
+    ]});
+
+    let philosophers = vec![
+        Philosopher::new("Джудит Батлер", 0, 1),
+        Philosopher::new("Рая Дунаевская", 1, 2),
+        Philosopher::new("Зарубина Наталья", 2, 3),
+        Philosopher::new("Эмма Гольдман", 3, 4),
+        Philosopher::new("Анна Шмидт", 0, 4),
+    ];
+
+    let handles: Vec&lt;_&gt; = philosophers.into_iter().map(|p| {
+        let table = table.clone();
+
+        thread::spawn(move || {
+            p.eat(&amp;table);
+        })
+    }).collect();
+
+    for h in handles {
+        h.join().unwrap();
+    }
+}
+</code></pre>
+<p>даёт результат</p>
+<pre><code class="lang-auto">Эмма Гольдман начала есть.
+Эмма Гольдман закончила есть.
+Зарубина Наталья начала есть.
+Зарубина Наталья закончила есть.
+Рая Дунаевская начала есть.
+Рая Дунаевская закончила есть.
+Джудит Батлер начала есть.
+Джудит Батлер закончила есть.
+Анна Шмидт начала есть.
+Анна Шмидт закончила есть.
+</code></pre>
+<p>вместо</p>
+<pre><code class="lang-auto">Рая Дунаевская начала есть.
+Эмма Гольдман начала есть.
+Эмма Гольдман закончила есть.
+Рая Дунаевская закончила есть.
+Джудит Батлер начала есть.
+Зарубина Наталья начала есть.
+Джудит Батлер закончила есть.
+Анна Шмидт начала есть.
+Зарубина Наталья закончила есть.
+Анна Шмидт закончила есть.
+</code></pre>
+<p>Ожидаемого параллелизма не наблюдается. В чём может быть проблема?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Mar 21, 2017 7:23 AM">
+            <time itemprop="datePublished" datetime="2017-03-21 07:23:00 +0000">Mar 21, 2017</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>На самом деле параллелизм никуда не делся. Чтобы прояснить сложные взаимоотношения философов и вилок, сделаем сообщения в функции <code>eat()</code> более информативными:</p>
+<pre><code class="lang-auto">    fn eat(&amp;self, table: &amp;Table) {
+        let _left = table.forks[self.left].lock().unwrap();
+        
+        println!("{} взяла вилку № {} слева.", self.name, self.left);
+        
+        thread::sleep(Duration::from_millis(150));
+        let _right = table.forks[self.right].lock().unwrap();
+
+        println!("{} взяла вилку № {} справа и начала есть.", self.name, self.right);
+        
+        thread::sleep(Duration::from_millis(1000));
+        
+        println!("{} закончила есть и положила вилки № {} и № {}.", self.name, self.left, self.right);
+    }
+</code></pre>
+<p>Получим:</p>
+<pre><code class="lang-auto">Джудит Батлер взяла вилку № 0 слева.
+Рая Дунаевская взяла вилку № 1 слева.
+Эмма Гольдман взяла вилку № 3 слева.
+Зарубина Наталья взяла вилку № 2 слева.
+Эмма Гольдман взяла вилку № 4 справа и начала есть.
+Эмма Гольдман закончила есть и положила вилки № 3 и № 4.
+Зарубина Наталья взяла вилку № 3 справа и начала есть.
+Зарубина Наталья закончила есть и положила вилки № 2 и № 3.
+Рая Дунаевская взяла вилку № 2 справа и начала есть.
+Рая Дунаевская закончила есть и положила вилки № 1 и № 2.
+Джудит Батлер взяла вилку № 1 справа и начала есть.
+Джудит Батлер закончила есть и положила вилки № 0 и № 1.
+Анна Шмидт взяла вилку № 0 слева.
+Анна Шмидт взяла вилку № 4 справа и начала есть.
+Анна Шмидт закончила есть и положила вилки № 0 и № 4.
+</code></pre>
+<p>Первое, что делают философы - расхватывают левые вилки. Благодаря своей леворукости Анна Шмидт осталась без вилки (вилка 0 у Джудит) она не пытается захватить вилку 4 и та достается Эмме, которая собрала полный набор и начинает есть. Так как у философов не хватает сообразительности вернуть ненужную левую вилку на стол, то получается что они едят по одному.</p>
+<p>Проще всего добиться того чтобы одновременно ели два философа - убрать задержку после взятия левой вилки:</p>
+<pre><code class="lang-auto">//thread::sleep(Duration::from_millis(150));
+</code></pre>
+<p>Получим:</p>
+<pre><code class="lang-auto">Джудит Батлер взяла вилку № 0 слева.
+Джудит Батлер взяла вилку № 1 справа и начала есть.
+Зарубина Наталья взяла вилку № 2 слева.
+Зарубина Наталья взяла вилку № 3 справа и начала есть.
+Зарубина Наталья закончила есть и положила вилки № 2 и № 3.
+Джудит Батлер закончила есть и положила вилки № 0 и № 1.
+Анна Шмидт взяла вилку № 0 слева.
+Анна Шмидт взяла вилку № 4 справа и начала есть.
+Эмма Гольдман взяла вилку № 3 слева.
+Рая Дунаевская взяла вилку № 1 слева.
+Рая Дунаевская взяла вилку № 2 справа и начала есть.
+Анна Шмидт закончила есть и положила вилки № 0 и № 4.
+Рая Дунаевская закончила есть и положила вилки № 1 и № 2.
+Эмма Гольдман взяла вилку № 4 справа и начала есть.
+Эмма Гольдман закончила есть и положила вилки № 3 и № 4.
+</code></pre>
+<p>Джудит и Наталья едят одновременно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/doomkin" class="user-link">Павел</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Mar 21, 2017 11:03 AM">
+            <time itemprop="datePublished" datetime="2017-03-21 11:03:21 +0000">Mar 21, 2017</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Благодарю за содержательный и оперативный ответ. Под параллелизмом в этой задаче я подразумеваю ситуацию, когда одновременно ест больше одного философа, хотя это понятие имеет и другое значение: одновременная работа нескольких потоков. После того, как мы убрали задержку после взятия вилок, философы начали есть одновременно. В Вашем запуске экземпляра одновременно едят Джудит и Наталья, затем Анна и Рая. При разных запусках экземпляра ситуация меняется:</p>
+<pre><code class="lang-auto">Зарубина Наталья взяла вилку № 2 слева.
+Зарубина Наталья взяла вилку № 3 справа и начала есть.
+Рая Дунаевская взяла вилку № 1 слева.
+Джудит Батлер взяла вилку № 0 слева.
+Зарубина Наталья закончила есть и положила вилки № 2 и № 3.
+Эмма Гольдман взяла вилку № 3 слева.
+Эмма Гольдман взяла вилку № 4 справа и начала есть.
+Рая Дунаевская взяла вилку № 2 справа и начала есть.
+Эмма Гольдман закончила есть и положила вилки № 3 и № 4.
+Рая Дунаевская закончила есть и положила вилки № 1 и № 2.
+Джудит Батлер взяла вилку № 1 справа и начала есть.
+Джудит Батлер закончила есть и положила вилки № 0 и № 1.
+Анна Шмидт взяла вилку № 0 слева.
+Анна Шмидт взяла вилку № 4 справа и начала есть.
+Анна Шмидт закончила есть и положила вилки № 0 и № 4.
+
+</code></pre>
+<p>Здесь одновременно едят только Эмма и Рая.</p>
+<pre><code class="lang-auto">Рая Дунаевская взяла вилку № 1 слева.
+Рая Дунаевская взяла вилку № 2 справа и начала есть.
+Джудит Батлер взяла вилку № 0 слева.
+Эмма Гольдман взяла вилку № 3 слева.
+Эмма Гольдман взяла вилку № 4 справа и начала есть.
+Рая Дунаевская закончила есть и положила вилки № 1 и № 2.
+Джудит Батлер взяла вилку № 1 справа и начала есть.
+Зарубина Наталья взяла вилку № 2 слева.
+Эмма Гольдман закончила есть и положила вилки № 3 и № 4.
+Зарубина Наталья взяла вилку № 3 справа и начала есть.
+Джудит Батлер закончила есть и положила вилки № 0 и № 1.
+Анна Шмидт взяла вилку № 0 слева.
+Анна Шмидт взяла вилку № 4 справа и начала есть.
+Зарубина Наталья закончила есть и положила вилки № 2 и № 3.
+Анна Шмидт закончила есть и положила вилки № 0 и № 4.
+</code></pre>
+<p>Здесь одновременно едят Рая и Эмма, затем Эмма и Джудит, затем Джудит и Наталья, затем Наталья и Анна. Это значит, что разные запуски дают разное общее время обеда. Возникает два философских вопроса:</p>
+<ol>
+<li>Почему это происходит в нашем алгоритме?</li>
+<li>Какой алгоритм даёт минимальное время обеда?</li>
+</ol>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Mar 21, 2017 12:38 PM">
+            <time itemprop="datePublished" datetime="2017-03-21 12:38:00 +0000">Mar 21, 2017</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Сколько потоков работает одновременно зависит от возможностей процессора и менеджера потоков ОС. Чтобы сделать все  совсем наглядным можно добавить сообщение в самое начало функции <code>eat()</code> и убрать все остальные кроме последнего:</p>
+<pre><code class="lang-auto">Джудит Батлер села за стол.
+Рая Дунаевская села за стол.
+Зарубина Наталья села за стол.
+Эмма Гольдман села за стол.
+Анна Шмидт села за стол.
+Джудит Батлер закончила есть и положила вилки № 0 и № 1.
+Зарубина Наталья закончила есть и положила вилки № 2 и № 3.
+Анна Шмидт закончила есть и положила вилки № 0 и № 4.
+Рая Дунаевская закончила есть и положила вилки № 1 и № 2.
+Эмма Гольдман закончила есть и положила вилки № 3 и № 4.
+</code></pre>
+<p>Тут сначала  запускаются все потоки в том порядке как они описаны в переменной <code>philosophers</code>. Заканчиваются они уже в другом порядке.</p>
+<p>Насчет минимального времени трудно сказать. Можно попробовать задавать случайную задержку на старте, согласовывать действия философов, возвращать левую вилку если правая занята. Вариантов много.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Mar 21, 2017 2:43 PM">
+            <time itemprop="datePublished" datetime="2017-03-21 14:43:39 +0000">Mar 21, 2017</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Интересно что вывод сообщений из потоков похоже тоже оказывает какое-то влияние на их поведение. Видимо из-за того что потокам приходится синхронизироваться для записи в общий ресурс - <code>stdout</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/doomkin" class="user-link">Павел</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Mar 22, 2017 11:04 AM">
+            <time itemprop="datePublished" datetime="2017-03-22 11:04:35 +0000">Mar 22, 2017</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Не похоже, что порядок философов совпадает с порядком в векторе <code>philosophers</code>:</p>
+<pre><code class="lang-auto">   let philosophers = vec![
+        Philosopher::new("Джудит Батлер", 0, 1),
+        Philosopher::new("Рая Дунаевская", 1, 2),
+        Philosopher::new("Наталья Зарубина", 2, 3),
+        Philosopher::new("Эмма Гольдман", 3, 4),
+        Philosopher::new("Анна Шмидт", 0, 4),
+    ];
+</code></pre>
+<p>Реализация:</p>
+<pre><code class="lang-auto">    fn eat(&amp;self, table: &amp;Table) {
+        println!("{} села за стол.", self.name);
+
+        let _left = table.forks[self.left].lock().unwrap();
+        let _right = table.forks[self.right].lock().unwrap();
+
+        println!("{} взяла вилку № {} слева и вилку № {} справа и начала есть.",
+            self.name, self.left, self.right);
+                
+        thread::sleep(Duration::from_millis(1000));
+        
+        println!("{} закончила есть.", self.name);
+    }
+</code></pre>
+<p>Даёт результат:</p>
+<pre><code class="lang-auto">Джудит Батлер села за стол.
+Джудит Батлер взяла вилку № 0 слева и вилку № 1 справа и начала есть.
+Рая Дунаевская села за стол.
+Анна Шмидт села за стол.
+Эмма Гольдман села за стол.
+Эмма Гольдман взяла вилку № 3 слева и вилку № 4 справа и начала есть.
+Наталья Зарубина села за стол.
+Джудит Батлер закончила есть.
+Эмма Гольдман закончила есть.
+Наталья Зарубина взяла вилку № 2 слева и вилку № 3 справа и начала есть.
+Анна Шмидт взяла вилку № 0 слева и вилку № 4 справа и начала есть.
+Наталья Зарубина закончила есть.
+Анна Шмидт закончила есть.
+Рая Дунаевская взяла вилку № 1 слева и вилку № 2 справа и начала есть.
+Рая Дунаевская закончила есть.
+</code></pre>
+<p>Анна и Эмма нарушили очередь и сели за стол раньше Натальи. У меня возник другой вопрос: как реализовать счётчик одновременно обедающих философов?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Mar 22, 2017 12:39 PM">
+            <time itemprop="datePublished" datetime="2017-03-22 12:39:04 +0000">Mar 22, 2017</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Если убрать второе сообщение, то начнет совпадать. <code>println()</code> внутри потока как то влияет на порядок их выполнения.</p>
+<p>По хорошему надо убрать все <code>println()</code> и записывать в локальный вектор/массив системное время запуска/взятия вилок и т.п. А после завершения потока вернуть этот вектор в основной поток. В основном потоке можно сравнить эти времена и определить какие философы обедали одновременно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/doomkin" class="user-link">Павел</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Mar 22, 2017 12:53 PM">
+            <time itemprop="datePublished" datetime="2017-03-22 12:53:12 +0000">Mar 22, 2017</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Похоже, мой Arch Linux на Intel i7 по другому обрабатывает потоки, убрал второе сообщение:</p>
+<pre><code class="lang-auto">    fn eat(&amp;self, table: &amp;Table) {
+        println!("{} села за стол.", self.name);
+
+        let _left = table.forks[self.left].lock().unwrap();
+        let _right = table.forks[self.right].lock().unwrap();
+
+        //println!("{} взяла вилку № {} слева и вилку № {} справа и начала есть.",
+        //    self.name, self.left, self.right);
+                
+        thread::sleep(Duration::from_millis(1000));
+        
+        println!("{} закончила есть.", self.name);
+    }
+</code></pre>
+<p>Но порядок посадки философов за стол отличается от порядка в векторе <code>philosophers</code>:</p>
+<pre><code class="lang-auto">Рая Дунаевская села за стол.
+Анна Шмидт села за стол.
+Эмма Гольдман села за стол.
+Джудит Батлер села за стол.
+Наталья Зарубина села за стол.
+Рая Дунаевская закончила есть.
+Анна Шмидт закончила есть.
+Эмма Гольдман закончила есть.
+Джудит Батлер закончила есть.
+Наталья Зарубина закончила есть.
+</code></pre>
+<p>А что если для подсчёта одновременно обедающих философов объявить разделяемую между потоками переменную типа <code>i32</code> и внутри <code>eat</code> увеличивать и уменьшать её? Как это можно реализовать в Rust?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Mar 22, 2017 4:10 PM">
+            <time itemprop="datePublished" datetime="2017-03-22 16:10:24 +0000">Mar 22, 2017</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хм, у меня на Win7 порядок был всегда одинаковый.</p>
+<p>Можно, только нужно завернуть ее в <code>Arc&lt;Mutex&lt;_&gt;&gt;</code>. Навскидку как-то так:</p>
+<pre><code class="lang-auto">let counter = Arc::new(Mutex::new(0i32));
+//...
+        let table = table.clone();
+        let counter = counter.clone();
+
+        thread::spawn(move || {
+            p.eat(&amp;table, counter);
+        })
+
+</code></pre>
+<p>Но тут во-первых нужно захватывать доступ к переменной - потоки опять будут мешать друг другу.  Во-вторых в конце она все равно будет равна 0, а если ее мониторить в основном потоке в цикле то это еще сильнее будет мешать вторичным потокам.</p>
+<p>Еще есть <a href="https://doc.rust-lang.org/std/sync/atomic/index.html" rel="nofollow noopener">atomic types</a>. Думаю это лучше подойдет.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/doomkin" class="user-link">Павел</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Mar 23, 2017 11:39 PM">
+            <time itemprop="datePublished" datetime="2017-03-23 23:39:45 +0000">Mar 23, 2017</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Для подсчёта количества одновременных едоков использовал тип <code>AtomicUsize</code>:</p>
+<pre><code class="lang-auto">use std::thread;
+use std::time::Duration;
+use std::sync::{Mutex, Arc};
+use std::sync::atomic::{AtomicUsize, Ordering};
+
+struct Philosopher {
+    name:  String,
+    left:  usize,
+    right: usize,
+}
+
+impl Philosopher {
+    fn new(name: &amp;str, left: usize, right: usize) -&gt; Philosopher {
+        Philosopher {
+            name: name.to_string(),
+            left: left,
+            right: right,
+        }
+    }
+
+    fn eat(&amp;self, table: &amp;Table, n_eaters: &amp;Arc&lt;AtomicUsize&gt;) {
+        // Философ взял левую вилку
+        let _left = table.forks[self.left].lock().unwrap();
+        
+        // Философ взял правую вилку
+        let _right = table.forks[self.right].lock().unwrap();
+
+        // Увеличилось количество одновременных едоков
+        n_eaters.store(n_eaters.load(Ordering::SeqCst) + 1, Ordering::Release);
+                
+        println!("{} взял вилку № {} слева и вилку № {} справа и начал есть. Ест {}",
+                 self.name, 
+                 self.left, 
+                 self.right, 
+                 n_eaters.load(Ordering::SeqCst));
+            
+        // Философ немного поел
+        thread::sleep(Duration::from_millis(100));
+        
+        // Уменьшилось количество одновременных едоков
+        n_eaters.store(n_eaters.load(Ordering::SeqCst) - 1, Ordering::Release);
+                        
+        // Философ вернул обе вилки
+        println!("{} закончил есть. Ест {}", 
+                 self.name, 
+                 n_eaters.load(Ordering::SeqCst));
+    }
+}
+
+struct Table {
+    forks: Vec&lt;Mutex&lt;()&gt;&gt;,
+}
+
+fn main() {
+    // Вилки на столе - ценный разделяемый ресурс!
+    let table = Arc::new(Table { forks: vec![
+        Mutex::new(()),
+        Mutex::new(()),
+        Mutex::new(()),
+        Mutex::new(()),
+        Mutex::new(()),
+    ]});
+
+    // Проголодавшиеся философы
+    let philosophers = vec![
+        Philosopher::new("Андрей",   0, 1),
+        Philosopher::new("Борис",    1, 2),
+        Philosopher::new("Владимир", 2, 3),
+        Philosopher::new("Георгий",  3, 4),
+        Philosopher::new("Дмитрий",  0, 4), // левша
+    ];
+    
+    // Количество одновременно кушающих философов: пока никого
+    let n_eaters = Arc::new(AtomicUsize::new(0));
+
+    // Философы приготовились к обеду
+    let handles: Vec&lt;_&gt; = philosophers.into_iter().map(|p| {
+        let table = table.clone();
+        let n_eaters = n_eaters.clone();
+
+        thread::spawn(move || {
+            p.eat(&amp;table, &amp;n_eaters);
+        })
+    }).collect();
+
+    // Философы приступили к приёму пищи
+    for h in handles {
+        h.join().unwrap();
+    }
+}
+</code></pre>
+<p>Результат:</p>
+<pre><code class="lang-auto">Борис взял вилку № 1 слева и вилку № 2 справа и начал есть. Ест 1
+Георгий взял вилку № 3 слева и вилку № 4 справа и начал есть. Ест 2
+Борис закончил есть. Ест 1
+Андрей взял вилку № 0 слева и вилку № 1 справа и начал есть. Ест 2
+Георгий закончил есть. Ест 1
+Владимир взял вилку № 2 слева и вилку № 3 справа и начал есть. Ест 2
+Андрей закончил есть. Ест 1
+Дмитрий взял вилку № 0 слева и вилку № 4 справа и начал есть. Ест 2
+Владимир закончил есть. Ест 1
+Дмитрий закончил есть. Ест 0
+</code></pre>
+<p>Здорово получилось, благодарю за тандемные итерации <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=5" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Mar 24, 2017 6:14 AM">
+            <time itemprop="datePublished" datetime="2017-03-24 06:14:14 +0000">Mar 24, 2017</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А чем <code>fetch_add()</code> и <code>fetch_sub()</code> не понравились?</p>
+<p>Еще один момент - передавать в функцию <code>eat()</code> ссылку на <code>Arc</code> нет смысла. Это по сути указатель на указатель. Лучше передавать либо сам <code>Arc&lt;AtomicUsize&gt;</code>, либо <code>&amp;AtomicUsize</code>.</p>
+<p>Если внимательно посмотреть, то функция <code>eat()</code>  требует <code>&amp;Table</code>, а ей дают <code>&amp;Arc&lt;Table&gt;</code>:</p>
+<pre><code>    let table = table.clone();
+    let n_eaters = n_eaters.clone();
+
+    thread::spawn(move || {
+        p.eat(&amp;table, &amp;n_eaters);
+    })
+</code></pre>
+<p><code>&amp;Arc&lt;Table&gt;</code> автоматически преобразуется в <code>&amp;Table</code> благодаря тому, что для <code>Arc&lt;T&gt;</code> реализован типаж <code>Deref&lt;Target=T&gt;</code>. Этот же типаж позволяет использовать методы типа завернутого в <code>Arc&lt;_&gt;</code> как бы напрямую:</p>
+<pre><code>let a:Arc&lt;u32&gt; = Arc::new(42);
+println!("{}", a.count_ones());
+</code></pre>
+<p><a href="http://rurust.github.io/rust_book_ru/src/deref-coercions.html" rel="nofollow noopener">Преобразования при разыменовании</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/doomkin" class="user-link">Павел</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Mar 24, 2017 9:18 AM">
+            <time itemprop="datePublished" datetime="2017-03-24 09:18:48 +0000">Mar 24, 2017</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_11">Replying to #11</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Поправил функцию <code>eat</code> в соответствии с рекомендациями. Код получился читабельнее:</p>
+<pre><code class="lang-auto">    fn eat(&amp;self, table: &amp;Table, n_eaters: &amp;AtomicUsize) {
+</code></pre>
+<pre><code class="lang-auto">        // Увеличилось количество одновременных едоков
+        n_eaters.fetch_add(1, Ordering::SeqCst);             
+</code></pre>
+<pre><code class="lang-auto">        // Уменьшилось количество одновременных едоков
+        n_eaters.fetch_sub(1, Ordering::SeqCst);
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_13"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_13" title="Mar 24, 2017 12:32 PM">
+            <time itemprop="datePublished" datetime="2017-03-24 12:32:58 +0000">Mar 24, 2017</time>
+          </a>
+          <span class="post-number">#13</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Кстати, информация из серии “Курьезы Ржавчины”.<br>
+Несмотря на то, что во всех примерах в документации <code>atomic types</code> заворачивают в <code>Arc</code> для передачи в другие потоки, на самом деле это не нужно. Можно передавать просто по ссылке.<br>
+Но тут есть одно большое и толстое <strong>НО</strong>. <img src="https://forum.rustycrate.ru/images/emoji/twitter/wink.png?v=5" title=":wink:" class="emoji" alt=":wink:"><br>
+В стабильной ветке без внешних крэйтов такую ссылку создать невозможно. Если не пользоваться чем-то вроде <code>crossbeam</code>, то ссылка должна иметь время жизни <code>'static</code>. А создать <code>static</code> экземпляр <code>AtomicUsize</code> не выйдет т.к. нужно вызвать функцию <code>new()</code>. Придется использовать <code>nightly</code> с фичей <code>#![feature(const_fn)]</code> или <code>lazy_static</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

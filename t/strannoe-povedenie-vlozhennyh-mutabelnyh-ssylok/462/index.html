@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Странное поведение вложенных мутабельных ссылок - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Странное поведение вложенных мутабельных ссылок</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Странное поведение вложенных мутабельных ссылок</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Aug 3, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Aug 3, 2018 7:53 AM">
+            <time itemprop="datePublished" datetime="2018-08-03 07:53:09 +0000">Aug 3, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Проблема проявляется при преобразовании вложенной ссылки в нормальную с <strong>исходным</strong> временем жизни. В случае немутабельных ссылок все прекрасно работает:</p>
+<pre><code class="lang-auto">fn deref_rr&lt;'a,'b&gt;(x: &amp;'a &amp;'b u8) -&gt; &amp;'b u8 {x}
+</code></pre>
+<p>И с внешними мутабельными ссылками тоже все работает:</p>
+<pre><code class="lang-auto">fn deref_mr&lt;'a,'b&gt;(x: &amp;'a mut &amp;'b u8) -&gt; &amp;'b u8 {x}  
+</code></pre>
+<p>А вот с внутренними мутабельными ссылками возникают проблемы:</p>
+<pre><code class="lang-auto">fn deref_rm&lt;'a,'b&gt;(x: &amp;'a &amp;'b mut u8) -&gt; &amp;'b u8 {x} // lifetime mismatch
+fn deref_mm&lt;'a,'b&gt;(x: &amp;'a mut &amp;'b mut u8) -&gt; &amp;'b u8 {x} // lifetime mismatch
+fn deref_mut_mm&lt;'a,'b&gt;(x: &amp;'a mut &amp;'b mut u8) -&gt; &amp;'b mut u8 {x} // lifetime mismatch
+</code></pre>
+<p>Вложенность ссылки может быть любая, причем внешние ссылки могут быть как мутабельные так и нет. Ошибка возникает только если корневая ссылка мутабельная.</p>
+<p>Сильно похоже на баг компилятора. Но времена жизни - фундаментальная фича Rust и как-то не верится, что тут может быть такой серьезный косяк.</p>
+<p>С другой стороны, если такое преобразование запрещено намеренно, совершенно неясно почему. Какие проблемы оно может вызывать?</p>
+<p>ЗЫ: Вышеизложенный поток сознания - результат медитации над <a href="https://stackoverflow.com/questions/51591381/when-an-immutable-reference-to-a-mutable-reference-to-a-value-outside-the-scope" rel="nofollow noopener">вопросом на stackoverflow</a></p>
+<hr>
+<p>Ответ <a href="https://forum.rustycrate.ru/t/strannoe-povedenie-vlozhennyh-mutabelnyh-ssylok/462/8?u=ibuzpe9">где-то рядом</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Aug 3, 2018 11:12 AM">
+            <time itemprop="datePublished" datetime="2018-08-03 11:12:44 +0000">Aug 3, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="IBUzPE9" data-post="3" data-topic="462">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ibuzpe9/48/154_2.png" class="avatar"> IBUzPE9:</div>
+<blockquote>
+<p><code>'a: 'b</code> означает что <code>'a</code> переживет <code>'b</code> - внешняя переживет внутреннюю.</p>
+</blockquote>
+</aside>
+<p>Мда, я путаюсь в этом “интуитивном” синтаксисе.</p>
+<blockquote>
+<p>Я так понимаю по умолчанию Rust должен сам выводить именно 'b: 'a.</p>
+</blockquote>
+<p>Для параметров-ссылок функции компилятор не выводит лайфтаймы самостоятельно, только ручками.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="3 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          3 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Aug 3, 2018 11:45 AM">
+            <time itemprop="datePublished" datetime="2018-08-03 11:45:51 +0000">Aug 3, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><code>'a:'b</code> означает что <code>'a</code> переживет <code>'b</code> - внешняя переживет внутреннюю. С учетом свойств ссылок это вырожденный случай когда <code>'a == 'b</code>.<br>
+С таким условием даже немутабельный <code>deref_rr()</code> нельзя использовать:</p>
+<pre><code class="lang-auto">fn deref_rr&lt;'a:'b, 'b&gt;(x: &amp;'a &amp;'b u8) -&gt; &amp;'b u8 {
+    x
+}
+
+fn main() {
+    let mut x1 = 1u8;
+    let r1:&amp;u8 = {
+        let t = &amp;x1;
+        deref_rr(&amp;t)
+    };
+    println!("{}", r1);
+}
+</code></pre>
+<pre><code class="lang-auto">error[E0597]: `t` does not live long enough
+</code></pre>
+<p>А если заменить <code>'a:'b</code> на <code>'b:'a</code> то этот пример начинает работать. Я так понимаю по умолчанию Rust должен сам выводить именно <code>'b:'a</code>.</p>
+<p>Проблема именно в том чтобы получить внутреннюю ссылку с внутренним временем жизни, которое больше чем вж внешней.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Aug 3, 2018 11:59 AM">
+            <time itemprop="datePublished" datetime="2018-08-03 11:59:55 +0000">Aug 3, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Блин, вместо нового сообщения исправил старое. Специфичный здесь движок комментариев.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Aug 3, 2018 12:04 PM">
+            <time itemprop="datePublished" datetime="2018-08-03 12:04:09 +0000">Aug 3, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="Virtuos86" data-post="2" data-topic="462">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/virtuos86/48/221_2.png" class="avatar"> Virtuos86:</div>
+<blockquote>
+<p>Для параметров-ссылок функции компилятор не выводит лайфтаймы самостоятельно, только ручками.</p>
+</blockquote>
+</aside>
+<p>Может быть, но в данном случае явное указание <code>'b:'a</code> ничего не меняет.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Aug 3, 2018 12:08 PM">
+            <time itemprop="datePublished" datetime="2018-08-03 12:08:27 +0000">Aug 3, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Ну как, текст ошибки немного меняется. Про лайфтаймы параметров в Книге написано:</p>
+<blockquote>
+<p>However, when a function has references to or from code outside that function, it becomes almost impossible for Rust to figure out the lifetimes of the parameters or return values on its own. The lifetimes might be different each time the function is called. This is why we need to annotate the lifetimes manually.</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Aug 3, 2018 12:19 PM">
+            <time itemprop="datePublished" datetime="2018-08-03 12:19:47 +0000">Aug 3, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хм, да действительно меняется. Но понятнее не становится.</p>
+<pre><code class="lang-auto">  --------------     ------  ^ ...but data from `x` is returned here
+  |
+  this parameter and the return type are declared with different lifetimes...
+</code></pre>
+<pre><code class="lang-auto"> --------------             ^ ...but data from `x` flows into `x` here
+ |
+ these two types are declared with different lifetimes...
+</code></pre>
+<p>Номер ошибки остается тот же самый.<br>
+Я бы даже сказал он становится менее понятным. Rust почему то двойную ссылку <code>&amp;'a &amp;'b mut u8</code> начинает называть  “these two types”. Впрочем это мелочи, такое с ним бывает <img src="https://forum.rustycrate.ru/images/emoji/twitter/thinking.png?v=5" title=":thinking:" class="emoji" alt=":thinking:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Sep 9, 2018 9:25 AM">
+            <time itemprop="datePublished" datetime="2018-09-09 09:25:37 +0000">Sep 9, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://stackoverflow.com/a/52241021/5138648" rel="nofollow noopener">Вот ответ который все объясняет</a>.</p>
+<p>Если бы эта функция работала:</p>
+<pre><code class="lang-auto">fn deref_rm&lt;'a,'b&gt;(x: &amp;'a &amp;'b mut u8) -&gt; &amp;'b u8 {x}
+</code></pre>
+<p>То мы могли бы получить иммутабельную ссылку одновременно с мутабельной, что запрещено правилами заимствования.</p>
+<p>Тут есть интересный момент - если  задать время жизни <strong>внешней ссылки</strong> большим или равным времени жизни <strong>внутренней</strong> то функция будет компилироваться без ошибок:</p>
+<pre><code class="lang-auto">fn deref_rm&lt;'a:'b,'b&gt;(x: &amp;'a &amp;'b mut u8) -&gt; &amp;'b u8 {x}
+</code></pre>
+<p>В данном случае <strong>внутренняя мутабельная ссылка</strong> иммутабельно заимствована все свое время жизни и ее нельзя использовать для изменения данных, на которые она ссылается. Вот пример, где мутабельная и иммутабельная ссылки легально существуют одновременно:</p>
+<pre><code class="lang-auto">fn deref_rm&lt;'a:'b,'b&gt;(x: &amp;'a &amp;'b mut u8) -&gt; &amp;'b u8 {x}
+
+fn main() {
+    let mut data = 1u8;
+    let mdata:&amp;mut u8 = &amp;mut data;
+    let rdata:&amp;u8 = deref_rm(&amp;mdata); //let rdata:&amp;u8 = &amp;*mdata;
+    println!("{}", rdata);
+    println!("{}", mdata);
+    //*mdata = 2u8; //cannot assign to `*mdata` because it is borrowed
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

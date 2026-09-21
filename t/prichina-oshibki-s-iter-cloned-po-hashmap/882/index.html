@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Причина ошибки с iter().cloned() по HashMap? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Причина ошибки с iter().cloned() по HashMap?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Причина ошибки с iter().cloned() по HashMap?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Apr 17, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Apr 17, 2019 6:06 AM">
+            <time itemprop="datePublished" datetime="2019-04-17 06:06:01 +0000">Apr 17, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я тут затупил несколько. Может кто-то разжевать, почему <em>именно такая</em> ошибка сборки выдается?</p>
+<pre><code class="lang-rust">use std::collections::HashMap;
+
+fn main() {
+    type Map = HashMap&lt;u8, u8&gt;;
+
+    let g: Map = Map::new();
+    let g1: &amp;Map = &amp;g;
+
+    let z: Map = g1.iter().cloned().collect();
+
+    // ```text
+    // error[E0271]: type mismatch resolving `&lt;std::collections::hash_map::Iter&lt;'_, u8, u8&gt; as std::iter::Iterator&gt;::Item == &amp;_`
+    //  --&gt; src/main.rs:8:28
+    //   |
+    // 8 |     let z: Map = g1.iter().cloned().collect();
+    //   |                            ^^^^^^ expected tuple, found reference
+    //   |
+    //   = note: expected type `(&amp;u8, &amp;u8)`
+    //              found type `&amp;_`
+    // ```
+
+    dbg!(z);
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=2da3342d6463410617ff35795add8eca" rel="nofollow noopener">Playground</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Apr 17, 2019 7:06 AM">
+            <time itemprop="datePublished" datetime="2019-04-17 07:06:43 +0000">Apr 17, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Такое довольно часто встречается, я уже внимание обращать перестал. Стоит зарепортить наверное.<br>
+Вот было что-то похожее:</p>
+<aside class="onebox githubissue">
+  <header class="source">
+      <a href="https://github.com/rust-lang/rust/issues/39333" target="_blank" rel="nofollow noopener">github.com/rust-lang/rust</a>
+  </header>
+  <article class="onebox-body">
+    <a href="https://github.com/gdouezangrard" rel="nofollow noopener">
+<img src="https://forum.rustycrate.ru/uploads/default/original/1X/a90925b19b8c9e1ad331f54ec1dc37de20814ca4.png" class="thumbnail onebox-avatar" width="96" height="96">
+</a>
+
+<h4><a href="https://github.com/rust-lang/rust/issues/39333" target="_blank" rel="nofollow noopener">Issue: E0271: misleading type-inference</a></h4>
+
+<div class="date" style="margin-top:10px;">
+	<div class="user" style="margin-top:10px;">
+	opened by <a href="https://github.com/gdouezangrard" target="_blank" rel="nofollow noopener">gdouezangrard</a>
+	on <a href="https://github.com/rust-lang/rust/issues/39333" target="_blank" rel="nofollow noopener">2017-01-27</a>
+	</div>
+	<div class="user">
+	closed by <a href="https://github.com/estebank" target="_blank" rel="nofollow noopener">estebank</a>
+	on <a href="https://github.com/rust-lang/rust/issues/39333" target="_blank" rel="nofollow noopener">2017-12-06</a>
+	</div>
+</div>
+
+<pre class="content" style="white-space: pre-wrap;">Issue
+The error for the following code shows a misleading type-inference:
+let vec: Vec&lt;String&gt; = Vec::new();
+match vec[0] {
+ "test" =&gt; {},
+ _ =&gt;...</pre>
+
+<div class="labels">
+ 	<span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">A-inference</span>
+ 	<span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">C-bug</span>
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/red75prime" class="user-link">red75prime</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Apr 17, 2019 8:03 AM">
+            <time itemprop="datePublished" datetime="2019-04-17 08:03:46 +0000">Apr 17, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><code>cloned()</code> хочет <code>Self: Iterator&lt;Item = &amp;T&gt;</code>, a <code>HashMap::iter()</code> даёт <code>Iterator&lt;Item = (&amp;K, &amp;V)&gt;</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Реализация абстракций, по канону как? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Реализация абстракций, по канону как?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Реализация абстракций, по канону как?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">May 21, 2017</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/QuarkDoe" class="user-link">Quark Doe</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="May 21, 2017 3:56 AM">
+            <time itemprop="datePublished" datetime="2017-05-21 03:56:14 +0000">May 21, 2017</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вот допустим у меня есть примерно такой Java-код:</p>
+<pre><code class="lang-auto">public enum SegmentType {
+    CLOSE, MOVE_TO, LINE_TO, SPLINE_TO
+}
+
+public interface Segment {
+	
+    SegmentType getType();
+
+    Object[] getParams();
+}
+
+public final class MoveSegment implements Segment{
+    private Integer[] point = new Integer[2];
+
+    public MoveSegment( int x, int y ){
+        point[0] = x;
+        point[1] = y;
+    }
+
+    public SegmentType getType(){
+        return MOVETO;
+    }
+
+    public Object[] getParams(){
+        return point;
+    }
+}
+
+public final class CloseSegment implements Segment{
+
+    public SegmentType getType(){
+        return CLOSE;
+    }
+
+    public Object[] getParams(){
+        return null;
+    }
+}
+
+public interface Shape extends Iterable&lt;Shape&gt;{
+}
+
+void travel( Shape shape ){
+	for( Segment segment: shape ){
+		switch( segment.getType() ){
+			case MOVETO: break;
+			case CLOSE: break;
+		}
+	}
+}
+</code></pre>
+<p>Как подобное лучше реализовать на Rust’е?<br>
+Если с Segment’ом вполне понятно:</p>
+<pre><code class="lang-auto">pub enum Segment&lt;T&gt; {
+    Close,
+    MoveTo( T, T ),
+}
+
+</code></pre>
+<p>То как по хорошему должен выглядить Shape?<br>
+ПОнятно, что самый простой способ:</p>
+<pre><code class="lang-auto">pub trait Shape&lt;T&gt; {
+    fn get_path(&amp;self) -&gt; Vec&lt;Segment&lt;T&gt;&gt;;
+}
+</code></pre>
+<p>Но не будет ли там слишком много копирования данных?<br>
+Хотелось бы итерировать по ссылкам.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vitvakatu" class="user-link">Илья Богданов</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="May 21, 2017 6:48 AM">
+            <time itemprop="datePublished" datetime="2017-05-21 06:48:56 +0000">May 21, 2017</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Набросал небольшой пример, возможно он вам поможет. Если от итерирования требуется какая-то логика, например, прекращать итерирование при <code>Close</code> - придется реализовать <code>Iterator</code> для <code>Shape</code>.<br>
+<a href="https://is.gd/G9pAX0" class="onebox" target="_blank" rel="nofollow noopener">https://is.gd/G9pAX0</a></p>
+<p>Что же касается копирования данных - не занимайтесь преждевременной оптимизацией. <code>enum</code> такого же размер, как самый большой его элемент, не думаю, что стоит экономить на копировании 16 байт.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="May 21, 2017 12:38 PM">
+            <time itemprop="datePublished" datetime="2017-05-21 12:38:51 +0000">May 21, 2017</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Чтобы избежать копирования можно реализовать <code>IntoIterator</code> для <strong>ссылок</strong> на структуры  <code>Shape</code>-ов. <a href="https://play.rust-lang.org/?gist=b38ccd49633dca0a3166240e7ec565a6&amp;version=stable&amp;backtrace=0" rel="nofollow noopener">Как-то так</a>:</p>
+<pre><code class="lang-auto">#[derive(Debug)]
+struct Pos&lt;T&gt;(T, T);
+
+#[derive(Debug)]
+struct Line&lt;T&gt;{
+    p0: Pos&lt;T&gt;,
+    p1: Pos&lt;T&gt;
+}
+
+#[derive(Debug)]
+struct Poly&lt;T&gt;(Vec&lt;Pos&lt;T&gt;&gt;);
+
+
+struct LineIter&lt;'l, T:'l&gt;{
+    line:&amp;'l Line&lt;T&gt;,
+    pn:usize
+}
+
+impl&lt;'l, T&gt; Iterator for LineIter&lt;'l, T&gt; {
+    type Item = &amp;'l Pos&lt;T&gt;;
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;{
+        match self.pn {
+            0 =&gt; {self.pn += 1; Some(&amp;self.line.p0)}
+            1 =&gt; {self.pn += 1; Some(&amp;self.line.p1)}
+            _ =&gt; None
+        }
+    }
+}
+
+struct PolyIter&lt;'p, T:'p&gt;{
+    poly:&amp;'p Poly&lt;T&gt;,    
+    pn: usize,
+}
+
+
+impl&lt;'p, T&gt; Iterator for PolyIter&lt;'p, T&gt; {
+    type Item = &amp;'p Pos&lt;T&gt;;
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;{
+        if self.pn &lt; self.poly.0.len() {
+            let i = self.pn;
+            self.pn += 1;
+            Some(&amp;self.poly.0[i])
+        }else{
+            None
+        }
+    }
+}
+
+impl&lt;'l, T&gt; IntoIterator for &amp;'l Line&lt;T&gt; {
+    type Item = &amp;'l Pos&lt;T&gt;;
+    type IntoIter = LineIter&lt;'l, T&gt;;
+
+    fn into_iter(self) -&gt; Self::IntoIter {
+        LineIter{
+            line:self,
+            pn:0
+        }
+    }
+}
+
+impl&lt;'p, T&gt; IntoIterator for &amp;'p Poly&lt;T&gt; {
+    type Item = &amp;'p Pos&lt;T&gt;;
+    type IntoIter = PolyIter&lt;'p, T&gt;;
+
+    fn into_iter(self) -&gt; Self::IntoIter {
+        PolyIter{
+            poly:self,
+            pn:0
+        }
+    }
+}
+
+
+fn main() {
+    let line = Line{p0:Pos(1,2), p1:Pos(3,4)};
+    let poly = Poly(vec![Pos(1,2), Pos(3,4), Pos(5,6), Pos(7,8)]);
+    
+    //iterate by ref
+    for p in &amp;line { println!("line pos = {:?}", p)};
+    for p in &amp;poly { println!("poly pos = {:?}", p)};
+    
+    //line and poly does not moved
+    println!("{:?}", line);
+    println!("{:?}", poly);
+}
+</code></pre>
+<p>Если нужен свой типаж, функция которого возвращает итератор, то без использования <code>Box</code> или <code>impl Trait</code> (только nightly) можно сделать так:</p>
+<pre><code class="lang-auto">trait ShapeIter&lt;'i, T:'i, I: Iterator&lt;Item = &amp;'i Pos&lt;T&gt;&gt;&gt; {
+    fn iter(&amp;'i self) -&gt; I;
+}
+
+impl&lt;'i, T&gt; ShapeIter &lt;'i, T, LineIter&lt;'i, T&gt;&gt; for Line&lt;T&gt; {
+    fn iter(&amp;'i self) -&gt; LineIter&lt;'i, T&gt;{
+        LineIter{
+            line:self,
+            pn:0
+        }        
+    }
+} 
+
+impl&lt;'i, T&gt; ShapeIter &lt;'i, T, PolyIter&lt;'i, T&gt;&gt; for Poly&lt;T&gt; {
+    fn iter(&amp;'i self) -&gt; PolyIter&lt;'i, T&gt;{
+        PolyIter{
+            poly:self,
+            pn:0
+        }        
+    }
+} 
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

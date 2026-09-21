@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Фrustрастция (Inferring closure signature) - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Фrustрастция (Inferring closure signature)</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Фrustрастция (Inferring closure signature)</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Aug 20, 2020</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Ray" class="user-link">Ray</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Aug 20, 2020 4:45 AM">
+            <time itemprop="datePublished" datetime="2020-08-20 04:45:32 +0000">Aug 20, 2020</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я начал делать свой  executor/reactor и застрял:</p>
+<p>Первая попытка:</p>
+<pre><code class="lang-rust">use std::future::Future;
+
+struct Runtime;
+
+fn start_with_runtime&lt;C, F&gt;(closure: C)
+where
+    C: for&lt;'a&gt; FnOnce(&amp;'a Runtime) -&gt; F,
+    F: Future
+{
+    let rt = Runtime;
+    let _future = closure(&amp;rt);
+    // block_on(future)
+}
+
+async fn async_main(_rt: &amp;Runtime) {}
+
+fn main() {
+    start_with_runtime(|rt| { async_main(rt) });
+}
+</code></pre>
+<p>Идея проста, executor/reactor запускаются с помощью функции start_with_runtime(). Однако здесь я хочу попробовать идею когда API для работы с асинхронным кодом передается в качестве параметра, поэтому start_with_runtime() создает runtime на стеке и на вход просит функцию/замыкание которое получит ссылку на этот runtime.  Запускаем:</p>
+<pre><code class="lang-auto">error: lifetime may not live long enough
+  --&gt; src/main.rs:17:31
+   |
+17 |     start_with_runtime(|rt| { async_main(rt) });
+   |                         ---   ^^^^^^^^^^^^^^ returning this value requires that `'1` must outlive `'2`
+   |                         | |
+   |                         | return type of closure is impl std::future::Future
+   |                         has type `&amp;'1 Runtime`
+</code></pre>
+<p>(<a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=44793e6094a17e3ed75208e113172cba%5D" rel="nofollow noopener">playround</a>)</p>
+<p>Что за ерунда? Рассахариваем async просто для упрощения:</p>
+<pre><code class="lang-rust">struct Runtime;
+
+trait Shmutura {}
+struct ShmuturaImpl&lt;'a&gt; {
+   rt: &amp;'a Runtime
+}
+impl&lt;'a&gt; Shmutura for ShmuturaImpl&lt;'a&gt; {
+}
+
+fn start_with_runtime&lt;'b, C, F&gt;(closure: C)
+where
+    C: for&lt;'a&gt; FnOnce(&amp;'a Runtime) -&gt; F,
+    F: Shmutura + 'b
+{
+    let rt = Runtime;
+    let _future = closure(&amp;rt);
+    // block_on(future)
+}
+
+fn desugared_async&lt;'a&gt;(rt: &amp;'a Runtime) -&gt; impl Shmutura + 'a {
+  ShmuturaImpl { rt }
+}
+
+fn main() {
+    start_with_runtime(|rt| { desugared_async(rt) });
+}
+</code></pre>
+<p>Ошибка не изменилась, но теперь я вижу что с <code>async</code> и <code>Future</code> это вообще никак не связано.</p>
+<p>Итак, я ожидаю что замыкание, которое мы передаем в <code>start_with_runtime()</code> имеет вид <code>|&amp;'a Runtime| -&gt; impl Future + 'a</code>. Однако несколько часов спустя выясняется что это не так.  Я нашел такое обсуждение:</p>
+<p><a href="https://github.com/rust-lang/rust/issues/58052" rel="nofollow noopener">https://github.com/rust-lang/rust/issues/58052</a> :</p>
+<pre><code class="lang-rust">fn main() {
+    let f = |x: &amp;i32| x;
+    let i = &amp;3;
+    let j = f(i);
+}
+</code></pre>
+<pre><code class="lang-auto">error: lifetime may not live long enough
+ --&gt; src/main.rs:2:23
+  |
+2 |     let f = |x: &amp;i32| x;
+  |                 -   - ^ returning this value requires that `'1` must outlive `'2`
+  |                 |   |
+  |                 |   return type of closure is &amp;'2 i32
+  |                 let's call the lifetime of this reference `'1`
+</code></pre>
+<p>Для замыканий придумали простой синтаксис, я в своем коде не указывал ни тип параметров, ни тип результата в надежде что компилятор сам выведет все типы. Видимо в этом случае он делает что-то такое что трудно от него ожидать, что-то вроде <code>|&amp;'a Runtime| -&gt; impl Future + 'b</code> и тикет <span class="hashtag">#58052</span> про то что с этим что-то не так.</p>
+<p>Начинаешь гулять по тикетам (<span class="hashtag">#56537</span>, <span class="hashtag">#55526</span> и дальше по ссылкам) чтобы понять как что работает и попадаешь в какую-то кроличью нору, у которой сразу несколько измерений.</p>
+<p>Измерение первое: Выглядит это таким образом что команда Rust находит какой-то случай, который компилируется с ошибкой и тогда они начинают обсуждать правильно это или нет. Рассуждения там такие, ну наверное должно компилироваться, почему бы и нет, давайте я поправлю. Следующее сообщение, “я поправил но поломалось в других местах, давайте оставим как есть и потом что-нибудь придумаем”. С одной стороны выглядит так что компетентные люди решают проблемы языка по мере возможностей, с другой стороны какой-то спецификации у языка нет. Таким образом скорей всего нет какой-то возможности сделать вторую реализацию компилятора Rust, потому что как и что должно компилироваться решается по ходу дела.</p>
+<p>Измерение второе: чтобы как-то понимать что можно было писать, а что нет. С одной стороны вывод типов и lifetime elision нужны для того чтобы все как бы работало само собой, сложность скрывается и вроде писать код становится концептуально проще. Однако когда все это ломается, приходится со всем этим разбираться чтобы получить понимаю что вообще происходит. Учитывая что нет какого-то стандарта или спецификации, трудно понять где вообще можно искать.</p>
+<p>Ладно, вытираем слезки и пытаемся как-то исправить проблему. В кроличьей норке я узнал что сигнатура у замыканий выводится оглядываясь на требуемую сигнатуру, так что может быть можно как-то указать правильную сигнатуру здесь:</p>
+<pre><code class="lang-rust">fn start_with_runtime&lt;'b, C, F&gt;(closure: C)
+where
+    C: for&lt;'a&gt; FnOnce(&amp;'a Runtime) -&gt; F,
+    F: Shmutura + 'b
+</code></pre>
+<p>В реализации выше явно указано гонево  в виде<code>'b</code>, но это от безысходности, на этом месте должно быть <code>'a</code> от <code>for&lt;'a&gt;</code> что не компилируется или что что-то вроде такого:</p>
+<pre><code class="lang-rust">fn start_with_runtime&lt;C&gt;(closure: C)
+where
+    C: for&lt;'a&gt; FnOnce(&amp;'a Runtime) -&gt; (impl Shmutura +'a),
+</code></pre>
+<p>Что тоже не компилируется:</p>
+<pre><code class="lang-auto">error[E0562]: `impl Trait` not allowed outside of function and inherent method return types
+  --&gt; src/main.rs:12:40
+   |
+12 |     C: for&lt;'a&gt; FnOnce(&amp;'a Runtime) -&gt; (impl Shmutura + 'a),
+   |                                        ^^^^^^^^^^^^^^^^^^
+</code></pre>
+<p>Нельзя использовать <code>impl Trait</code> для возвращаемого параметра FnOnce. Если же я в своих функциях укажу ShmuturaImpl как возвращаемый тип, то все компилируется:</p>
+<p>(ссылку на playground не могу поставить из-за лимита)</p>
+<pre><code class="lang-rust">struct Runtime;
+
+trait Shmutura {}
+struct ShmuturaImpl&lt;'a&gt; {
+    rt: &amp;'a Runtime,
+}
+impl&lt;'a&gt; Shmutura for ShmuturaImpl&lt;'a&gt; {}
+
+fn start_with_runtime&lt;C&gt;(closure: C)
+where
+    C: for&lt;'a&gt; FnOnce(&amp;'a Runtime) -&gt; ShmuturaImpl&lt;'a&gt;,
+{
+    let rt = Runtime;
+    let _future = closure(&amp;rt);
+    // block_on(future)
+}
+
+//fn desugared_async&lt;'a&gt;(rt: &amp;'a Runtime) -&gt; impl Shmutura + 'a {
+fn desugared_async&lt;'a&gt;(rt: &amp;'a Runtime) -&gt; ShmuturaImpl&lt;'a&gt;  {
+    ShmuturaImpl { rt }
+}
+
+fn associate&lt;C&gt;(closure: C) -&gt; C
+where
+    C: for&lt;'a&gt; FnOnce(&amp;'a Runtime) -&gt; ShmuturaImpl&lt;'a&gt;
+{
+    return closure;
+}
+
+fn main() {
+    start_with_runtime(associate(|rt| desugared_async(rt)));
+}
+</code></pre>
+<p>Значит гипотеза о том чтобы можно было указать правильный expected signature работает и lifetime у замыкания в этом случае корректно выводится. В случае с шмутурами это может работать, но в случае с async и Future мне не известен тип Future, так что надо думать дальше.</p>
+<p>Проверим кстати что HRTB нельзя заменить на lifetime привязанный к start_with_runtime:</p>
+<pre><code class="lang-rust">fn start_with_runtime&lt;'b&gt;(closure: impl FnOnce(&amp;'b Runtime) -&gt; ShmuturaImpl&lt;'b&gt;)
+{
+    let rt = Runtime;
+    let _future = closure(&amp;rt);
+    // block_on(future)
+}
+</code></pre>
+<p>Не собирается:</p>
+<pre><code class="lang-auto"> Compiling playground v0.0.1 (/playground)
+error[E0597]: `rt` does not live long enough
+  --&gt; src/main.rs:14:27
+   |
+11 | fn start_with_runtime&lt;'b&gt;(closure: impl FnOnce(&amp;'b Runtime) -&gt; ShmuturaImpl&lt;'b&gt;)
+   |                       -- lifetime `'b` defined here
+...
+14 |     let _future = closure(&amp;rt);
+   |                   --------^^^-
+   |                   |       |
+   |                   |       borrowed value does not live long enough
+   |                   argument requires that `rt` is borrowed for `'b`
+15 |     // block_on(future)
+16 | }
+   | - `rt` dropped here while still borrowed
+</code></pre>
+<p>Все, я в тупике.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Aug 20, 2020 5:13 PM">
+            <time itemprop="datePublished" datetime="2020-08-20 17:13:42 +0000">Aug 20, 2020</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да, занятная история. Но по-моему тут вся проблема в том, что <code>impl Trait</code> висит в каком-то недоделаном состоянии с момента его введения.</p>
+<p>Можно заменить замыкание на функцию:</p>
+<pre><code class="lang-auto">trait Future {}
+
+impl&lt;T&gt; Future for T {}
+
+// Unwind async async_main(&amp;usize)
+// https://rust-lang.github.io/async-book/03_async_await/01_chapter.html#async-lifetimes
+fn async_main&lt;'a&gt;(rt: &amp;'a usize) -&gt; impl Future + 'a { }
+
+fn start_with_runtime&lt;F&gt;(closure: for&lt;'a&gt; fn(&amp;'a usize) -&gt; F) 
+where F:Future // + 'a //how to bound lifetime?
+{
+    let rt = 0;
+    let future = closure(&amp;rt);    
+}
+
+fn main() {
+    start_with_runtime(async_main);
+}
+</code></pre>
+<p>Здесь будет тоже тупик:</p>
+<pre><code class="lang-auto">   Compiling playground v0.0.1 (/playground)
+error[E0308]: mismatched types
+  --&gt; src/main.rs:17:24
+   |
+7  | fn async_main&lt;'a&gt;(rt: &amp;'a usize) -&gt; impl Future + 'a { }
+   |                                     ---------------- the found opaque type
+...
+17 |     start_with_runtime(async_main);
+   |                        ^^^^^^^^^^ one type is more general than the other
+   |
+   = note: expected fn pointer `for&lt;'a&gt; fn(&amp;'a usize) -&gt; impl Future`
+              found fn pointer `for&lt;'a&gt; fn(&amp;'a usize) -&gt; impl Future`
+</code></pre>
+<p>Такие конструкции тоже запрещены:</p>
+<pre><code class="lang-auto">fn start_with_runtime(cl: for&lt;'a&gt; fn(&amp;'a usize) -&gt; impl Future + 'a)
+</code></pre>
+<p>Сейчас просто нет способа связать время жизни обобщенного параметра <code>&lt;F:Future&gt;</code> с HRTB временем <code>'a</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Aug 21, 2020 8:24 AM">
+            <time itemprop="datePublished" datetime="2020-08-21 08:24:23 +0000">Aug 21, 2020</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Знакомая история, да.<br>
+Задать правильные требования к сигнатуре можно с использованием дополнительного трейта примерно так</p>
+<pre><code class="lang-rust">trait BorrowingFn&lt;'a&gt; {
+    type Fut: std::future::Future&lt;Output = Something&gt; + 'a;
+    fn call(self, arg: &amp;'a Runtime) -&gt; Self::Fut;
+}
+
+impl&lt;'a, Fu: 'a, F&gt; BorrowingFn&lt;'a&gt; for F
+where
+    F: FnOnce(&amp;'a Runtime) -&gt; Fu,
+    Fu: std::future::Future&lt;Output = Something&gt; + 'a,
+{
+    type Fut = Fu;
+    fn call(self, rt: &amp;'a Runtime) -&gt; Fu {
+        self(rt)
+    }
+}
+</code></pre>
+<p>после чего требуемое условие записывается как <code>for&lt;'a&gt; BorrowingFn&lt;'a&gt;</code> (<a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=a83ed04f715712d216d1813549432c6c" rel="nofollow noopener">playground</a>).</p>
+<p>Но внимательный читатель может заметить, что я вызываю <code>start_with_runtime</code> не с замыканием, а напрямую с async-функцией. Заставить компилятор выводить правильный тип для замыкания в этом контексте у меня пока не получилось (<a href="https://github.com/rust-lang/rust/issues/70263" rel="nofollow noopener">rust-lang/rust#70263</a>).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Ray" class="user-link">Ray</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Aug 21, 2020 9:58 AM">
+            <time itemprop="datePublished" datetime="2020-08-21 09:58:45 +0000">Aug 21, 2020</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо! Это как раз такой новый прием для меня над которым надо хорошенько подумать и принять на вооружение. Я сейчас думаю что можно смириться с тем что это не работает c замыканиями для этой задачи.</p>
+<p>Я думал что если ничего не выйдет откачу к варианту с методом (<a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=f6fff57a9a31c562694cd8a788c1cce5" rel="nofollow noopener">playground</a>)</p>
+<pre><code class="lang-rust">impl Runtime {
+    fn start_with_runtime&lt;'b, C, F&gt;(&amp;'b self, closure: C)
+    where
+        C: FnOnce(&amp;'b Runtime) -&gt; F,
+        F: Future + 'b,
+    {
+        let rt = Runtime;
+        let _future = closure(&amp;self);
+    }
+}
+
+fn main() {
+    let rt = Runtime;
+    rt.start_with_runtime(|rt| async_main(rt));
+}
+</code></pre>
+<p>Но это касается уже конкретного применения, а сама проблема показалась интересной в отрыве от практического применения, т.е. можно ли в принципе использовать такой паттерн.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Ray" class="user-link">Ray</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Aug 23, 2020 10:22 AM">
+            <time itemprop="datePublished" datetime="2020-08-23 10:22:24 +0000">Aug 23, 2020</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><code>BorrowingFn</code> довольно прикольная идея, по моему я вынес для себя несколько вещей о которых не знал. Например я как-то не знал что в определении трейта можно накладывать ограничения ассоциированные типы (просто все примеры обычно про Iterator или еще что-то такое где просто <code>type Output;</code>).</p>
+<p>Еще довольно круто что можно сделать вот так <code>impl&lt;..., F&gt; MyTraitFn for F where F: FnOnce(..)</code>, т.е. такой MyTraitFn теперь можно использовать как спецификацию вместо FnOnce в генериках.</p>
+<p>Взял эту идею в свой экспериментальный executor, спасибо.</p>
+<p>Сколько еще таких чудных приемчиков скрывает раст.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Ray" class="user-link">Ray</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Aug 24, 2020 5:29 AM">
+            <time itemprop="datePublished" datetime="2020-08-24 05:29:17 +0000">Aug 24, 2020</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>@ <a href="https://forum.rustycrate.ru/t/frustrastcziya-inferring-closure-signature/1109/3">tanriol</a>, не хотите опубликовать свой ответ на stackoverflow <a href="https://stackoverflow.com/questions/63517250" rel="nofollow noopener">https://stackoverflow.com/questions/63517250</a>? Я бы тогда засчитал его.  Все предложения которые я получил там связаны предполагают использование кучи, что мне не очень нравится.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Aug 24, 2020 6:19 AM">
+            <time itemprop="datePublished" datetime="2020-08-24 06:19:36 +0000">Aug 24, 2020</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="Ray" data-post="5" data-topic="1109">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/r/e9a140/48.png" class="avatar"> Ray:</div>
+<blockquote>
+<p>Сколько еще таких чудных приемчиков скрывает раст.</p>
+</blockquote>
+</aside>
+<p>Ну, не мало. Вот интересная статья - <a href="http://lukaskalbertodt.github.io/2018/08/03/solving-the-generalized-streaming-iterator-problem-without-gats.html#workaround-a-lifetime-parameter-in-trait" rel="noopener nofollow ugc">Solving the Generalized Streaming Iterator Problem without GATs</a>. Я уже несколько раз давал на нее ссылку на этом форуме. Не помешает повторить. К сожалению, актуальности она пока не теряет.<br>
+Там в первом пункте как раз разбирается прием, похожий на тот который использовал <a class="mention" href="/u/tanriol/index.html">@tanriol</a>.  Я тоже пытался его применить, но что-то у меня там не срослось. <img src="https://forum.rustycrate.ru/images/emoji/twitter/frowning_face.png?v=12" title=":frowning_face:" class="emoji" alt=":frowning_face:" loading="lazy" width="20" height="20"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

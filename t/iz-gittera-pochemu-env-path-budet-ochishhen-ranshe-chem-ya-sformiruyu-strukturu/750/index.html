@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Из гиттера: &quot;Почему env_path будет очищен раньше чем я сформирую структуру?&quot; - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Из гиттера: &quot;Почему env_path будет очищен раньше чем я сформирую структуру?&quot;</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Из гиттера: &quot;Почему env_path будет очищен раньше чем я сформирую структуру?&quot;</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+        <div class="topic-tags">
+          
+            <a href="/tag/из-телеги" class="tag-badge">из-телеги</a>
+          
+        </div>
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jan 15, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jan 15, 2019 6:43 AM">
+            <time itemprop="datePublished" datetime="2019-01-15 06:43:15 +0000">Jan 15, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасаю <a href="https://gitter.im/ruRust/easy?at=5c395a7eba355012a4256370">из бездны ruRust/easy гиттера</a>, вдруг кому пригодится в будущем:</p>
+<blockquote>
+<p><strong>Nikolay Govorov <span class="mention">@nikolay-govorov</span></strong>:<br>
+Где я не прав? Почему env_path будет очищен раньше чем я сформирую структуру?</p>
+<pre data-code-wrap="rust"><code class="lang-rust">pub struct Shell&lt;'a&gt; {
+    os_path: Vec&lt;&amp;'a str&gt;,
+}
+
+impl&lt;'a&gt; Shell&lt;'a&gt; {
+    pub fn new() -&gt; Shell&lt;'a&gt; {
+        let env_path = env::var_os("PATH").unwrap().into_string().unwrap();
+        let os_path: Vec&lt;&amp;'a str&gt; = env_path.as_str().split(':').collect();
+        Shell { os_path }
+    }
+}
+</code></pre>
+<hr>
+<p><strong>Ilya Bogdanov <a class="mention" href="/u/vitvakatu/index.html">@vitvakatu</a>:</strong><br>
+Потому что ты берешь as_str, который возвращает &amp;str, а затем разбиваешь этот &amp;str на &amp;'a str. Ну сам то подумай, у тебя из функции выходит Shell&lt;'a&gt;, а на входе никакого лайфтайма нет - значит ты возвращаешь структуру, лайфтаймом связанную с чем-то внутри тела функции (это можно выявить глядя только на сигнатуру)</p>
+<hr>
+<p><strong>Nikolay Govorov <span class="mention">@nikolay-govorov</span>:</strong><br>
+<a class="mention" href="/u/vitvakatu/index.html">@vitvakatu</a>, а какое решение? Я должен вернуть что-то связанное с внешним лайфтаймом, но как?</p>
+<pre data-code-wrap="rust"><code class="lang-rust">pub struct Shell&lt;'a&gt; {
+    os_path: Vec&lt;&amp;'a str&gt;,
+}
+
+impl&lt;'a&gt; Shell&lt;'a&gt; {
+    pub fn new() -&gt; Shell&lt;'a&gt; {
+        let env_path = env::var_os("PATH").unwrap().into_string().unwrap();
+        let os_path: Vec&lt;&amp;str&gt; = env_path.split(':').collect();
+        Shell { os_path }
+    }
+}
+</code></pre>
+<hr>
+<p><strong>Ilya Bogdanov <a class="mention" href="/u/vitvakatu/index.html">@vitvakatu</a>:</strong><br>
+<span class="mention">@nikolay-govorov</span> <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=72d4ba2d465ffa49ebf1e1b98bbfe5d8" class="inline-onebox">Rust Playground</a></p>
+<hr>
+<p><strong>Alexander Irbis <a class="mention" href="/u/irbis/index.html">@irbis</a>:</strong><br>
+<span class="mention">@nikolay-govorov</span> в таких ситуациях есть два подхода.</p>
+<p>Самый простой и дорогой: можно создавать владеющие ссылки (Box, Rc, Arc, <s>Gc</s>) - это иногда неизбежное, но достаточно дорогое решение, особенно, если нужно больше одного выделения памяти. Однако это вполне приемлемо, если это одноразовая операция и результат в дальнейшем многократно переиспользуется. Например, на старте программы подготавливаешь конфигурацию, а потом программа минутами/часами/днями работает.</p>
+<p>Либо можно передать в функцию заранее выделенный контейнер под результат, тогда у пользователя функции появляется возможность по желанию переиспользовать однажды выделенную память - так поступают функции ввода-вывода в стандартной библиотеке.</p>
+<p>Ккроме того, как более продвинутый подход: можно сделать специальную структуру, которая будет хранить всё значение в сыром виде в одной переменной и отдельно индексы нужных фрагментов, которые будет превращать в ссылки, когда нужно получить к ним доступ - это работает, когда у тебя редкомодифицируемые данные, используется, например, в крейте url.</p>
+<p>Ещё можно заметить, что может оказаться дешевле много раз повторить поиск по данным, чем один раз выделить память под все результаты. Если необходимое количество поисков тебе выгоднее, чем выделение памяти, то возможно стоит применять итератор, который даст возможность пройтись по всем результатам, а не собирать результаты в отдельную коллекцию.</p>
+<p>Что я имею в виду под “выделение памяти - дорого”: обычно выделение памяти требует захвата мьютекса (возможно даже не одного, зависит от того, как устроен аллокатор) - это выливается в несколько микросекунд на современных процессорах. Проход по нескольким сотням байтов с поиском вполне может укладываться в несколько наносекунд. То есть, разница по времени примерно в тысячу раз.</p>
+<p>Однако, если время работы программы не жмёт, нет высокой нагрузки, требующей выжимать всё из железа, - вероятно нет смысла изощряться и делать что-то сложнее самого наивного первого варианта. Впрочем, сделать итератор - тоже несложно.</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/incker" class="user-link">Станислав</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jan 15, 2019 8:01 AM">
+            <time itemprop="datePublished" datetime="2019-01-15 08:01:35 +0000">Jan 15, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А почему бы не положить <code>env_path</code>  тоже в структуру…<br>
+<code>os_path</code> будет ссылаться на <code>env_path</code>, и не нужен будет life time (наверное)</p>
+<p>А еще лучше будет <code>env_path</code> делать не <code>into_string</code>  а <code>to_str</code>. А <code>os_path</code> уже в строку</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jan 15, 2019 9:29 AM">
+            <time itemprop="datePublished" datetime="2019-01-15 09:29:28 +0000">Jan 15, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="incker" data-post="2" data-topic="750">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/incker/48/551_2.png" class="avatar"> incker:</div>
+<blockquote>
+<p>А почему бы не положить <code>env_path</code> тоже в структуру…<br>
+<code>os_path</code> будет ссылаться на <code>env_path</code> , и не нужен будет life time (наверное)</p>
+</blockquote>
+</aside>
+<p>Не, самоссылающиеся структуры в расте это вообще дикая боль. См:</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/32300132/why-cant-i-store-a-value-and-a-reference-to-that-value-in-the-same-struct" class="inline-onebox">rust - Why can't I store a value and a reference to that value in the same struct? - Stack Overflow</a></li>
+<li><a href="https://github.com/Kimundi/owning-ref-rs" class="inline-onebox">GitHub - Kimundi/owning-ref-rs: A library for creating references that carry their owner with them.</a></li>
+<li><a href="https://github.com/jpernst/rental" class="inline-onebox">GitHub - jpernst/rental: Rust macro to generate self-referential structs</a></li>
+<li><a href="https://github.com/rust-lang/rfcs/blob/master/text/2349-pin.md" class="inline-onebox">rfcs/text/2349-pin.md at master · rust-lang/rfcs · GitHub</a></li>
+</ul>
+<p>Предложение Ильи вполне правильное.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/inv2004" class="user-link">inv2004</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jan 15, 2019 9:11 PM">
+            <time itemprop="datePublished" datetime="2019-01-15 21:11:38 +0000">Jan 15, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А есть где-то в интернете FAQ по подобным кейсам борьбы с borrow-checker?</p>
+<p>Так как очевидно, все начинающие раст сталкиваются рано или поздно именно с этим, и относительно безболезненными решениями будет:</p>
+<ol>
+<li>вытащить то, что должно жить - вверх</li>
+<li>структура возврата должна возвращать данные, а не ссылки.</li>
+</ol>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jan 18, 2019 4:20 PM">
+            <time itemprop="datePublished" datetime="2019-01-18 16:20:22 +0000">Jan 18, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Полноценной подборки не знаю, но тему вроде такой гуглятся:</p>
+<aside class="onebox whitelistedgeneric">
+  <header class="source">
+      <img src="https://forum.rustycrate.ru/uploads/default/original/1X/a70ab5d077374748901898cfcd9c7a09b8a303a9.png" class="site-icon" width="192" height="192">
+      <a href="https://www.reddit.com/r/rust/comments/5ny09j/tips_to_not_fight_the_borrow_checker/" target="_blank" rel="nofollow noopener">reddit</a>
+  </header>
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.reddit.com/r/rust/comments/5ny09j/tips_to_not_fight_the_borrow_checker/" target="_blank" rel="nofollow noopener">r/rust - Tips to not fight the borrow checker?</a></h3>
+
+<p>54 votes and 44 comments so far on Reddit</p>
+
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/irbis" class="user-link">Alexander Irbis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Feb 17, 2019 5:23 PM">
+            <time itemprop="datePublished" datetime="2019-02-17 17:23:44 +0000">Feb 17, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Может быть не совсем отвечающая на последний вопрос, но достаточно обстоятельная статья о несовершенстве borrow checker’а, заставляющем с ним бороться, когда, казалось бы, уже не должно быть борьбы и будущих (настоящих) доработках и улучшениях, спасающих от ненужной борьбы: <a href="https://medium.com/@GolDDranks/things-rust-doesnt-let-you-do-draft-f596a3c740a5" rel="nofollow noopener">https://medium.com/@GolDDranks/things-rust-doesnt-let-you-do-draft-f596a3c740a5</a> Полагаю, многим будет интересно почитать, поскольку хорошо расписывается “как всё устроено” и почему всё (пока) не так как хочется.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

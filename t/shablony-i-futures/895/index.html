@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Шаблоны и Futures - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Шаблоны и Futures</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Шаблоны и Futures</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">May 1, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="May 1, 2019 1:49 PM">
+            <time itemprop="datePublished" datetime="2019-05-01 13:49:25 +0000">May 1, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Здравствуйте!<br>
+Продолжаю осваивать Rust тренируясь на разработке клиента Google OAuth 2.0. Никак в голове не укладываются трёхэтажные шаблоны.<br>
+Есть вот такой код</p>
+<pre><code class="lang-auto">fn retrieve_auth_url() {
+    let (sender, receiver) = futures::sync::oneshot::channel::&lt;Url&gt;();
+    hyper::rt::run(hyper::rt::lazy(move || {
+        retrieve_url(sender)
+    }));
+
+    let location = receiver.wait();
+
+    println!("Response: {:?}", location);
+}
+
+fn retrieve_url(send: Sender&lt;Url&gt;) -&gt; Client&lt;HttpsConnector&lt;Error&gt;&gt; {
+    let uri = Url::parse_with_params(GOOGLE_AUTH_URL, [
+        ("client_id", CLIENT_ID),
+        ("redirect_uri", "http://[::1]:3000"),
+        ("response_type", "code"),
+        ("scope", "https://www.googleapis.com/auth/drive")
+    ].iter());
+
+    let url = uri.unwrap().as_str().parse::&lt;Uri&gt;().unwrap();
+
+    let https = HttpsConnector::new(1).unwrap();
+    let client = Client::builder().build::&lt;_, hyper::Body&gt;(https);
+
+    client.get(url)
+        .map(|res| {
+            Url::parse(res.headers().get("location").unwrap().to_str().unwrap()).unwrap()
+        })
+        .map_err(|err| {
+            err
+        })
+}
+</code></pre>
+<p>Каким должен быть тип, возвращаемый функцией retrieve_url? Компилятор на него постоянно ругается, аргументируя тем, что hyper::rt::lazy требует другой тип (я пробовал разные варианты). При этом, если перенести код функции в замыкание - всё работает.<br>
+Ощущение, что я что-то упустил с шаблонами.</p>
+<p>Заранее спасибо.</p>
+<p>PS. А почему тип MapErr, который возвращает функция Client::map_err может выступать в качестве типа Client? Вот пример <a href="https://hyper.rs/guides/client/basic/" rel="nofollow noopener">https://hyper.rs/guides/client/basic/</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Deadooshka" class="user-link">Deadooshka</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="May 2, 2019 12:44 AM">
+            <time itemprop="datePublished" datetime="2019-05-02 00:44:18 +0000">May 2, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>У них в примере подобная функция возвращает impl Future <a href="https://github.com/hyperium/hyper/blob/master/examples/client.rs" rel="nofollow noopener">https://github.com/hyperium/hyper/blob/master/examples/client.rs</a> (и <a href="https://docs.rs/futures/0.1/futures/future/struct.MapErr.html" rel="nofollow noopener">MapErr</a> его имплементирует, так же как и ResponseFuture и Map)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/andreytkachenko" class="user-link">Andrey Tkachenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="May 2, 2019 11:01 AM">
+            <time itemprop="datePublished" datetime="2019-05-02 11:01:31 +0000">May 2, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Здравствуйте!</p>
+<p><strong>По коду.</strong><br>
+Здесь много чего не совсем понятно/завершено:</p>
+<ol>
+<li>Вы создаете канал:</li>
+</ol>
+<pre><code class="lang-rust">let (sender, receiver) = futures::sync::oneshot::channel::&lt;Url&gt;();
+</code></pre>
+<p>передаете sender:</p>
+<pre><code class="lang-rust">retrieve_url(sender)
+</code></pre>
+<p>потом ждете ответа:</p>
+<pre><code class="lang-rust">let location = receiver.wait();
+</code></pre>
+<p>Но внутри функции <code>retrieve_url</code> ничего не отправляете!<br>
+2. <code>client.get(url)</code> возвращает футуру (да, вы делаете мапы, но в итоге это все же футура) . Таким образом возвращаемое значение должно быть <code>impl Future</code>:</p>
+<pre><code class="lang-rust">fn retrieve_url(send: Sender&lt;Url&gt;) -&gt; impl Future&lt;Item = Url, Error = Error&gt; {
+</code></pre>
+<ol start="3">
+<li>
+<code>hyper::rt::run(&lt;impl Future&gt;)</code> ждет на вход что-либо имплементирующее треит Future  (в данном случае <code>hyper::rt::lazy</code> излишен) та что код будет примерно таким:</li>
+</ol>
+<pre><code class="lang-auto">fn retrieve_auth_url() {
+    hyper::rt::run(
+        retrieve_url()
+            .map(|url| println!("Response: {:?}", location))
+            .map_err(|err| eprintln!("Error: {}", err))
+    );
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="May 2, 2019 11:37 AM">
+            <time itemprop="datePublished" datetime="2019-05-02 11:37:05 +0000">May 2, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <ol>
+<li>Да, код в процессе переписывания, до этого пытался извлечь location без канала - не получилось.</li>
+<li>Первый раз вижу такую запись</li>
+</ol>
+<aside class="quote no-group" data-username="andreytkachenko" data-post="3" data-topic="895">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/andreytkachenko/48/127_2.png" class="avatar"> andreytkachenko:</div>
+<blockquote>
+<p>fn retrieve_url(send: Sender&lt;Url&gt;) -&gt; impl Future&lt;Item = Url, Error = Error&gt; {</p>
+</blockquote>
+</aside>
+<p>Зачем тут impl? Разве не просто “-&gt; Future&lt;…”</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/andreytkachenko" class="user-link">Andrey Tkachenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="May 2, 2019 12:04 PM">
+            <time itemprop="datePublished" datetime="2019-05-02 12:04:32 +0000">May 2, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><code>Future</code> это <strong>trait</strong>, а трейты в расте это что-то на подобии интерфейсов в других языках, это не конкретные типы, а значит у них нет заранее известного(во время компиляции) размера, и их нельзя просто так возвращать (или передавать) из функцию. Запись типа <code>impl Future</code> означат лишь что мы знаем что функция возвращает объект который имплементирует трейт Future. В данном случае конкретный тип объекта буде MapErr&lt;Map&lt;Get …&gt;&gt;&gt; его нельзя записать (как тип возвращаемого значения), т.к. он содержит дженерики с замыканиями, поэтому мы пользуемся <code>impl Future</code></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="May 2, 2019 12:10 PM">
+            <time itemprop="datePublished" datetime="2019-05-02 12:10:42 +0000">May 2, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо за подробное объяснение!<br>
+Ещё один момент не проясните?</p>
+<aside class="quote no-group" data-username="andreytkachenko" data-post="3" data-topic="895">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/andreytkachenko/48/127_2.png" class="avatar"> andreytkachenko:</div>
+<blockquote>
+<p><code>client.get(url)</code> возвращает футуру (да, вы делаете мапы, но в итоге это все же футура) .</p>
+</blockquote>
+</aside>
+<p>А как это та же самая, если MapErr - это не трейт, а структура? Т.е. вообще другой тип.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/andreytkachenko" class="user-link">Andrey Tkachenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="May 2, 2019 12:21 PM">
+            <time itemprop="datePublished" datetime="2019-05-02 12:21:41 +0000">May 2, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Дело в том что функции могут возвращать(и принимать тоже) обобщенные значения ака дженерики:</p>
+<pre><code class="lang-rust">fn my_function&lt;F: Future&gt;(future: F) { // в эту ф-ю можно передать объект любого конкретного типа который имеет имплементацию трейта `Future` 
+    ...
+}
+</code></pre>
+<p>технически компилятор для каждого конкретного типа создаст копию этой функции (для тех что мы используем конечно)</p>
+<p><code>impl Future</code> это частный случай дженериков для возвращаемого (и не только) значения.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="May 2, 2019 12:23 PM">
+            <time itemprop="datePublished" datetime="2019-05-02 12:23:07 +0000">May 2, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да, это понятно, но MapErr - это же вполне себе конкретный тип. Как и Client.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/andreytkachenko" class="user-link">Andrey Tkachenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="May 2, 2019 12:24 PM">
+            <time itemprop="datePublished" datetime="2019-05-02 12:24:29 +0000">May 2, 2019</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>А как это та же самая, если MapErr - это не трейт, а структура?</p>
+</blockquote>
+<p>Да конкретный тип другой, но все они имеют имплементацию трейта <code>Future</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="May 2, 2019 12:26 PM">
+            <time itemprop="datePublished" datetime="2019-05-02 12:26:00 +0000">May 2, 2019</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Но исполняться-то в недрах Tokio должен именно Client, а не MapErr!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/andreytkachenko" class="user-link">Andrey Tkachenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="May 2, 2019 12:32 PM">
+            <time itemprop="datePublished" datetime="2019-05-02 12:32:24 +0000">May 2, 2019</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Но исполняться-то в недрах Tokio должен именно Client, а не MapErr!</p>
+</blockquote>
+<p>Не совсем. Токио ничего о <code>Client</code> <strong>не знает</strong>. Токио нужет <strong>любой</strong> объект (будь то MapErr или MySuperPuperFuture) который <strong>имеет</strong> имплементацию трейта <code>Future</code>. Вот пример того как может выглядеть метод <code>run</code> у токио:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">pub fn run&lt;F: Future&lt;Item = (), Error = ()&gt;&gt;(f: F) {
+   // детали
+}
+</code></pre>
+<p>как видим никакого <code>Client</code> тут и впомине нет (<code>Client</code> это объект <code>Hyper</code> для установления связи с удаленным сервером и передачи данных. <code>Client</code> даже не имплементит trait <code>Future</code>, у него есть метод <code>.get</code> который возвращает что-то что имплементирует Future)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="May 2, 2019 12:33 PM">
+            <time itemprop="datePublished" datetime="2019-05-02 12:33:30 +0000">May 2, 2019</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_11">Replying to #11</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Уфф… Вроде понятнее стало.<br>
+Большое спасибо!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

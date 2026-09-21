@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Type validation failed: encountered 0 at .v.buf.ptr, - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Type validation failed: encountered 0 at .v.buf.ptr,</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Type validation failed: encountered 0 at .v.buf.ptr,</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Oct 16, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Oct 16, 2018 1:29 PM">
+            <time itemprop="datePublished" datetime="2018-10-16 13:29:01 +0000">Oct 16, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>внимание! пример чисто синтетический!</p>
+<p><a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2015&amp;gist=cbd48a048fae4e17597041d96ef7faa9" rel="noopener nofollow ugc">посмотреть</a></p>
+<pre data-code-wrap="Rust"><code class="lang-Rust">#![feature(const_vec_new)]
+#![feature(const_transmute)]
+use std::mem::transmute;
+
+pub struct S {
+    pub v: Vec&lt;i32&gt;,
+}
+
+unsafe impl std::marker::Sync for S {}
+
+static dd: S = S { v: Vec::new() }; //OK
+
+static ch: [u8; ::std::mem::size_of::&lt;S&gt;()] = unsafe { transmute([0u8; ::std::mem::size_of::&lt;S&gt;()]) }; //OK
+
+//static ch2: S = unsafe { transmute(ch) }; // ?????
+
+pub fn getS() -&gt; S { unsafe { transmute(ch) } }//OK
+
+fn main() {
+    let ee: S = getS();
+    let ddd = ee.v.capacity();
+    let fff = ee.v.len();
+    println!("{}", ddd);
+    println!("{}", fff)
+}
+</code></pre>
+<p>если раскомментировать строку получим ошибку…</p>
+<pre><code class="lang-auto">error[E0080]: this static likely exhibits undefined behavior
+  --&gt; src/main.rs:14:1
+   |
+14 | static ch2: S = unsafe { transmute(ch) };
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ type validation failed: encountered 0 at .v.buf.ptr, but expected something greater or equal to 1
+   |
+   = note: The rules on what exactly is undefined behavior aren't clear, so this check might be overzealous. Please open an issue on the rust compiler repository if you believe it should not be considered undefined behavior
+</code></pre>
+<p>не критично, но…<br>
+хотелось бы иметь простое статическое поле.</p>
+<hr>
+<p><a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2015&amp;gist=fcc9beda485c85cc72b28eaec5dd1e0e" rel="noopener nofollow ugc">понятно. разобрался</a><br>
+ну не нравится ей что .v.buf.ptr, == 0…<br>
+да не вопрос.<br>
+подсунул массив заполненный единицами</p>
+<pre data-code-wrap="rust"><code class="lang-rust">[1u8; ::std::mem::size_of::&lt;S&gt;()]
+</code></pre>
+<p>съело.<br>
+мдяяяя… оно при компиляции  проверяет чтобы указатели статических полей небыли равны нулю (null).</p>
+<p>впечатляет.</p>
+<p>полюбопытствовал чему пойнтер пустого статического вектора равен</p>
+<pre><code class="lang-auto">static dd: S = S { v: Vec::new() };
+</code></pre>
+<blockquote>
+<p>Unique::empty()</p>
+</blockquote>
+<p>а вот в рантайме всё можно</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Oct 16, 2018 3:13 PM">
+            <time itemprop="datePublished" datetime="2018-10-16 15:13:49 +0000">Oct 16, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хоть пример и синтетический, но и правда выглядит как нарушение инвариантов языка, т.е. UB.</p>
+<p><a href="https://github.com/rust-lang/rust/issues/53605">https://github.com/rust-lang/rust/issues/53605</a> тоже не то что бы сильно законченным кажется, может еще в этом дело.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Oct 16, 2018 3:15 PM">
+            <time itemprop="datePublished" datetime="2018-10-16 15:15:42 +0000">Oct 16, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>объяснение добавил выше. не стал делать отдельно</p>
+<p>capacity()  ==  72340172838076673 <img src="https://forum.rustycrate.ru/images/emoji/twitter/sunglasses.png?v=6" title=":sunglasses:" class="emoji" alt=":sunglasses:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

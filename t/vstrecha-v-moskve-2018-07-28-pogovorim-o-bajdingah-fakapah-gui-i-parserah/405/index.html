@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Встреча в Москве 2018.07.28: поговорим о байдингах, факапах, gui и парсерах - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/vstrechi/5/index.html">События</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Встреча в Москве 2018.07.28: поговорим о байдингах, факапах, gui и парсерах</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Встреча в Москве 2018.07.28: поговорим о байдингах, факапах, gui и парсерах</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/vstrechi/5" class="category-badge" style="--cat-color: #25AAE2"><span class="category-bullet" aria-hidden="true"></span>События</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jul 13, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jul 13, 2018 10:34 AM">
+            <time itemprop="datePublished" datetime="2018-07-13 10:34:01 +0000">Jul 13, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Тема: Идиоматичные FFI байндинги<br>
+Спикер: Михаил Лубинец (<span class="mention">@mersinvald</span>)<br>
+Расскажу про биндинг в raqm, будет практическая преза по шагам генерации биндинга, про sys-крейт, про кросс-платформу, про вайтлистинг и sanity тесты. И потом про то как оборачивать это в растотипы чтобы никому не хотелось тебя убить.</p>
+<p>Тема: Rust in production - готовим и решаем частые проблемы.<br>
+Спикер: Илья Богданов (<a class="mention" href="/u/vitvakatu/index.html">@vitvakatu</a>)<br>
+Неожиданные сложности, которые возникают с Rust в реальной разработке и то, как с ними бороться. Поговорим о асинхронных веб-фреймворках, процедурных макросах, code style и почему так трудно его соблюдать, а также почему mut совсем не означает изменяемость.</p>
+<p>Тема: Пишем парсеры на Nom<br>
+Спикер: Антон Шрамко (<span class="mention">@tapok_satan</span>)<br>
+Расскажу тем кто не в танке:</p>
+<ul>
+<li>Как перестать использовать регулярные выражения для парсинга</li>
+<li>Как писать простые и лаконичные парсеры с использованием nom</li>
+<li>Частые кейсы использования, примеры кода, подходы и прочий скам</li>
+</ul>
+<p>Тема: (Лайтинг) GUI на Rust, зачем нужен, какие подвижки<br>
+Спикер: Антон Шрамко (<span class="mention">@tapok_satan</span>)<br>
+Расскажу про проект Rise UI, целях, и зачем вообще на расте нужно писать собственную desktop gui библиотеку - какие профиты от использования раста, где использование библиотеки будет актуально и прочее.</p>
+<p>P.S - если у вас есть что рассказать по теме Rust, будь то доклад или лайтинг - вы можете также поучаствовать, просто напишите на этот Telegram <span class="mention">@tapok_satan</span> - тему и короткое описание.</p>
+</blockquote>
+<p>подробности:<br>
+<a href="https://www.meetup.com/rustjerk/events/252640463/" class="onebox" target="_blank" rel="noopener">https://www.meetup.com/rustjerk/events/252640463/</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jul 19, 2018 7:55 AM">
+            <time itemprop="datePublished" datetime="2018-07-19 07:55:16 +0000">Jul 19, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://gitter.im/ruRust/gamedev?at=5b4cef0f66c1e833a9efc9c8">немного подробностей из гиттера (внезапно, игровой комнаты)</a>:</p>
+<blockquote>
+<p>Anton Shramko <span class="mention">@friktor</span> июль 16 22:</p>
+<blockquote>
+<p>Запись будет?`</p>
+</blockquote>
+<p>Yep</p>
+<p>За это я договорился, плюс договорился чтоб проектор нормальный купили, у нас там очень большой экран. Так что думаю запись будет качественная.</p>
+<blockquote>
+<p>можно вкратце?</p>
+</blockquote>
+<p><a class="mention" href="/u/snuk182/index.html">@snuk182</a> Ну я на митапе буду рассказывать подробнее, включая цели и особенности относительно и других гуев, плюс о том почему слишком рано и зря убили b2g. Ну а если прям совсем вкратце - автор не продумал подход написания, и очень быстро уперся в потолок возможностей (сам через это проходил 2 раза - крайне болезненный опыт), у него довольно шаткая работа с клипами и контейнерами, сильно прибитая к старому вебрендеру, и старым эвентам, плюс у него там своеобразные костыли для работы со стилями совсем не учитывающие возможности скроллинга, работы с трансформациями, и не учитывающая что нужны возможности для работы с состояниями аля hover, active и тд. Тоесть если он захочет чтобы у него из limn чтото вышло ему придется чтобы эти проблемы решить все переписать с нуля, с учетом потолка. Я несколько раз свою поделку переписывал пока не дошел до того как все более менее грамотно разбить и учитывать с расчетом на расширение и поддержку.</p>
+<p>Ну и еще у лимна не учитывается совсем работа с текстовым лайаутом, а это отдельная и крайне больная тема с которой я довольно много воевал, и пока что в проигрыше - сейчас мне один чувак там помог сделал как раз байдинги к лайауту raqm, что в принципе на первое время сойдет для textview, но даже у raqm довольно много косяков и придется лайаут один фиг самим с нуля писать</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Aug 7, 2018 6:27 AM">
+            <time itemprop="datePublished" datetime="2018-08-07 06:27:22 +0000">Aug 7, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Mike Lubinets <span class="mention">@mersinvald</span>:</p>
+<p>Видео с докладами с митапа RustJerk готовы, всех кому интересны темы докладов, просим на YouTube <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+</blockquote>
+<blockquote>
+<ol>
+<li>BitFury: Is Rust Ready for Production?</li>
+</ol>
+</blockquote>
+<div class="youtube-onebox lazy-video-container" data-video-id="eQPjxunnTGY" data-video-title="BitFury: Is Rust Ready for Production? / RustJerk Meet-up July 2018 [Russian]" data-video-start-time="" data-provider-name="youtube">
+  <a href="https://www.youtube.com/watch?v=eQPjxunnTGY" target="_blank" rel="noopener">
+    <img class="youtube-thumbnail" src="https://img.youtube.com/vi/eQPjxunnTGY/maxresdefault.jpg" title="BitFury: Is Rust Ready for Production? / RustJerk Meet-up July 2018 [Russian]" width="690" height="388">
+  </a>
+</div>
+
+<blockquote>
+<ol start="2">
+<li>Bindgen: делаем sys-крейт</li>
+</ol>
+</blockquote>
+<div class="youtube-onebox lazy-video-container" data-video-id="xGWCzwcUJsA" data-video-title="Bingden: making a sys-crate / RustJerk Meet-up July 2018 [Russian + English subs]" data-video-start-time="" data-provider-name="youtube">
+  <a href="https://www.youtube.com/watch?v=xGWCzwcUJsA" target="_blank" rel="noopener">
+    <img class="youtube-thumbnail" src="https://img.youtube.com/vi/xGWCzwcUJsA/hqdefault.jpg" title="Bingden: making a sys-crate / RustJerk Meet-up July 2018 [Russian + English subs]" width="480" height="360">
+  </a>
+</div>
+
+<blockquote>
+<ol start="3">
+<li>Краткое введение в Nom</li>
+</ol>
+</blockquote>
+<div class="youtube-onebox lazy-video-container" data-video-id="U3WAqDFZThY" data-video-title="Brief introduction into Nom / RustJerk Meet-up July 2018 [Russian]" data-video-start-time="" data-provider-name="youtube">
+  <a href="https://www.youtube.com/watch?v=U3WAqDFZThY" target="_blank" rel="noopener">
+    <img class="youtube-thumbnail" src="https://img.youtube.com/vi/U3WAqDFZThY/maxresdefault.jpg" title="Brief introduction into Nom / RustJerk Meet-up July 2018 [Russian]" width="690" height="388">
+  </a>
+</div>
+
+<p><a href="https://www.youtube.com/playlist?list=PLpayaS609GmQIKLZY0sPsEJpvNk3H6Uyf">Весь список</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Производительность Mutex vs. RwLock - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Производительность Mutex vs. RwLock</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Производительность Mutex vs. RwLock</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Oct 30, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">F</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/freecoder" class="user-link">Alexander</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Oct 30, 2018 5:23 PM">
+            <time itemprop="datePublished" datetime="2018-10-30 17:23:48 +0000">Oct 30, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Задались этим вопросом в чате, и вот что выяснилось.</p>
+<p>Во-первых, вот ссылка на презентацию по сравнению производительности примитивов синхронизации в Rust: <a href="https://www.slideshare.net/mitsunorikomatsu/performance-comparison-of-mutex-rwlock-and-atomic-types-in-rust" rel="nofollow noopener"> Performance Comparison of Mutex, RWLock and Atomic types in Rust</a></p>
+<p>Во-вторых, вот бенчмарк, который каждый может запустить у себя самостоятельно: <a href="https://github.com/komamitsu/rust-lock-bench" rel="nofollow noopener">rust-lock-bench</a></p>
+<p>В-теретьих, выяснилось, что <code>Mutex</code> в Linux работает быстрее, но в MacOS быстрее работает <code>RwLock</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="4 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          4
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">F</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/freecoder" class="user-link">Alexander</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Oct 30, 2018 5:32 PM">
+            <time itemprop="datePublished" datetime="2018-10-30 17:32:04 +0000">Oct 30, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Копирую сюда полезные замечания из чата.</p>
+<p><a class="mention" href="/u/kpp/index.html">@kpp</a></p>
+<blockquote>
+<p>хоть бенчи и самодельные, но вроде все ок: <a href="https://github.com/komamitsu/rust-lock-bench/blob/master/src/lock_bench.rs#L54" class="inline-onebox">rust-lock-bench/src/lock_bench.rs at master · komamitsu/rust-lock-bench · GitHub</a><br>
+не хватает бенчей с <a href="https://crates.io/crates/parking_lot" class="inline-onebox">crates.io: Rust Package Registry</a></p>
+</blockquote>
+<p><a class="mention" href="/u/kpp/index.html">@kpp</a></p>
+<blockquote>
+<p>Ахах, parking_lot не особо помог)</p>
+</blockquote>
+<pre><code class="lang-auto">==== num_reader: 20, num_writer: 0 ====
+mutex    =&gt;   mean:    20.00, std_dev:     0.58
+rwlock   =&gt;   mean:    57.29, std_dev:     1.25
+prwlock  =&gt;   mean:    57.29, std_dev:     1.25
+seq_cst  =&gt;   mean:     0.00, std_dev:     0.00
+relaxed  =&gt;   mean:     0.00, std_dev:     0.00
+unsync   =&gt;   mean:     0.00, std_dev:     0.00
+</code></pre>
+<pre><code class="lang-auto">==== num_reader: 0, num_writer: 20 ====
+mutex    =&gt;   mean:    26.14, std_dev:     1.35
+rwlock   =&gt;   mean:   115.14, std_dev:     4.91
+prwlock  =&gt;   mean:   115.14, std_dev:     4.91
+seq_cst  =&gt;   mean:     3.43, std_dev:     0.53
+relaxed  =&gt;   mean:     3.86, std_dev:     0.38
+unsync   =&gt;   mean:     0.29, std_dev:     0.49
+</code></pre>
+<blockquote>
+<p>один в один с std rwlock</p>
+</blockquote>
+<p><a class="mention" href="/u/kurnevsky/index.html">@kurnevsky</a></p>
+<blockquote>
+<p><em><a class="mention" href="/u/kpp/index.html">@kpp</a></em> parking_lot помимо производительности еще дает гарантии на то, что write lock будет рано или поздно получен, вне зависимости от интенсивности read локов.</p>
+</blockquote>
+<p><a class="mention" href="/u/kpp/index.html">@kpp</a></p>
+<blockquote>
+<p>а обратное утверждение тоже верно?</p>
+</blockquote>
+<p><a class="mention" href="/u/kurnevsky/index.html">@kurnevsky</a></p>
+<blockquote>
+<p>В обратном мало смысла - write лок может быть один.<br>
+Он освобождает ресурс - следующий по очереди берет.<br>
+С read-ами сложнее - они могут браться непрерывно и освобождаться так, что ресурс никогда не будет свободен. Но при этом ни один лок сам по себе не берет ресурс навсегда.<br>
+То есть, write лок может висеть вечно.<br>
+Насколько помню, std такой гарантии не дает.<br>
+<em><a class="mention" href="/u/kpp/index.html">@kpp</a></em> плюс еще зависит от бенчмарка. parking_lot может быть лучше, если лок берется несколько раз последовательно в одном треде.<br>
+(не смотрел этот конкретный бенчмарк)</p>
+</blockquote>
+<p><a class="mention" href="/u/kpp/index.html">@kpp</a></p>
+<blockquote>
+<p>Кто хочет, может потестить <a href="https://github.com/komamitsu/rust-lock-bench/pull/3">komamitsu/rust-lock-bench#3</a></p>
+</blockquote>
+<p><a class="mention" href="/u/kurnevsky/index.html">@kurnevsky</a></p>
+<blockquote>
+<p>Интереснее потестить это совместно с токио <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"><br>
+Потому как там локи могут залочить реактор целиком, несмотря на гринтреды.<br>
+И есть пару либ для локов в токио.</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">F</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/freecoder" class="user-link">Alexander</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Oct 31, 2018 11:42 AM">
+            <time itemprop="datePublished" datetime="2018-10-31 11:42:45 +0000">Oct 31, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Интересная статья по теме: <a href="https://fy.blackhats.net.au/blog/html/2018/10/19/rust_rwlock_and_mutex_performance_oddities.html" rel="nofollow noopener">Rust RwLock and Mutex Performance Oddities</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Nov 1, 2018 8:01 AM">
+            <time itemprop="datePublished" datetime="2018-11-01 08:01:03 +0000">Nov 1, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Интересная, только я не понял - неужели этим предпочтением (читатели или писатели) нельзя управлять снаружи? Подразумевается что тут это захардкожено</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

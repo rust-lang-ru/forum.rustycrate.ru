@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Посоветуйтие библитеку сериализации/десериализации в двоичный протокол - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Посоветуйтие библитеку сериализации/десериализации в двоичный протокол</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Посоветуйтие библитеку сериализации/десериализации в двоичный протокол</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">May 31, 2016</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/akaDemik" class="user-link">Денис Хлякин</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="May 31, 2016 8:23 AM">
+            <time itemprop="datePublished" datetime="2016-05-31 08:23:20 +0000">May 31, 2016</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Добрый день.<br>
+В некоторых проектах на <a href="http://dlang.org/" rel="nofollow noopener">D</a> пользовался <a href="https://github.com/atilaneves/cerealed" rel="nofollow noopener">cerealed</a>. Сейчас есть небольшая похожая задача. Хочу попробовать Rust. Но, сходу, похожей библиотеки не нашел. Крейтов с двоичной сериализацией хватает. Но везде сериализация это самоцель.</p>
+<p>А в <a href="https://github.com/atilaneves/cerealed" rel="nofollow noopener">cerealed</a> двоичная сериализация используется как способ реализовать двоичный протокол обмена.<br>
+То есть хотелось бы контроль над тем как данные будут превращаться в байтики.</p>
+<p>Пример того чем я пользовался:</p>
+<pre><code class="lang-auto">struct MyStruct {
+    ubyte mybyte1;
+    @NoCereal uint nocereal1; //won't be serialised
+    @Bits!4 ubyte nibble;
+    @Bits!1 ubyte bit;
+    @Bits!3 ubyte bits3;
+    ubyte mybyte2;
+}
+
+auto cereal = Cerealiser();
+cereal ~= MyStruct(3, 123, 14, 1, 42);
+assert(cereal.bytes == [ 3, 0xea /*1110 1 010*/, 42]);
+</code></pre>
+<pre><code class="lang-auto">struct Packet {
+    ushort length;
+    @ArrayLength("length") ushort[] array;
+}
+auto pkt = decerealise!Packet([
+    0, 3, //length
+    0, 1, 0, 2, 0, 3]); //array of 3 ushorts
+assert(pkt.length == 3);
+assert(pkt.array == [1, 2, 3]);
+</code></pre>
+<p>Если кто пользовался или знает, был бы рад услышать рекомендации.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kstep" class="user-link">Kstep</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="May 31, 2016 11:00 AM">
+            <time itemprop="datePublished" datetime="2016-05-31 11:00:19 +0000">May 31, 2016</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я подозреваю, что вы ищете <a href="https://crates.io/crates/bincode" rel="nofollow noopener">bincode</a>.<br>
+Возможно подойдёт <a href="https://crates.io/crates/rmp" rel="nofollow noopener">rmp</a> (в сочетании с <a href="https://crates.io/crates/rmp-serde" rel="nofollow noopener">rmp-serde</a>+<a href="https://crates.io/crates/serde" rel="nofollow noopener">serde</a> или <a href="https://crates.io/crates/rmp-serialize" rel="nofollow noopener">rmp-serialize</a>+<a href="https://crates.io/crates/rustc-serialize" rel="nofollow noopener">rustc-serialize</a>).</p>
+<p>Для работы с битовыми флагами подойдёт <a href="https://crates.io/crates/bitflags" rel="nofollow noopener">bitflags!</a>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/akaDemik" class="user-link">Денис Хлякин</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="May 31, 2016 12:07 PM">
+            <time itemprop="datePublished" datetime="2016-05-31 12:07:25 +0000">May 31, 2016</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо.<br>
+bincode и rmp я видел. Это не совсем то. Видимо я не совсем точно выразил чего хочу.<br>
+По сути, каждый из них реализует свой собственный “фиксированный” двоичный протокол.</p>
+<p>А я искал возможность описать уже существующий, необходимый мне протокол (<a href="https://ru.wikipedia.org/wiki/Modbus" rel="nofollow noopener">modbus</a> или <a href="https://ru.wikipedia.org/wiki/IEC_60870-5#IEC_60870-5-104" rel="nofollow noopener">МЭК-104</a>, как пример), в виде сериализуемых структур.</p>
+<p>В <a href="http://forum.dlang.org/post/tbugssjmjkliynevgvwm@forum.dlang.org" rel="nofollow noopener">анонсе cerealed</a> как пример приводится формат UDP пакета. Имеют интерес первые три сообщения из анонса.</p>
+<p>А сейчас да, я использую  bitflags!, структуры с align=1 и transmute из &amp;[u8] в свои структуры.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/akaDemik" class="user-link">Денис Хлякин</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="May 31, 2016 12:14 PM">
+            <time itemprop="datePublished" datetime="2016-05-31 12:14:04 +0000">May 31, 2016</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>К bincode я даже обращался с <a href="https://github.com/TyOverby/bincode/issues/58" rel="nofollow noopener">вопросом</a>. Сказали так сделать нельзя. Посоветовали способ которым я уже пользуюсь <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=5" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/akaDemik" class="user-link">Денис Хлякин</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jun 2, 2016 7:59 AM">
+            <time itemprop="datePublished" datetime="2016-06-02 07:59:46 +0000">Jun 2, 2016</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Резюмируя свои поиски.</p>
+<p>bitflags! это хорошо но мало. Мне ближе bit fields. А их два. Слабенький, зато для stable, <a href="https://crates.io/crates/bit_field" rel="nofollow noopener">bit_field</a>. И более весёлый, но для nightly, <a href="https://crates.io/crates/bitfield" rel="nofollow noopener">bitfield</a>. В сумме с <a href="https://crates.io/crates/nue" rel="nofollow noopener">nue</a> получилось почти хорошо. Но не так удобно.<br>
+Закралось желание попробовать написать аналог <a href="https://github.com/atilaneves/cerealed" rel="nofollow noopener">cerealed</a> на rust. Просто из любопытства. На первый взгляд задача кажется не очень сложной.</p>
+<p>В режиме decode-only хорошо выглядит <a href="https://github.com/Geal/nom" rel="nofollow noopener">nom</a>. Но из него не сделать encoder. Жаль.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/akaDemik" class="user-link">Денис Хлякин</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Jun 2, 2016 8:01 AM">
+            <time itemprop="datePublished" datetime="2016-06-02 08:01:17 +0000">Jun 2, 2016</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А вообще, всем подавай nightly и процедурные макросы. Очень охота дождаться их стабилизации.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

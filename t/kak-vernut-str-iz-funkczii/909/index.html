@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Как вернуть &amp;str из функции? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Как вернуть &amp;str из функции?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Как вернуть &amp;str из функции?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">May 10, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="May 10, 2019 12:14 PM">
+            <time itemprop="datePublished" datetime="2019-05-10 12:14:40 +0000">May 10, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Здравствуйте!<br>
+Споткнулся на ровном месте и не могу понять в чём причина.<br>
+Суть - нужно на основании параметра функции сформировать строку и вернуть её. Но компилятор постоянно ругается на то, что я пытаюсь вернуть заимствованное значение. .clone и to_owned не помогают.<br>
+Вот немного упрощенный код</p>
+<pre><code class="lang-auto">pub fn new(redirect_port: u16) -&gt; Self {
+        let mut url = "http://127.0.0.1:".to_string();
+        url.push_str(&amp;redirect_port.to_string());
+        Authorizer {
+            redirect_url: url.to_owned().as_str()
+        }
+    }
+</code></pre>
+<p>Сейчас выдаёт ошибку</p>
+<pre><code class="lang-auto">59 | |             redirect_url: url.to_owned().as_str()
+   | |                           -------------- temporary value created here
+60 | |         }
+   | |_________^ returns a value referencing data owned by the current function
+</code></pre>
+<p>Но почему это временное значение? Я так понимаю, url.to_owned создаёт копию String и передаёт владение вызывающей стороне, а as_str - возвращает просто указатель на неё. По идее, должно всё работать.</p>
+<p>Спасибо.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Revertron" class="user-link">Revertron</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="May 10, 2019 12:42 PM">
+            <time itemprop="datePublished" datetime="2019-05-10 12:42:58 +0000">May 10, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А где здесь происходит эта часть?</p>
+<blockquote>
+<p>и передаёт владение вызывающей стороне</p>
+</blockquote>
+<p>Владение, это, грубо говоря, где-то существующая переменная типа String с нужным текстом. И не просто в стеке, как создаёт <code>to_owned()</code>. Потому, что стек очистится при выходе из функции.<br>
+Может вам не нужно хранить ссылку на строку, а нужно хранить всю строку, но потом уже передавать на неё ссылку куда-то ещё?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chernomor" class="user-link">Sergey</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="May 10, 2019 12:59 PM">
+            <time itemprop="datePublished" datetime="2019-05-10 12:59:53 +0000">May 10, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="n0dwis" data-post="1" data-topic="909">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/n/a8b319/48.png" class="avatar"> n0dwis:</div>
+<blockquote>
+<p>url.to_owned создаёт копию String</p>
+</blockquote>
+</aside>
+<p>но само значение никому во владение не отдается. Значение остается  temporary (временным) и удаляется в конце функции. Можно убрать to_str() и поменять тип redirect_url на String - в этом случае владение перейдет к структуре Authorizer.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/QuarkDoe" class="user-link">Quark Doe</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="May 10, 2019 2:26 PM">
+            <time itemprop="datePublished" datetime="2019-05-10 14:26:55 +0000">May 10, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Может я чего-то не понимаю, но &amp;str это ж по сути ссылка.<br>
+Т.е. возвращать надо либо структуру (String), либо ссылку на объект чьё время жизни лежит за пределами функции.<br>
+А так ты возвращаешь ссылку на элемент структуры String которая уничтожится по выходу из функции.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="May 10, 2019 2:47 PM">
+            <time itemprop="datePublished" datetime="2019-05-10 14:47:05 +0000">May 10, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="Revertron" data-post="2" data-topic="909">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/revertron/48/486_2.png" class="avatar"> Revertron:</div>
+<blockquote>
+<p>И не просто в стеке, как создаёт <code>to_owned()</code></p>
+</blockquote>
+</aside>
+<p>А разве to_owned создаёт копию в стеке?</p>
+<aside class="quote no-group" data-username="chernomor" data-post="3" data-topic="909">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chernomor/48/476_2.png" class="avatar"> chernomor:</div>
+<blockquote>
+<p>но само значение никому во владение не отдается</p>
+</blockquote>
+</aside>
+<p>Как-так? Я же и возвращаю копию!</p>
+<aside class="quote no-group" data-username="QuarkDoe" data-post="4" data-topic="909">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/quarkdoe/48/111_2.png" class="avatar"> QuarkDoe:</div>
+<blockquote>
+<p>Т.е. возвращать надо либо структуру (String), либо ссылку на объект чьё время жизни лежит за пределами функции.</p>
+</blockquote>
+</aside>
+<p>Так я же возвращаю структуру, в которой содержится ссылка на строку. Можно, конечно, хранить там String, но хочу прояснить момент со &amp;str.</p>
+<aside class="quote no-group" data-username="QuarkDoe" data-post="4" data-topic="909">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/quarkdoe/48/111_2.png" class="avatar"> QuarkDoe:</div>
+<blockquote>
+<p>А так ты возвращаешь ссылку на элемент структуры String которая уничтожится по выходу из функции.</p>
+</blockquote>
+</aside>
+<p>Нет, я возвращаю всю структуру. Немного неправильно сформулировал вопрос, наверное.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/QuarkDoe" class="user-link">Quark Doe</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="May 10, 2019 2:55 PM">
+            <time itemprop="datePublished" datetime="2019-05-10 14:55:23 +0000">May 10, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="n0dwis" data-post="5" data-topic="909">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/n/a8b319/48.png" class="avatar"> n0dwis:</div>
+<blockquote>
+<p>Так я же возвращаю структуру, в которой содержится ссылка на строку</p>
+</blockquote>
+</aside>
+<p>А где хранится сама строка? Прально, нигде. Она по выходу из функции уничтожается.<br>
+Creates owned data from borrowed data, usually by cloning. (цы)<br>
+У тебя String на стеке создан и никуда не девается из функции.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/QuarkDoe" class="user-link">Quark Doe</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="May 10, 2019 2:56 PM">
+            <time itemprop="datePublished" datetime="2019-05-10 14:56:22 +0000">May 10, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="n0dwis" data-post="5" data-topic="909">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/n/a8b319/48.png" class="avatar"> n0dwis:</div>
+<blockquote>
+<p>Нет, я возвращаю всю структуру. Немного неправильно сформулировал вопрос, наверное.</p>
+</blockquote>
+</aside>
+<p>Неважно в чём ты возвращаешь ссылку. Сам объект ты не возвращаешь.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="May 10, 2019 2:58 PM">
+            <time itemprop="datePublished" datetime="2019-05-10 14:58:16 +0000">May 10, 2019</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="QuarkDoe" data-post="7" data-topic="909">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/quarkdoe/48/111_2.png" class="avatar"> QuarkDoe:</div>
+<blockquote>
+<p>А где хранится сама строка? Прально, нигде. Она по выходу из функции уничтожается.</p>
+</blockquote>
+</aside>
+<p>Ну вот я предполагаю, что владельцем должна быть структура. Причём должна владеть именно &amp;str, а не String.<br>
+Похоже, так вообще не получится, т.к. чистый объект str - это строка созданная при компиляции. А &amp;str - это уже срез от какой-то сроки. Т.е. невладеющая ссылка. Но как-то я не уверен…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Revertron" class="user-link">Revertron</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="May 10, 2019 3:08 PM">
+            <time itemprop="datePublished" datetime="2019-05-10 15:08:24 +0000">May 10, 2019</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вот теперь правильно мыслите <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=6" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/QuarkDoe" class="user-link">Quark Doe</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="May 10, 2019 3:10 PM">
+            <time itemprop="datePublished" datetime="2019-05-10 15:10:15 +0000">May 10, 2019</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="n0dwis" data-post="9" data-topic="909">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/n/a8b319/48.png" class="avatar"> n0dwis:</div>
+<blockquote>
+<p>А &amp;str - это уже срез от какой-то сроки.</p>
+</blockquote>
+</aside>
+<p>Да, это слайс и владеть он не может.<br>
+Rust has only one string type in the core language, which is the string slice <code>str</code> that is usually seen in its borrowed form <code>&amp;str</code> . (цы)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="May 10, 2019 3:34 PM">
+            <time itemprop="datePublished" datetime="2019-05-10 15:34:13 +0000">May 10, 2019</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Всем спасибо! <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=6" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

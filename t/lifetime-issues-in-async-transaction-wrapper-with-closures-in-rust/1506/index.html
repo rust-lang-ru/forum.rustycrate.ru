@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lifetime issues in async transaction wrapper with closures in Rust - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Lifetime issues in async transaction wrapper with closures in Rust</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Lifetime issues in async transaction wrapper with closures in Rust</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+        <div class="topic-tags">
+          
+            <a href="/tag/async" class="tag-badge">async</a>
+          
+        </div>
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Feb 16, 2025</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">G</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Gregory_Rogachev" class="user-link">Gregory Rogachev</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Feb 16, 2025 9:11 AM">
+            <time itemprop="datePublished" datetime="2025-02-16 09:11:54 +0000">Feb 16, 2025</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>I’m working on a Rust project using the repository pattern and want to implement a transaction execution wrapper to handle commit/rollback functionality. However, I’m facing difficulties managing lifetimes with futures in closures.</p>
+<h3><a name="p-4086-environment-1" class="anchor" href="#p-4086-environment-1" aria-label="Heading link"></a>Environment:</h3>
+<ul>
+<li>Rust: <code>rustc 1.82.0 (f6e511eec 2024-10-15)</code></li>
+<li>Cargo: <code>cargo 1.82.0 (8f40fc59f 2024-08-21)</code></li>
+</ul>
+<h3><a name="p-4086-issue-2" class="anchor" href="#p-4086-issue-2" aria-label="Heading link"></a>Issue:</h3>
+<p>I get the following lifetime error:</p>
+<pre><code class="lang-auto">error: lifetime may not live long enough
+   --&gt; src/questions.rs:111:22
+    |
+111 |                 |tx| async move { self.persistence_repository.next_user_id(tx).await },
+    |                  --- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ returning this value requires that `'1` must outlive `'2`
+    |                  | |
+    |                  | return type of closure `{async block@src/questions.rs:111:22: 111:32}` contains a lifetime `'2`
+    |                  has type `&amp;'1 mut questions::Transaction&lt;'_&gt;`
+</code></pre>
+<h3><a name="p-4086-context-3" class="anchor" href="#p-4086-context-3" aria-label="Heading link"></a>Context:</h3>
+<p>The problem occurs when I pass a closure to the <code>with_transaction</code> function. Here is the simplified reproduction code:</p>
+<p>[Reproduction code as provided in the question]</p>
+<h3><a name="p-4086-what-ive-tried-4" class="anchor" href="#p-4086-what-ive-tried-4" aria-label="Heading link"></a>What I’ve Tried:</h3>
+<ul>
+<li>Adjusting the lifetime annotations for <code>Transaction&lt;'a&gt;</code> and the closure.</li>
+<li>Experimenting with <code>for&lt;'a&gt;</code> in the <code>with_transaction</code> trait method signature.</li>
+<li>Restructuring the async block in the closure.</li>
+</ul>
+<h3><a name="p-4086-desired-behavior-5" class="anchor" href="#p-4086-desired-behavior-5" aria-label="Heading link"></a>Desired Behavior:</h3>
+<p>I want the transaction wrapper function <code>with_transaction</code> to:</p>
+<ol>
+<li>Execute the provided closure (transactional logic) with a mutable transaction reference.</li>
+<li>Commit or rollback the transaction based on the closure’s result.</li>
+</ol>
+<h3><a name="p-4086-question-6" class="anchor" href="#p-4086-question-6" aria-label="Heading link"></a>Question:</h3>
+<p>How can I correctly manage lifetimes in this case to avoid the <code>lifetime may not live long enough</code> error? Is there a better way to design this transaction wrapper to handle async closures cleanly in Rust?</p>
+<h3><a name="p-4086-reproduction-code-7" class="anchor" href="#p-4086-reproduction-code-7" aria-label="Heading link"></a>Reproduction code:</h3>
+<pre data-code-wrap="rust"><code class="lang-rust">use anyhow::Context;
+use sqlx::{PgPool, Postgres, Transaction as SqlxTransaction};
+use std::future::Future;
+
+pub trait PersistenceRepository {
+    async fn next_user_id&lt;'a&gt;(
+        &amp;self,
+        transaction: &amp;mut Transaction&lt;'a&gt;,
+    ) -&gt; Result&lt;String, anyhow::Error&gt;;
+}
+
+pub struct AuthService&lt;P, T&gt; {
+    persistence_repository: P,
+    transaction_factory: T,
+}
+
+impl&lt;P: Send + Sync, T: Send + Sync&gt; AuthService&lt;P, T&gt; {
+    pub fn new(persistence_repository: P, transaction_factory: T) -&gt; Self {
+        Self {
+            persistence_repository,
+            transaction_factory,
+        }
+    }
+}
+
+impl&lt;P: PersistenceRepository, T: TransactionFactory&gt; AuthService&lt;P, T&gt; {
+    pub async fn create_user(&amp;self) -&gt; Result&lt;String, anyhow::Error&gt; {
+        self.transaction_factory
+            .with_transaction(
+                |tx| async move { self.persistence_repository.next_user_id(tx).await },
+            )
+            .await
+    }
+}
+
+pub trait TransactionFactory {
+    async fn begin_transaction(&amp;self) -&gt; Result&lt;Transaction&lt;'_&gt;, anyhow::Error&gt;;
+    async fn commit_transaction(&amp;self, transaction: Transaction&lt;'_&gt;) -&gt; Result&lt;(), anyhow::Error&gt;;
+    async fn rollback_transaction(&amp;self, transaction: Transaction&lt;'_&gt;)
+        -&gt; Result&lt;(), anyhow::Error&gt;;
+
+    async fn with_transaction&lt;'b, F, Fut, R, E&gt;(&amp;'b self, f: F) -&gt; Result&lt;R, E&gt;
+    where
+        F: for&lt;'a&gt; FnOnce(&amp;'a mut Transaction&lt;'b&gt;) -&gt; Fut,
+        Fut: Future&lt;Output = Result&lt;R, E&gt;&gt;,
+        E: From&lt;anyhow::Error&gt;;
+}
+
+pub struct Transaction&lt;'a&gt; {
+    pub inner: SqlxTransaction&lt;'a, Postgres&gt;,
+}
+
+#[derive(Clone)]
+pub struct SqlxTransactionFactory {
+    pool: PgPool,
+}
+
+impl SqlxTransactionFactory {
+    pub fn new(pool: PgPool) -&gt; Self {
+        Self { pool }
+    }
+}
+
+impl TransactionFactory for SqlxTransactionFactory {
+    async fn begin_transaction(&amp;self) -&gt; Result&lt;Transaction&lt;'_&gt;, anyhow::Error&gt; {
+        let transaction = self
+            .pool
+            .begin()
+            .await
+            .context("failed to begin transaction")?;
+        Ok(Transaction { inner: transaction })
+    }
+
+    async fn commit_transaction(&amp;self, transaction: Transaction&lt;'_&gt;) -&gt; Result&lt;(), anyhow::Error&gt; {
+        transaction
+            .inner
+            .commit()
+            .await
+            .context("failed to commit transaction")?;
+        Ok(())
+    }
+
+    async fn rollback_transaction(
+        &amp;self,
+        transaction: Transaction&lt;'_&gt;,
+    ) -&gt; Result&lt;(), anyhow::Error&gt; {
+        transaction
+            .inner
+            .rollback()
+            .await
+            .context("failed to rollback transaction")?;
+        Ok(())
+    }
+
+    async fn with_transaction&lt;'b, F, Fut, R, E&gt;(&amp;'b self, f: F) -&gt; Result&lt;R, E&gt;
+    where
+        F: for&lt;'a&gt; FnOnce(&amp;'a mut Transaction&lt;'b&gt;) -&gt; Fut,
+        Fut: Future&lt;Output = Result&lt;R, E&gt;&gt;,
+        E: From&lt;anyhow::Error&gt;,
+    {
+        let mut tx = self.begin_transaction().await.unwrap();
+        let result = f(&amp;mut tx).await;
+
+        match result {
+            Ok(value) =&gt; {
+                self.commit_transaction(tx).await;
+                Ok(value)
+            }
+            Err(error) =&gt; {
+                self.rollback_transaction(tx).await;
+                Err(error)
+            }
+        }
+    }
+}
+
+
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

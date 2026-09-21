@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вопросы по небезопасному rustу - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Вопросы по небезопасному rustу</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Вопросы по небезопасному rustу</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Nov 16, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Nov 16, 2018 5:36 AM">
+            <time itemprop="datePublished" datetime="2018-11-16 05:36:28 +0000">Nov 16, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>День добрый, господа.<br>
+Смотрю вот код <a href="https://github.com/contain-rs/linked-hash-map/blob/master/src/lib.rs" rel="nofollow noopener">linked-hash-map</a> и возникло пару вопросов.</p>
+<p>В кратце - там двусвязный список элементы которого имеют структуру:</p>
+<pre><code class="lang-rust">struct Node&lt;K, V&gt; {
+    next: *mut Node&lt;K, V&gt;,
+    prev: *mut Node&lt;K, V&gt;,
+    key: K,
+    value: V,
+}
+</code></pre>
+<p>И автор библиотеки переиспользует эти структуры. То есть при удалении он освобождает память <code>key</code>,  возвращает <code>value</code>,  а сам узел сохраняет в списке free чтобы потом его переиспользовать.</p>
+<pre><code class="lang-rust">// add to free list
+(*node).next = self.free;
+self.free = node;
+// drop the key and return the value
+drop(ptr::read(&amp;(*node).key));
+ptr::read(&amp;(*node).value)
+</code></pre>
+<p>Вот так он переиспользует узлы.</p>
+<pre><code class="lang-rust">let free = self.free;
+ptr::write(free, Node::new(k, v));
+free
+</code></pre>
+<ol>
+<li>
+<p>Вопрос номер один больше риторический, знаю такую технику переиспользования практикуют в языках с GC, что бы снизить нагрузку на него и на перераспределение памяти, насколько это актуально для rust и языков без GC? (вообще мне такой подход немного претил и в языках с GC всегда возникала мысль - а на кой тогда вообще этот GC, если, фактически, часть работ приходится делать за него ибо если это не делать за него всё будет в 2 раза медленнее)</p>
+</li>
+<li>
+<p>Второй вопрос технический, насколько корректно автор библиотеки это делает:<br>
+<code>drop</code> я так понимаю полностью освобождает память;<br>
+<code>ptr::write</code> делает mov перемещает управление памятью во вновь созданную переменную типа T;<br>
+далее он переиспользует узел, фактически он создаёт новый узел в куче и перезаписывает его в адрес старого узла.</p>
+</li>
+</ol>
+<p>Разве это вообще повышает производительность, ведь он фактически, всё одно, создаёт новый узел а не переиспользует старый, мало того он после его создания перезаписывает его в адреc старого узла?</p>
+<p>Корректно ли это по памяти, когда он перезаписывает всю структуру ноды значение поля value, которое он вычитал и вернул из функции, может же ещё использоваться в программе и не быть освобождено к моменту перезаписи всей структуры?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Nov 16, 2018 7:57 AM">
+            <time itemprop="datePublished" datetime="2018-11-16 07:57:03 +0000">Nov 16, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>… насколько это актуально для rust и языков без GC?</p>
+</blockquote>
+<blockquote>
+<p>Разве это вообще повышает производительность, ведь он фактически, всё одно, создаёт новый узел а не переиспользует старый, мало того он после его создания перезаписывает его в адреc старого узла?</p>
+</blockquote>
+<p>Вполне себе актуально, насколько я представляю: выделение нового блока памяти это очень дорогая операция в среднем.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Nov 16, 2018 8:17 AM">
+            <time itemprop="datePublished" datetime="2018-11-16 08:17:19 +0000">Nov 16, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="Cergo" data-post="1" data-topic="640">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/cergo/48/306_2.png" class="avatar"> Cergo:</div>
+<blockquote>
+<p>далее он переиспользует узел, фактически он создаёт новый узел в куче и перезаписывает его в адрес старого узла.</p>
+</blockquote>
+</aside>
+<pre><code class="lang-auto">ptr::write(free, Node::new(k, v));
+</code></pre>
+<p>На самом деле здесь узел создается в стеке. Тут могут быть проблемы с производительностью только если ключ и значение имеют большой размер, например если это какой-нибудь здоровенный массив. Если это будет вектор, то фактически будет скопирован только указатель  и длинна.<br>
+Но я не вижу способа сделать лучше. Нельзя передать мутабельную неинициализированную ссылку в функцию-конструктор, т.к. в безопасном Rust неициализированных ссылок в принципе не существует.</p>
+<aside class="quote no-group" data-username="Cergo" data-post="1" data-topic="640">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/cergo/48/306_2.png" class="avatar"> Cergo:</div>
+<blockquote>
+<p>Корректно ли это по памяти, когда он перезаписывает всю структуру ноды значение поля value, которое он вычитал и вернул из функции, может же ещё использоваться в программе и не быть освобождено к моменту перезаписи всей структуры?</p>
+</blockquote>
+</aside>
+<p>Вроде бы тут все в порядке. Он вернул <strong>копию</strong> поля <code>value</code>, а при перезаписи через <code>ptr::write</code> не вызывается <code>drop</code> для старого значения. Даже если <code>value</code> содержит какие-то указатели на объекты, которые должны быть освобождены, для них <code>drop</code> будет вызван когда <strong>копия</strong> <code>value</code> которую мы вернули выйдет из области видимости.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">P</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Pzixel" class="user-link">Psilon</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Nov 16, 2018 8:41 AM">
+            <time itemprop="datePublished" datetime="2018-11-16 08:41:42 +0000">Nov 16, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Выделение памяти в языках с GC дешевле, чем без него, потому что в языках с GC аллокация памяти это просто инкремент указателя, потому что память всегда выровнена и дефрагментирована. Поиск по списку блока блока подходящего размера намного тяжелее.</p>
+<aside class="quote no-group" data-username="IBUzPE9" data-post="3" data-topic="640">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ibuzpe9/48/154_2.png" class="avatar"> IBUzPE9:</div>
+<blockquote>
+<p>Но я не вижу способа сделать лучше. Нельзя передать мутабельную неинициализированную ссылку в функцию-конструктор, т.к. в безопасном Rust неициализированных ссылок в принципе не существует.</p>
+</blockquote>
+</aside>
+<p>MaybeUninit ?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Nov 16, 2018 8:43 AM">
+            <time itemprop="datePublished" datetime="2018-11-16 08:43:46 +0000">Nov 16, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Действительно <code>Node::new(k, v)</code> создается на стеке.</p>
+<p>Но с чего вы взяли что он вернул копию поля value?<br>
+<a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=c2ed5d9d756744d0dbdfee74006747e1" rel="nofollow noopener">вот небольшой пример</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Nov 16, 2018 9:05 AM">
+            <time itemprop="datePublished" datetime="2018-11-16 09:05:23 +0000">Nov 16, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В вашем примере <code>ptr::read</code> вызывается после того как вы изменили значение <code>x</code>. Так все работает:</p>
+<pre><code class="lang-auto">    let mut x = 12;
+    let y = &amp;x as *const i32;
+
+    let ret = unsafe {std::ptr::read(y)};
+
+    x = 13;
+    assert_eq!(ret, 12);
+</code></pre>
+<p><a class="mention" href="/u/pzixel/index.html">@Pzixel</a> Да. <code>MaybeUninit</code> как раз то что нужно.  Но это совсем новая фишка, только найтли.</p>
+<p>Хотя непонятно как его тут использовать. Все равно от копирования избавиться не удасться, просто оно будет происходить в другом месте - при вызове <code>MaybeUninit::set(Node)</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Nov 16, 2018 11:17 AM">
+            <time itemprop="datePublished" datetime="2018-11-16 11:17:41 +0000">Nov 16, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Выходит <code>ptr::read</code> создаёт value копию когда он возвращает value?<br>
+Но тогда что он освобождает <code>drop(ptr::read(&amp;(*node).key));</code>  делает копию и удаляет копию ?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Nov 16, 2018 11:49 AM">
+            <time itemprop="datePublished" datetime="2018-11-16 11:49:44 +0000">Nov 16, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Тут дело в том, что если <code>key</code> не <code>Copy</code> то просто так его не удалить:</p>
+<pre><code class="lang-auto">drop((*node).key);
+</code></pre>
+<p>Rust будет ругаться что не может переместить значение. В таких случаях обычно <code>mem::replace()</code> используют:</p>
+<pre><code class="lang-auto">drop(mem::replace(&amp;mut (*node).key, mem::uninitialized()));
+</code></pre>
+<p>По факту там результат тот же получается, только без затирания старого значения. Использовать “оставшийся” <code>key</code> после этого конечно нельзя.</p>
+<hr>
+<p>Пример для конкретики - если тип ключа будет <code>Box&lt;usize&gt;</code>:</p>
+<pre><code class="lang-auto">let tmp = ptr::read(&amp;(*node).key);
+drop(tmp);
+</code></pre>
+<p>После выполнения первой строчки у нас будет два бокса которые указывают на одно место в куче. После второй - это место в куче будет освобождено и первый бокс, который остался в <code>(*node).key</code> превратится в висячий указатель.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Почему тут переменная считается одолженной? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Почему тут переменная считается одолженной?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Почему тут переменная считается одолженной?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+        <div class="topic-tags">
+          
+            <a href="/tag/borrow-checker" class="tag-badge">borrow-checker</a>
+          
+        </div>
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jan 15, 2022</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jan 15, 2022 7:08 AM">
+            <time itemprop="datePublished" datetime="2022-01-15 07:08:29 +0000">Jan 15, 2022</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Увидел это какое-то время назад в англоязычном телеграм чате и все никак не могу как следует осознать. Есть такой код:</p>
+<pre><code class="lang-rust">#[derive(Debug)]
+struct X&lt;'a&gt; {
+    a: i32,
+    b: &amp;'a i32,
+}
+
+#[allow(unused)]
+fn main() {
+    let mut x = X { a: 1, b: &amp;0 };
+    let mut y = 2;
+    x.b = &amp;y;
+    x.b = &amp;0;
+    y = 3;
+    println!("x: {:?}", x.b);
+}
+</code></pre>
+<p>и он <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2021&amp;gist=10879ec11c4a7182e6848ad33206baa9">не собирается с вот такой ошибкой</a>:</p>
+<pre><code class="lang-nohighlight">error[E0506]: cannot assign to `y` because it is borrowed
+  --&gt; src/main.rs:13:5
+11 |     x.b = &amp;y;
+   |           -- borrow of `y` occurs here
+12 |     x.b = &amp;0;
+13 |     y = 3;
+   |     ^^^^^ assignment to borrowed `y` occurs here
+14 |     println!("x: {:?}", x.b);
+   |                         --- borrow later used here
+</code></pre>
+<p>И, вроде, понятно, что это завязанный на структуру <code>'a</code> виноват и понятно что это меняет время жизни <code>y</code>, но почему именно <code>y</code> считается <em>одолженным</em> в этой ситуации?</p>
+<p>Видел похожий вопрос на SO - <a href="https://stackoverflow.com/questions/69541461/are-there-any-restrictions-when-using-a-reference-in-a-field-of-a-struct">https://stackoverflow.com/questions/69541461/are-there-any-restrictions-when-using-a-reference-in-a-field-of-a-struct</a> - но тоже как-то не очень помогает глубокое понимание того как реально работает одалживание составить. Может кто-то может пояснить?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jan 15, 2022 9:54 AM">
+            <time itemprop="datePublished" datetime="2022-01-15 09:54:41 +0000">Jan 15, 2022</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Похоже, вариант <a href="https://t.me/rustlang_ru/424476">от @Kolsky</a> лучше всего поясняет как именно оно происходит:</p>
+<blockquote>
+<ol>
+<li>X живёт 'a;</li>
+<li>Лайфтайм &amp;0 свободно сокращается до 'a;</li>
+<li>Одалживаем y, следовательно, 'a живёт максимум как скоуп функции, и одалживание y становится 'a;</li>
+<li>x живёт и валидна как минимум до строчки с println;</li>
+<li>'a продлевается до println;</li>
+<li>y, одолженное на 'a, было перезаписано раньше срока одалживания.</li>
+</ol>
+<p>Типа можно было бы усложнить анализ NLL для !Drop и сказать, что часть полей всё ещё доступна после окончания лайфтайма, но тут уже семантика слегка изменится</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/wafflelapkin" class="user-link">Waffle Maybe</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jan 31, 2022 5:59 PM">
+            <time itemprop="datePublished" datetime="2022-01-31 17:59:52 +0000">Jan 31, 2022</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я не вчитывался, но это не похожее issue?</p><aside class="onebox githubissue" data-onebox-src="https://github.com/rust-lang/rust/issues/93163">
+  <header class="source">
+
+      <a href="https://github.com/rust-lang/rust/issues/93163" target="_blank" rel="noopener nofollow ugc">github.com/rust-lang/rust</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue">
+	  <svg width="60" height="60" class="github-icon" viewbox="0 0 14 16" aria-hidden="true"><path d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/rust-lang/rust/issues/93163" target="_blank" rel="noopener nofollow ugc">"temporary value dropped while borrowed"-checker does not use NLL</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2022-01-21" data-time="16:02:36" data-timezone="UTC">04:02PM - 21 Jan 22 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/JonasAlaif" target="_blank" rel="noopener nofollow ugc">
+          <img alt="JonasAlaif" src="https://avatars.githubusercontent.com/u/13405042?v=4" class="onebox-avatar-inline" width="20" height="20">
+          JonasAlaif
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">A slightly modified version of Example 2 from [here](https://rust-lang.github.io<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">/rfcs/2094-nll.html#reborrow-constraints) fails:
+```rust
+fn main() {
+    let foo: &amp;mut i32       = &amp;mut 22;
+    let mut r_a: &amp;&amp;mut i32  = &amp; foo;
+    let r_b: &amp;mut &amp;&amp;mut i32 = &amp;mut r_a;
+    let r_c: &amp;&amp;mut i32      = &amp; **r_b;
+
+    // What is considered borrowed here?
+    *r_b = &amp;&amp;mut 0;
+
+    println!("{}", r_c);
+}
+```
+with the following error:
+```
+error[E0716]: temporary value dropped while borrowed
+  --&gt; src/main.rs:8:13
+   |
+8  |     *r_b = &amp;&amp;mut 0;
+   |             ^^^^^^- temporary value is freed at the end of this statement
+   |             |
+   |             creates a temporary which is freed while still in use
+9  | 
+10 |     println!("{}", r_c);
+   |                    --- borrow later used here
+   |
+   = note: consider using a `let` binding to create a longer lived value
+```
+However, clearly `r_c` does not reborrow from `r_a` nor from `r_b`. Therefore, using it at the end should not affect either of these, but as we can see this is not the case. If one comments out the `println!` on line 10, then compilation succeeds as expected. Playground link [here](https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2021&amp;gist=aed343ce90ea76a5728ef67885f5a6b4)</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Надо бы наверное NLL rfc почитать…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Majestio" class="user-link">Олег</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="May 3, 2022 3:20 PM">
+            <time itemprop="datePublished" datetime="2022-05-03 15:20:17 +0000">May 3, 2022</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="ozkriff" data-post="1" data-topic="1251">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p><code>x.b = &amp;0;</code></p>
+</blockquote>
+</aside>
+<p>Скажите, а что означает &amp;0, или в доку ткните, плс!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="May 3, 2022 3:30 PM">
+            <time itemprop="datePublished" datetime="2022-05-03 15:30:28 +0000">May 3, 2022</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>0 это строковый литерал, &amp;0 это ссылка на него (с временем жизни 'static)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Majestio" class="user-link">Олег</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="May 3, 2022 4:11 PM">
+            <time itemprop="datePublished" datetime="2022-05-03 16:11:42 +0000">May 3, 2022</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Андрей, благодарю! С литералами немного непонятно … по сути это строка типа “\0” из C++?<br>
+И да, почему static, т.к. задана в явном виде? Или почему?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="May 4, 2022 2:17 PM">
+            <time itemprop="datePublished" datetime="2022-05-04 14:17:32 +0000">May 4, 2022</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>по сути это строка типа “\0” из C++?</p>
+</blockquote>
+<p>Строковые литералы (<code>"abc"</code>) - один из видов литералов, да. Но литералы бывают всякие - <code>0</code> целочисленный, <code>0.0_f32</code> - флоатовый, <code>()</code> - юнит, <code>true</code> - булевый, <code>MyStruct { my_field: 0 }</code> - структурный. Литерал - просто “буквальная” форма записи некого значения.</p>
+<blockquote>
+<p>почему static, т.к. задана в явном виде?</p>
+</blockquote>
+<p>потому что этот 0 будет жить (в text секции собранного бинаря, например) на протяжении жизни всего приложения, а этот ВЖ называется <a href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html#the-static-lifetime">'static</a>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Majestio" class="user-link">Олег</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="May 4, 2022 2:30 PM">
+            <time itemprop="datePublished" datetime="2022-05-04 14:30:48 +0000">May 4, 2022</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Благодарю! (дополнение до 20 символов в сообщении)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

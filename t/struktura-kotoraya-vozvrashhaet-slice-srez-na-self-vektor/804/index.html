@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Структура которая возвращает slice (срез) на self вектор - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Структура которая возвращает slice (срез) на self вектор</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Структура которая возвращает slice (срез) на self вектор</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Feb 18, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/incker" class="user-link">Станислав</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Feb 18, 2019 10:00 PM">
+            <time itemprop="datePublished" datetime="2019-02-18 22:00:50 +0000">Feb 18, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Здравствуйте,</p>
+<p>Есть структура с вектором. Нужно чтоб она возвращала срез. Куда мне посоветовали посмотреть - это на deref. Код:</p>
+<pre><code>struct DerefExample {
+    value: Vec&lt;u8&gt;
+}
+
+impl Deref for DerefExample {
+    type Target = Vec&lt;u8&gt;;
+
+    fn deref(&amp;self) -&gt; &amp;Vec&lt;u8&gt; {
+        // а так не работает
+        // &amp;self.value[..3]
+
+        &amp;self.value
+    }
+}
+
+
+fn main() {
+    let der = DerefExample {
+        value: vec![0, 1, 2, 3, 4, 5, 6, 7]
+    };
+
+    println!("{:?}", der.value);
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=d196fb8b689807a5194168e7c5aaeb73" rel="nofollow noopener">Playground</a></p>
+<p>Мне не обязательно чтоб через deref работало. Любой способ подойдет лишь бы срез возвращало</p>
+<p>Спасибо</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Feb 19, 2019 1:07 AM">
+            <time itemprop="datePublished" datetime="2019-02-19 01:07:37 +0000">Feb 19, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=016296308a5ef1c394e8fe26f2cd8d78" rel="nofollow noopener">оно?</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">L</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/LooMaclin" class="user-link">LooMaclin</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Feb 19, 2019 11:56 AM">
+            <time itemprop="datePublished" datetime="2019-02-19 11:56:10 +0000">Feb 19, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вопрос понятен. Чтобы вернуть срез необходимо в сигнатуре метода именно его и указать в качестве возвращаемого типа (<code>&amp;[T]</code>).</p>
+<p>Полноценный пример:</p>
+<pre><code class="lang-rust">struct A {
+    pub b: Vec&lt;u8&gt;,
+}
+
+impl A {
+    
+    fn test(&amp;self) -&gt; &amp;[u8] {
+        &amp;self.b
+    }
+}
+
+fn main() {
+    let a = A { b: vec![1,2,3] };
+    println!("{:?}", a.test());
+}
+</code></pre>
+<p>Ссылка на плэйграунд: <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=97499003e02e24a9816a9d306362a580" rel="nofollow noopener">https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=97499003e02e24a9816a9d306362a580</a></p>
+<p>Больше о слайсах можно узнать в соответствующем разделе книги: <a href="https://doc.rust-lang.org/book/ch04-03-slices.html#other-slices" rel="nofollow noopener">https://doc.rust-lang.org/book/ch04-03-slices.html#other-slices</a>, а так же из официальной документации: <a href="https://doc.rust-lang.org/std/slice/index.html" rel="nofollow noopener">https://doc.rust-lang.org/std/slice/index.html</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/incker" class="user-link">Станислав</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Feb 19, 2019 12:03 PM">
+            <time itemprop="datePublished" datetime="2019-02-19 12:03:48 +0000">Feb 19, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо большое, Все работает!</p>
+<p>Сразу не смог понять что такое <code>&amp;Self::Target</code> из первого примера, потом понял что это то же самое что <code>&amp;[u8]</code> Буду знать что и так писать можно</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Feb 19, 2019 7:03 PM">
+            <time itemprop="datePublished" datetime="2019-02-19 19:03:15 +0000">Feb 19, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="incker" data-post="4" data-topic="804">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/incker/48/551_2.png" class="avatar"> incker:</div>
+<blockquote>
+<p>Сразу не смог понять что такое <code>&amp;Self::Target</code></p>
+</blockquote>
+</aside>
+<p><code>Self::Target</code> это ассоциированный тип типажа (трэйта). <code>Self</code> указывает на сам тип(аж), оператор <code>::</code> и капитализированный идентификатор после него на то что идет доступ к ассоциированному типу. Что такое ассоциированный тип лучше почитать в хорошей документации, я большой противник наспех разжевываемой в комментариях информации, относящейся к фундаментальным знаниям.<br>
+Как минимум такая запись удобна для рефакторинга: если тип таргета изменится, достаточно будет его поменять только в том месте, где он определен. Как максимум это удобно и для понимания кода, потому что видишь, что, ага, используется ассоциированный тип, а не какой-то произвольный.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/incker" class="user-link">Станислав</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Feb 20, 2019 12:30 AM">
+            <time itemprop="datePublished" datetime="2019-02-20 00:30:40 +0000">Feb 20, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я наверное сюда и доспрошу… я не могу понять как может вернуть итератор срез. Код:</p>
+<pre><code>use std::marker::PhantomData;
+
+#[allow(dead_code)]
+
+struct DerefExample&lt;'a&gt; {
+    value: Vec&lt;u8&gt;,
+    phantom: PhantomData&lt;&amp;'a u8&gt;,
+}
+
+impl&lt;'a&gt; Iterator for DerefExample&lt;'a&gt; {
+    type Item = &amp;'a [u8];
+
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        // а такой код не работает
+        //Some(&amp;self.value[..3])
+
+        None
+    }
+}
+
+
+fn main() {
+    let mut der = DerefExample {
+        value: vec![0, 1, 2, 3, 4, 5, 6, 7],
+        phantom: PhantomData,
+    };
+
+    println!("{:?}", der.next());
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=561b11364059cf2ba076d0166d87d492" rel="nofollow noopener">Rust Playground</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Feb 20, 2019 1:11 AM">
+            <time itemprop="datePublished" datetime="2019-02-20 01:11:49 +0000">Feb 20, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Согласно <a href="https://users.rust-lang.org/t/lifetime-annotation-problem/13840/3" rel="nofollow noopener">мнению экспертов</a> прямого решения нет. <code>RefCell</code> в помощь.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">L</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/LooMaclin" class="user-link">LooMaclin</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Feb 20, 2019 1:59 AM">
+            <time itemprop="datePublished" datetime="2019-02-20 01:59:58 +0000">Feb 20, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Так как вы хотите - сделать нельзя. Потому что итератор (в текущем его виде в стандартной библиотеке Rust) не может вернуть ссылку на данные, которыми он владеет (нет связи времён жизни между возвращаемым значением в сигнатуре функции <code>next</code> и ассоциированным типом). Поэтому в std и в различных крейтах - в большинстве случаев есть промежуточный тип, который не владеет данными и для которого и реализуется Iterator, а создаётя этот промежуточный тип с помощью имплементации на типе IntoIterator. В вашем случае тип данных является владельцем данных и для него же производится попытка реализовать трэйт Iterator.</p>
+<p>Пример того, как можно сделать:</p>
+<pre><code class="lang-rust">struct Example {
+    value: Vec&lt;u8&gt;,
+}
+
+struct IteratorExample&lt;'a&gt; {
+    value: &amp;'a [u8],
+}
+
+impl&lt;'a&gt; Iterator for IteratorExample&lt;'a&gt; {
+    type Item = &amp;'a [u8];
+
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        // а такой код не работает
+        Some(&amp;self.value[..3])
+        
+        // None
+    }
+}
+
+impl&lt;'a&gt; IntoIterator for &amp;'a Example {
+    type Item = &amp;'a [u8];
+    type IntoIter = IteratorExample&lt;'a&gt;;
+    
+    fn into_iter(self) -&gt; Self::IntoIter {
+        IteratorExample {
+            value: &amp;self.value
+        }
+    }
+    
+} 
+
+fn main() {
+    let der = Example {
+        value: vec![0, 1, 2, 3, 4, 5, 6, 7],
+    };
+    let mut iter = der.into_iter();
+    println!("{:?}", iter.next());
+    println!("{:?}", iter.next());
+    println!("{:?}", iter.next());
+    
+}
+
+</code></pre>
+<p>Ссылка на плэйграунд:<br>
+<a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=a3bb6ad1b94290c23978a239393dc54d" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=a3bb6ad1b94290c23978a239393dc54d</a></p>
+<p>P.S<br>
+А теперь ссылка касательно того, почему сейчас этого сделать нельзя: <a href="https://github.com/rust-lang/rfcs/blob/master/text/1598-generic_associated_types.md#motivation" rel="nofollow noopener">https://github.com/rust-lang/rfcs/blob/master/text/1598-generic_associated_types.md#motivation</a><br>
+Ждём конструкторов ассоциированных типов (часть HKT). В найтли это уже есть и можно опробовать с помощью включения флага: <code>#![feature(generic_associated_types)]</code><br>
+Оно пока анстейбл и может вызывать поломку компилятора. И даже в том случае, если это реализуют и стабилизируют, не понятно когда стриминг итераторы заедут в <code>std</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="4 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          4
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Feb 20, 2019 7:53 AM">
+            <time itemprop="datePublished" datetime="2019-02-20 07:53:25 +0000">Feb 20, 2019</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Информативненько!<br>
+Сообщение должно быть не короче 20 символов.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

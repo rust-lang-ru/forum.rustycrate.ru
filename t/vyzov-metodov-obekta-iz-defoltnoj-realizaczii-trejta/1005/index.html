@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вызов методов объекта из дефолтной реализации трейта - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Вызов методов объекта из дефолтной реализации трейта</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Вызов методов объекта из дефолтной реализации трейта</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Sep 30, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">H</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/hrrrxppp" class="user-link">hrrrxppp</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Sep 30, 2019 11:32 AM">
+            <time itemprop="datePublished" datetime="2019-09-30 11:32:39 +0000">Sep 30, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Добрый день.<br>
+Не могу понять один момент, вот такой код не компилируется</p>
+<pre><code class="lang-auto">struct MyStruct{
+    x: i32
+}
+
+impl MyStruct{
+    pub fn foo(&amp;mut self){
+        self.x = 5;
+    }
+}
+
+trait Foo{
+    fn foo_foo( &amp;mut self )
+    {
+        self.foo();
+    }
+}
+
+impl Foo for MyStruct{
+}
+
+fn main() {
+    println!("Hello, world!");
+}
+</code></pre>
+<pre><code class="lang-auto">error[E0599]: no method named `foo` found for type `&amp;mut Self` in the current scope
+  --&gt; src/main.rs:14:14
+   |
+14 |         self.foo();
+   |              ^^^
+</code></pre>
+<p>Из дефолтной реализации трейта нельзя вызвать метод объекта?<br>
+если переношу вызов из дефолтной реализации в конкретную то все Ок.</p>
+<pre><code class="lang-auto">trait Foo{
+    fn foo_foo( &amp;mut self );
+}
+
+impl Foo for MyStruct{
+    fn foo_foo( &amp;mut self )
+    {
+        self.foo();
+    }
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Sep 30, 2019 11:46 AM">
+            <time itemprop="datePublished" datetime="2019-09-30 11:46:16 +0000">Sep 30, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Из дефолтной реализации трейта нельзя вызвать метод объекта?</p>
+</blockquote>
+<p>Да, дефолтные реализации ничего про конкретные типы, для которых они реализуются, не знают.</p>
+<p>Использовать можно только то, что предоставляет сам типаж или его требования (например, если Foo будет требовать Clone, то в умолчательном foo_foo можно будет делать <code>.clone()</code> объекта).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">H</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/hrrrxppp" class="user-link">hrrrxppp</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Sep 30, 2019 12:31 PM">
+            <time itemprop="datePublished" datetime="2019-09-30 12:31:20 +0000">Sep 30, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Подскажите, а как в Rust обычно реализуются такие вещи, мне нужно выполнить один и тот же код над объектами разного типа с вызовом у них одной и той же функции?<br>
+Только делаю конкретную реализацию как в примере выше или есть еще пути?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Sep 30, 2019 1:20 PM">
+            <time itemprop="datePublished" datetime="2019-09-30 13:20:25 +0000">Sep 30, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Только делаю конкретную реализацию как в примере выше или есть еще пути?</p>
+</blockquote>
+<p>Да, для каждого типа нужна своя реализация - иначе типаж бы получился прибитым гвоздями только к одному типу.</p>
+<p>Обычно как-то так код выглядит:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">#[derive(Debug)]
+struct A {
+    x: i32,
+}
+
+#[derive(Debug)]
+struct B {
+    c: char,
+}
+
+trait Foo {
+    fn foo(&amp;mut self);
+}
+
+impl Foo for A {
+    fn foo(&amp;mut self) {
+        self.x = 5;
+    }
+}
+
+impl Foo for B {
+    fn foo(&amp;mut self) {
+        self.c = 'F';
+    }
+}
+
+fn do_same_thing_static_dispatch(f: &amp;mut impl Foo) {
+    println!("Doing something...");
+    f.foo();
+    println!("Doing something else...");
+}
+
+fn do_same_thing_dynamic_dispatch(f: &amp;mut dyn Foo) {
+    println!("Doing something...");
+    f.foo();
+    println!("Doing something else...");
+}
+
+fn main() {
+    let mut a = A { x: 0 };
+    let mut b = B { c: 'a' };
+    do_same_thing_static_dispatch(&amp;mut a);
+    do_same_thing_static_dispatch(&amp;mut b);
+    do_same_thing_dynamic_dispatch(&amp;mut a);
+    do_same_thing_dynamic_dispatch(&amp;mut b);
+    dbg!(a, b);
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=6af5629aae6e0d99066ce037ac8519d5"><strong>Playground</strong></a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">H</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/hrrrxppp" class="user-link">hrrrxppp</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Sep 30, 2019 1:28 PM">
+            <time itemprop="datePublished" datetime="2019-09-30 13:28:38 +0000">Sep 30, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Странно на мой взгляд, на момент компиляции все типы реализующие трейт известны, и проверить что там есть функция и с ней все ок, по идее можно.<br>
+Спасибо, а то думал, что не понял чего то, и делаю не правильно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Sep 30, 2019 1:34 PM">
+            <time itemprop="datePublished" datetime="2019-09-30 13:34:45 +0000">Sep 30, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>иначе типаж бы получился прибитым гвоздями только к одному типу</p>
+</blockquote>
+<p>Вообще, да, это я странное написал там.</p>
+<blockquote>
+<p>на момент компиляции все типы реализующие трейт известны, и проверить что там есть функция и с ней все ок, по идее можно</p>
+</blockquote>
+<p>Да, в теории такое могло бы быть реализовано, конечно, что типажи втихоря выводили бы такие зависимости, но Rust в общем и целом <a href="https://habr.com/ru/post/348282/">склонен к явности</a>, так что вот тут требует явно тут все выписать. Типа, что у нас не случайно метод (или еще что) с таким же названием попался у типа, а мы именно специально для этого типажа его писали.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Oct 2, 2019 9:27 PM">
+            <time itemprop="datePublished" datetime="2019-10-02 21:27:12 +0000">Oct 2, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Если у разных типов нужно вызывать одну и ту же функцию, по сути это говорит о том, что эта функция входит в их общий интерфейс. Стандартный способ сообщить об этом для Rust - сделать, чтобы эта функция входила в общий для них типаж. Тогда ей можно будет воспользоваться в реализации, если реализация этого типажа обязательна для интересующего нас типажа.</p>
+<p>Если функция с идентичным смыслом, которую имеет смысл вызывать без знания точного типа, определена сама по себе, а не в типаже, на мой взгляд это не очень хороший признак.</p>
+<p>Ну и да, компилятор не исходит из того, что в момент компиляции все типы известны. Они могут быть известны не все, и, более того, часть из них может быть определена вообще в других крейтах, если это публичный типаж.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/QuarkDoe" class="user-link">Quark Doe</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Oct 5, 2019 4:08 AM">
+            <time itemprop="datePublished" datetime="2019-10-05 04:08:39 +0000">Oct 5, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Естественно трейт не знает об объекте ничего.<br>
+Он просто физически не в состоянии этого знать.<br>
+Поэтому метод <code>foo</code> должен быть частью интерфейса.<br>
+Примерно как-то так:</p>
+<pre><code class="lang-auto">struct MyStruct{
+    x: i32
+}
+
+trait Foo{
+    fn foo( &amp;mut self );
+
+    fn foo_foo( &amp;mut self )
+    {
+        self.foo();
+    }
+}
+
+impl Foo for MyStruct{
+    fn foo(&amp;mut self){
+        self.x = 5;
+    }
+}
+
+fn main() {
+    println!("Hello, world!");
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

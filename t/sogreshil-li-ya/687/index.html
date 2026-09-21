@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>&quot;Согрешил&quot; ли я? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">&quot;Согрешил&quot; ли я?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">&quot;Согрешил&quot; ли я?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Dec 8, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Dec 8, 2018 1:32 PM">
+            <time itemprop="datePublished" datetime="2018-12-08 13:32:24 +0000">Dec 8, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В коде необходимо обеспечить уникальность курсора ’ &amp; mut Cursor’  он бережно передается от одного объекта некоторого состояния,  другому.</p>
+<p>Одним из таких объектов является структура Items которая в себе содержит ссылку на Cursor и массив с дополнительными параметрами описывающими координаты курсора.</p>
+<pre><code class="lang-auto">struct Items&lt;'a&gt; { cur: &amp;'a mut Cursor, dims: [usize; 3] }
+</code></pre>
+<p>проблема в том,  что далее в коде, курсор перезанимается в последующий объект  item</p>
+<pre><code class="lang-auto">while let Some(item) = items.next()
+{
+     //cannot access items at this scope
+}
+
+</code></pre>
+<p>Но(!) в процессе цикла мне необходим доступ к постоянно меняющимся координатам <code>dims</code></p>
+<p>был вариант когда <code>items.next()</code> возвращал  tuple c копией координат плюс <code>item</code>… но копировать, на каждой итерации не умно</p>
+<p>соответственно искал выход. нашел такой</p>
+<pre><code class="lang-auto">impl Items&lt;'_&gt; {
+         fn dims(&amp;self) -&gt; &amp;'static [usize; 3] { unsafe { transmute(&amp;self.dims) } }
+}
+</code></pre>
+<p>получаю ссылку на массив, содержимое которого во время итерации постоянно обновляется</p>
+<pre><code class="lang-auto">let dims = items.dims();// getting additional params array
+
+while let Some(item) = items.next()
+{
+     let d0 = dims[0]; // no problem!
+}
+</code></pre>
+<p>при этом задача  обеспечения уникальность курсора ’ &amp; mut Cursor’ тоже выполняется на отличненько.</p>
+<p>какие подводные камни  я не вижу?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Dec 8, 2018 2:51 PM">
+            <time itemprop="datePublished" datetime="2018-12-08 14:51:22 +0000">Dec 8, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А что если избежать все подводные камни, храня не <code>&amp;'a mut Cursor</code>, а <code>&amp;'a RefCell&lt;Cursor&gt;</code>?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Dec 8, 2018 2:56 PM">
+            <time itemprop="datePublished" datetime="2018-12-08 14:56:54 +0000">Dec 8, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p><code>RefCell&lt;Cursor&gt;</code> ?</p>
+</blockquote>
+<p>не могу сообразить что это даст</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Dec 8, 2018 3:08 PM">
+            <time itemprop="datePublished" datetime="2018-12-08 15:08:25 +0000">Dec 8, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вроде в чате уже ответили, но это правда UB и компилятор имеет право что угодно тебе поломать оптимизациями из-за этого. Если оно работает сейчас, то совершенно спокойно и без предупреждений может сломаться в следующих версиях компилятора или при сборке под другие ОС. Плюсую мнение что тут надо просто скопировать эти три usize’а, это очень дешевая операция, которую компилятору еще и соптимизировать просто.</p>
+<hr>
+<p>UPD: И да, доклад отличный кинули</p>
+<div class="lazyYT" data-youtube-id="ACW-7dktyDk" data-youtube-title="Дмитрий Кашицын, Троллейбус из буханки: алиасинг и векторизация в LLVM" data-width="480" data-height="270" data-parameters="feature=oembed&amp;wmode=opaque"></div>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Dec 8, 2018 3:16 PM">
+            <time itemprop="datePublished" datetime="2018-12-08 15:16:08 +0000">Dec 8, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>спасибо.  есть о чём подумать.<br>
+покопаю в сторону RefCell&lt;Cursor&gt;</p>
+<p>================================</p>
+<p>покопал.<br>
+нет, RefCell тут не применима. почему?</p>
+<p>потому, что меняется<br>
+<strong>и</strong> курсор<br>
+<strong>и</strong> дополнительная информация вокруг него (массив dims).</p>
+<p>но.</p>
+<ul>
+<li>всё происходит в одном потоке</li>
+<li>все изменения происходят только в методах структуры Items</li>
+<li>коду с снаружи нужен доступ только к дополнительной информации и только на чтение</li>
+</ul>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Dec 8, 2018 4:52 PM">
+            <time itemprop="datePublished" datetime="2018-12-08 16:52:19 +0000">Dec 8, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><code>RefCell</code> “спрячет” мутабельность <code>Cursor</code> за собой и можно будет спокойно делать:</p>
+<pre><code class="lang-auto">fn dims(&amp;self) -&gt; &amp;'_ [usize; 3] {
+ &amp;self.dims
+}
+</code></pre>
+<p>а если нужно будет его изменить, то то-же пожалуйста:</p>
+<pre><code class="lang-auto">fn update_cursor(&amp;mut self, data: ()) {
+ *self.cursor.borrow_mut() = data;
+ self.dims = [1, 2, 3];
+}
+</code></pre>
+<p>на всякий случай привожу сигнатуру Items:</p>
+<pre><code class="lang-auto">struct Items&lt;'a&gt; {
+ cursor: &amp;'a RefCell&lt;Cursor&gt;, 
+ dims: [usize; 3],
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Dec 8, 2018 5:25 PM">
+            <time itemprop="datePublished" datetime="2018-12-08 17:25:58 +0000">Dec 8, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>большое спасибо<br>
+но пошел по другому пути<br>
+разломил Items на две части совсем   выкусил массив dims<br>
+пользователь будет вынужден самостоятельно создать его, поскольку метод <code>next()</code> будет этого требовать</p>
+<p>получилось даже лучше чем было</p>
+<pre><code class="lang-auto">struct Items&lt;'a&gt;  (&amp;'a mut Cursor);
+
+impl Items&lt;'_&gt; {
+	fn next(&amp;mut self, dims: &amp;mut [usize; 3]) -&gt; Option&lt;Option&lt;Values&gt;&gt; {
+		....
+	}
+
+fn main() {
+.....
+
+let mut dims = [0usize;3]; // additional params array 
+
+	while let Some(item) = items.next(&amp; mut dims)
+		{
+              .............
+                        let d0 = dims[0]; // no problem!
+        }
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Dec 8, 2018 5:39 PM">
+            <time itemprop="datePublished" datetime="2018-12-08 17:39:26 +0000">Dec 8, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Андрей,</p>
+<p>мой код несколько иначе работает.<br>
+в методе next происходит мутация и курсора и дополнительной информации одновременно. так вот, трабл в том, что в этот момент Items залочен ибо <code>&amp;mut self</code> и он передан в возвращенный экземпляр <code>Values</code></p>
+<p>соответственно к dims тоже доступа нет.<br>
+да и панику словить в рантайме тоже… так себе удовольствие</p>
+<p>если будет интересно разобраться могу выложить код полностью.</p>
+<p>есть какая то магия в Rust, заставляющая искать более лучшие решения.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Dec 8, 2018 7:07 PM">
+            <time itemprop="datePublished" datetime="2018-12-08 19:07:24 +0000">Dec 8, 2018</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я наверное не до конца понимаю логику приложения.<br>
+Если вы нашли решение и оно вам нравится, так и оставите его</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

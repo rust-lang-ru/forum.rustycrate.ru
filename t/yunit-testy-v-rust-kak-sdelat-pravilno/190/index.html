@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Юнит-тесты в руст. Как сделать правильно? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Юнит-тесты в руст. Как сделать правильно?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Юнит-тесты в руст. Как сделать правильно?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Mar 30, 2017</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Mar 30, 2017 9:34 PM">
+            <time itemprop="datePublished" datetime="2017-03-30 21:34:40 +0000">Mar 30, 2017</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Продолжаю изучать раст.<br>
+В настоящее время у меня код такой:</p>
+<p>src/lib.rs:</p>
+<pre><code>#![allow(stable_features)]
+#![allow(dead_code)]
+#![feature(static_recursion)]
+#![allow(non_upper_case_globals)]
+use std::ffi::CStr;
+use std::os::raw::c_char;
+
+mod t;
+
+struct Man {
+    name: &amp;'static str,
+    car: &amp;'static Car,
+}
+
+struct Car {
+    owner: &amp;'static Man,
+    id: i32,
+}
+
+static vasya:Man = Man{car: &amp;vaz, name: "Vasya"};
+static vaz:Car = Car{owner: &amp;vasya, id:30};
+
+static vova:Man = Man{car: &amp;mers, name: "Vova"};
+static mers:Car = Car{owner: &amp;vova, id:31};
+
+static all:[&amp;Man; 2] = [&amp;vasya, &amp;vova];
+
+#[no_mangle]
+pub extern fn get_id_by_name( name: *const c_char) -&gt; i32{
+
+    let need_name = unsafe{ CStr::from_ptr(name) }.to_str();
+    match need_name {
+        Ok(n) =&gt; {
+                println!("query name = {}", n);
+                for x in all.iter() {
+                    if n == x.name {
+                        return x.car.id;
+                    }
+                } 
+                0
+        }
+        ,
+        Err(e) =&gt; {
+            println!("error {}", e);
+            -1
+        },
+    }
+}
+</code></pre>
+<p>src/t.rs:</p>
+<pre><code>#[cfg(test)]
+mod tests {
+    use get_id_by_name;
+    use std::ffi::CString;
+
+    #[test]
+    fn test_get_id_by_name(){
+        println!("тест начался!");
+        let s = CString::new("Vova").unwrap();
+        let id1 = get_id_by_name(s.as_ptr());
+        println!("id={}", id1);
+        assert_eq!(id1, 32);
+        println!("тест завершен!")
+    }
+
+    #[test]
+    fn test_get_id_by_name2(){
+    }
+
+}
+</code></pre>
+<p>Cargo.toml:</p>
+<pre><code>[package]
+name = "name2id"
+version = "0.1.0"
+
+[lib]
+name = "name2id"
+path = "src/lib.rs"
+test = true
+crate-type = ["cdylib"]
+</code></pre>
+<p>main.c:</p>
+<pre><code>#include &lt;stdio.h&gt;
+extern int get_id_by_name(const char * name);
+int main(){
+    int id1 = get_id_by_name("Vasya");
+    int id2 = get_id_by_name("Vova");
+    int id3 = get_id_by_name("zzz");
+    printf("id1=%d id2=%d id3=%d\n", id1, id2, id3);
+}
+</code></pre>
+<p>Сишник собираю командой:  gcc main.c -L . -lname2id (предварительно руками подложив к сишнику собранный so-шник)</p>
+<p>Значит, что мне тут не нравится.</p>
+<ol>
+<li>
+<p>Строчка mod t в фале lib.rs, которой я загружаю модуль юнит тестов. Получается, что как бы либа должна знать о своих тестах. Но ведь должно быть наоборот: это надо в тесте ссылаться на либу. А либа о тестах, которыми ее тестируют, не должна знать ничего! Как такое сделать? В идеале хотелось бы как-то сказать об этом в Cargo.toml, что мол вот у тебя тесты, а вот тут - либа. Но сколько я ни читал документации, не нашел такого.</p>
+</li>
+<li>
+<p>Есть подозрение насчет строчки:<br>
+let need_name = unsafe{ CStr::from_ptr(name) }.to_str();<br>
+Собственно подозрение - а правильно ли я делаю? У меня такое подозрение, что компилятор не ругается потому, что стоит unsafe, но вообще так делать нельзя, т.к. все уничтожается при выходе из { }, а потом я беру to_str() от уже уничтоженного объекта.</p>
+</li>
+<li>
+<p>Чем в понимании руста отличаются юнит-тесты от интеграционных тестов? Для интеграицонных руст выполняет какие-то предварительные действия? Или с этой точки зрения они вообще ничем не отличаются?</p>
+</li>
+<li>
+<p>На самом деле, данный вопрос идет уже не конктексте сравнения rust и си, а в контексте сравнения с java, но тем не менее. Есть ли возможность подложить на время теста mock-обьект? Впринципе, я понимаю, что раз я могу либу утянуть и использовать вне растового окружения, то такая возможность, очевидно, есть. Для этого функции, которые нужно при тестах подменять, надо будет обьявить как extern и их можно линковать с разными либами при тестах и для релиза. Это понятно. Вопрос в том, а можно ли такое делать средствами rust?</p>
+</li>
+</ol>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Mar 31, 2017 10:02 AM">
+            <time itemprop="datePublished" datetime="2017-03-31 10:02:48 +0000">Mar 31, 2017</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>s/руст/раст/ <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=5" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+<ol>
+<li>
+<p>Gexon уже кинул ссылку, где про директорию tests написано. Так как раз библиотека о тестах знать не будет.</p>
+</li>
+<li>
+<p>Вроде все ок, никакого уничтожения <code>CStr</code> до <code>to_str()</code> не должно происходить.</p>
+</li>
+<li>
+<p>Если я ничего не путаю, то технически они ничем не отличаются.</p>
+</li>
+<li>
+<p>Кмк, идиоматичным считается все сущности, которые может потребовтаься подменить, использовать в коде через типажи и реализовывать эти типажи для подделок.</p>
+</li>
+</ol>
+<p>Хотя я натыкался на разной степени готовности штуки типа <a href="https://github.com/kriomant/mockers" rel="nofollow noopener">https://github.com/kriomant/mockers</a>, но хз насколько они полезны на практике.</p>
+<p>Кстати, если сишный код ожидает <code>int</code>, то опасно на стороне ржавчины использовать <code>i32</code> (мало ли на какой архитектуре код будет собираться и какого размера там будет <code>int</code>). Лучше взять <code>std::os::raw::c_int</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Mar 31, 2017 12:05 PM">
+            <time itemprop="datePublished" datetime="2017-03-31 12:05:41 +0000">Mar 31, 2017</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Почему его сообщение скрыли?</p>
+<p>Да, это я думал, что тесты в tests и в src технически чем-то отличаются.<br>
+А как сослаться из теста, который в tests на либу? Перенес свой <a href="http://t.rs" rel="nofollow noopener">t.rs</a> в tests, и вот такую ошибку получаю:</p>
+<pre><code>10 |         let id1 = get_id_by_name(s.as_ptr());
+   |                   ^^^^^^^^^^^^^^ not found in this scope
+</code></pre>
+<p>Перепобовал множество вариантов, ничего не получается. Видимо потому, что это so-шник, и он просто не живет в экосистеме rust,</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Mar 31, 2017 12:18 PM">
+            <time itemprop="datePublished" datetime="2017-03-31 12:18:20 +0000">Mar 31, 2017</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="onebox githubblob">
+  <header class="source">
+      <a href="https://github.com/brendanzab/cgmath/blob/920e47/tests/angle.rs#L20" target="_blank" rel="nofollow noopener">github.com</a>
+  </header>
+  <article class="onebox-body">
+    <h4><a href="https://github.com/brendanzab/cgmath/blob/920e47/tests/angle.rs#L20" target="_blank" rel="nofollow noopener">brendanzab/cgmath/blob/920e47/tests/angle.rs#L20</a></h4>
+<pre class="onebox"><code class="lang-rs"><ol class="start lines" start="10" style="counter-reset: li-counter 9 ;">
+<li>// Unless required by applicable law or agreed to in writing, software</li>
+<li>// distributed under the License is distributed on an "AS IS" BASIS,</li>
+<li>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</li>
+<li>// See the License for the specific language governing permissions and</li>
+<li>// limitations under the License.</li>
+<li>
+</li>
+<li>#[macro_use]</li>
+<li>extern crate approx;</li>
+<li>extern crate cgmath;</li>
+<li>
+</li>
+<li class="selected">use cgmath::{Rad, Deg};</li>
+<li>
+</li>
+<li>#[test]</li>
+<li>fn conv() {</li>
+<li>let angle: Rad&lt;_&gt; = Deg(-5.0f64).into();</li>
+<li>let angle: Deg&lt;_&gt; = angle.into();</li>
+<li>assert_ulps_eq!(&amp;angle, &amp;Deg(-5.0f64));</li>
+<li>
+</li>
+<li>let angle: Rad&lt;_&gt; = Deg(30.0f64).into();</li>
+<li>let angle: Deg&lt;_&gt; = angle.into();</li>
+<li>assert_ulps_eq!(&amp;angle, &amp;Deg(30.0f64));</li>
+</ol></code></pre>
+
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>просто use того что тебе надо, по-идее</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Mar 31, 2017 12:33 PM">
+            <time itemprop="datePublished" datetime="2017-03-31 12:33:05 +0000">Mar 31, 2017</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>да… Это потому, что я собираю внешнюю либу. cargo так не умеет.<br>
+Я выкачал этот проект cgmath, ввел <code>cargo test</code> - все отработало. Тогда я поправил toml чтобы он делал внешнюю либу - и снова сделал cargo test - и на этот раз оно выдало ошибки.</p>
+<p>Вообще, наверное, если хочется тестить so-шник, то логично его рассматривать не как часть проекта, а как внешнюю нативную либу. Соответственно, и линковаться с ней как будто это вообще какой-то внешний so-шник.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Mar 31, 2017 12:46 PM">
+            <time itemprop="datePublished" datetime="2017-03-31 12:46:38 +0000">Mar 31, 2017</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>можно вот так: <a href="https://gist.github.com/ozkriff/03885846af50788c7d64085bdc01c7b8" rel="nofollow noopener">gist</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Mar 31, 2017 1:08 PM">
+            <time itemprop="datePublished" datetime="2017-03-31 13:08:30 +0000">Mar 31, 2017</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да, так работает. Спасибо.<br>
+Собственно, строчкой crate-type = [“rlib”, “cdylib”] мы говорим, что хотим оба типа либ, и тогда все прокатывает.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

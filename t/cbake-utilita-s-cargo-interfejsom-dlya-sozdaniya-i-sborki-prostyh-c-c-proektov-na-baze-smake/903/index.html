@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cbake - утилита с cargo интерфейсом для создания и сборки простых C/C++ проектов на базе СMake - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/projects/11/index.html">Проекты</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Cbake - утилита с cargo интерфейсом для создания и сборки простых C/C++ проектов на базе СMake</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Cbake - утилита с cargo интерфейсом для создания и сборки простых C/C++ проектов на базе СMake</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/projects/11" class="category-badge" style="--cat-color: #F7941D"><span class="category-bullet" aria-hidden="true"></span>Проекты</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">May 5, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Chronophagus" class="user-link">Chronophagus</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="May 5, 2019 10:25 PM">
+            <time itemprop="datePublished" datetime="2019-05-05 22:25:06 +0000">May 5, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Довольно часто на работе я создаю отдельные проекты для реализации независимых компонент большого приложения, которое собирается симейком. В последнее время рутина по созданию этих маленьких проектов, и поддержание актуальности списка исходников в CMakeLists.txt во время разработки стали раздражать. И тут я подумал, что было бы неплохо иметь какое-то подобие cargo для плюсов. <a href="https://github.com/Chronophagus/cbake" rel="nofollow noopener">cbake</a> - утилита, которая берёт рутинную работу с симейком на себя. Она позволяет быстро сгенерировать структуру проекта, обновляет список исходников в СMakeLists.txt, билдит и ранит проект в дебаг и релиз конфигурациях, и не мешает работать с CMakeLists.txt руками</p>
+<p>Создание проекта:<br>
+<div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/17bca43130b4d8f85a23ef57378c143a898c870d.png" data-download-href="https://forum.rustycrate.ru/uploads/default/17bca43130b4d8f85a23ef57378c143a898c870d" title="сbake1.png"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/17bca43130b4d8f85a23ef57378c143a898c870d_2_690x392.png" alt="%D1%81bake1" width="690" height="392" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/17bca43130b4d8f85a23ef57378c143a898c870d_2_690x392.png, https://forum.rustycrate.ru/uploads/default/optimized/1X/17bca43130b4d8f85a23ef57378c143a898c870d_2_1035x588.png 1.5x, https://forum.rustycrate.ru/uploads/default/optimized/1X/17bca43130b4d8f85a23ef57378c143a898c870d_2_1380x784.png 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/17bca43130b4d8f85a23ef57378c143a898c870d_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">сbake1.png</span><span class="informations">1855×1056 141 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p>Я задумывал 3 проектных структуры:</p>
+<ol>
+<li>Минимальная:<br>
+Проект/<br>
+— build/<br>
+— <em>исходники…</em><br>
+— СMakeLists.txt</li>
+<li>Плоская:<br>
+Проект/<br>
+— build/<br>
+— include/<br>
+------ <em>headers…</em><br>
+— src/<br>
+------ <em>sources…</em><br>
+— CMakeLists.txt</li>
+<li>Иерархия:<br>
+Проект/<br>
+— build/<br>
+— module1/<br>
+------ <em>sources</em><br>
+------ CMakeLists.txt<br>
+…<br>
+— moduleN/<br>
+— main.cpp<br>
+— CMakeLists.txt</li>
+</ol>
+<p>На данный момент реализована только минимальная. Проект в целом довольно сырой, хотелось бы как минимум добавить опций для генерации исходного СMakeLists.txt, но мои потребности уже покрывает. Мне очень бы не помешало код ревью прежде, чем я приступлю к плоской структуре, я пока не очень понимаю как делать удобный АПИ на расте, несчастный сmake::generator.rs переписывал раза 4.</p>
+<p>На <a href="http://xn--rates-0ye.io" rel="nofollow noopener">сrates.io</a> проект пока не лил, всё на <a href="https://github.com/Chronophagus/cbake" rel="nofollow noopener">гите</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

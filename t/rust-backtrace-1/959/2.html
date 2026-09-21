@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rust_backtrace=1 - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Rust_backtrace=1</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Rust_backtrace=1</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jul 30, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_21"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_21" title="Jul 31, 2019 9:56 AM">
+            <time itemprop="datePublished" datetime="2019-07-31 09:56:01 +0000">Jul 31, 2019</time>
+          </a>
+          <span class="post-number">#21</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А что не так в этом плане? Локально запустил и, вроде, на правильный ввод оно хорошо реагирует, падает только в случае не подходящего под регулярку ввода:</p>
+<pre><code class="lang-nohighlight">$ cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.04s
+     Running `target/debug/re_test`
+Enter a temperature (e.g., 32F, 100C) &gt;&gt;&gt; 
+100F
+37 C is 100 F
+Enter a temperature (e.g., 32F, 100C) &gt;&gt;&gt; 
+40C
+40 C is 104 F
+Enter a temperature (e.g., 32F, 100C) &gt;&gt;&gt; 
+bad input line
+thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', src/libcore/option.rs:347:21
+note: Run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+$ 
+</code></pre>
+<p>(lazy_static внутри main это забавно, конечно, хы)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_22"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/WladWlad" class="user-link">Wlad</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_22" title="Jul 31, 2019 10:30 AM">
+            <time itemprop="datePublished" datetime="2019-07-31 10:30:19 +0000">Jul 31, 2019</time>
+          </a>
+          <span class="post-number">#22</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Блин, а у меня в VS Code паникует на любой ввод. Вот сейчас попробовал в powershell и в cmd - такая же ситуация - паника.<br>
+А про lazy_static я прочитал что неважно где ее объявлять.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_23"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_23" title="Jul 31, 2019 10:53 AM">
+            <time itemprop="datePublished" datetime="2019-07-31 10:53:03 +0000">Jul 31, 2019</time>
+          </a>
+          <span class="post-number">#23</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Вот сейчас попробовал в powershell и в cmd - такая же ситуация - паника.</p>
+</blockquote>
+<p>В чатике говорят, на винде тоже должно все работать:</p>
+<blockquote>
+<p><a href="https://t.me/rust_beginners_ru/27931"><strong>Mikola Summer Duck</strong>: Проверил на винде с тулчейном msvc, на корректных вводах всё работает.</a></p>
+</blockquote>
+<p>Так что странно.</p>
+<p>Можешь как-то детальнее описать что и как именно делаешь? А то пока нет идей что именно не правильно работает.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_24"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">P</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Pzixel" class="user-link">Psilon</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_24" title="Jul 31, 2019 11:24 AM">
+            <time itemprop="datePublished" datetime="2019-07-31 11:24:14 +0000">Jul 31, 2019</time>
+          </a>
+          <span class="post-number">#24</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_22">Replying to #22</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вместо ввода используй константу для <code>guess</code>, а то гадать что ты там вводишь можно до посинения. Если сломается - шарь код, мы у себя проверим.</p>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=f310507632da0020114bb1f01acdc490" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=f310507632da0020114bb1f01acdc490</a></p>
+<p>Вот пример - всё работает. Модифицируй, чтобы сломалось, и расшарь.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_25"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/WladWlad" class="user-link">Wlad</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_25" title="Jul 31, 2019 2:04 PM">
+            <time itemprop="datePublished" datetime="2019-07-31 14:04:38 +0000">Jul 31, 2019</time>
+          </a>
+          <span class="post-number">#25</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Нашел! - нужно вставить символ игнорирования регистра (?i)</p>
+<pre><code class="lang-auto">static ref RE: Regex= Regex::new(r"((?i)[-+]?[0-9]+(?:[.][0-9]*)?)[[:s:]*([CF])").unwrap();
+</code></pre>
+<p>Тут у вас какие-то ограничения, а мне сказали, что у меня награды есть.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+  <nav class="pagination" role="navigation" aria-label="Post pages">
+    
+    <a href="/t/rust-backtrace-1/959/index.html" class="pagination-prev" rel="prev">Previous</a>
+    
+
+    <span class="pagination-info">Page 2 of 2</span>
+
+    
+  </nav>
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

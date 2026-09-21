@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вопросы о &quot;философии&quot; Rust - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Вопросы о &quot;философии&quot; Rust</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Вопросы о &quot;философии&quot; Rust</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Feb 26, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Feb 26, 2019 6:59 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 06:59:02 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Здравствуйте!<br>
+Только начинаю учить Rust и появилось несколько вопросов о самих подходах в реализации языка.</p>
+<ol>
+<li>
+<p>Я правильно понимаю, что в Rust нет указателей в смысле C, Java и даже php? Т.е. всё переменные хранят именно значения, размещаемые, как правило, в стеке. Если нужна именно ссылка - нужно использовать Box&lt;&gt;.</p>
+</li>
+<li>
+<p>Синтаксический сахар - его очень много? Скажем оператор ?, который работает исключительно с типом Result, с другим - не получится. Или стандартные трейты, например, Deref - ведь нельзя средствами языка реализовать прозрачное обращение к оборачиваемому значению (вызов методов и т.п.). Так это или нет?</p>
+</li>
+</ol>
+<p>Спасибо.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/andreevlex" class="user-link">Alexander Andreev</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Feb 26, 2019 7:20 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 07:20:40 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>оператор <code>?</code> с версии 1.22 можно использовать с <code>Option&lt;T&gt;</code>.<br>
+<aside class="onebox whitelistedgeneric">
+  <header class="source">
+      <img src="https://forum.rustycrate.ru/uploads/default/original/1X/dca47ab7f656dcbf365ff6fd372cd4ea0e5660eb.png" class="site-icon" width="32" height="32">
+      <a href="https://blog.rust-lang.org/2017/11/22/Rust-1.22.html" target="_blank" rel="nofollow noopener">blog.rust-lang.org</a>
+  </header>
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/345;"><img src="https://forum.rustycrate.ru/uploads/default/original/1X/ddfff7d39e5e143921e1819a2bb6c6d7d4a51c83.jpeg" class="thumbnail"></div>
+
+<h3><a href="https://blog.rust-lang.org/2017/11/22/Rust-1.22.html" target="_blank" rel="nofollow noopener">Announcing Rust 1.22 (and 1.22.1) | Rust Blog</a></h3>
+
+<p>Empowering everyone to build reliable and efficient software.</p>
+
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Feb 26, 2019 7:23 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 07:23:56 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <ol>
+<li>Нет, неправильно. Есть и указатели, как безопасные, так и опасные в стиле Си, и ссылки, изменяемые и неизменяемые. Box предназначен для работы со значениями, размещаемыми в куче.</li>
+<li>“Сахара” столько, чтобы не страдать от низкоуровневости языка. Для “синтаксических диабетиков” ничего страшного, думаю, нет.</li>
+</ol>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Feb 26, 2019 7:25 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 07:25:41 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>По первому вопросу. В Rust есть несколько видов того, что с точки зрения C/C++ называлось бы указателем. Это и <code>Box</code> (да, этот тип несколько магический, но по сути это указатель-владелец), и ссылки <code>&amp;</code>/<code>&amp;mut</code> (указатель-заимствующий), и сырые указатели <code>*const</code>/<code>*mut</code> (наиболее близки к пониманию указателей в терминах C, поскольку для них владение/заимствование нужно отслеживать вручную), и “умные указатели” <code>Rc</code>/<code>Arc</code> с подсчётом ссылок. Собирать их в одну кучу “указателей” обычно не имеет смысла.</p>
+<p>Более того, отдельные библиотеки вполне могут добавлять новые типы “указателей” (например, атомарные указатели крейта <a href="https://docs.rs/crossbeam-epoch/0.7.1/crossbeam_epoch/" rel="nofollow noopener"><code>crossbeam-epoch</code></a>).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Feb 26, 2019 7:34 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 07:34:58 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>“Сахара” столько, чтобы не страдать от низкоуровневости языка. Для “синтаксических диабетиков” ничего страшного, думаю, нет.</p>
+</blockquote>
+<p>Но то, что я привёл - это он или нет?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Feb 26, 2019 7:39 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 07:39:54 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Синтаксический сахар по определению не привносит никаких новых возможностей. Всё, что делается с помощью него, можно сделать и без него.<br>
+Поэтому <code>?</code> это “сахар”, а трэйт <code>Deref</code> и перегружаемая им операция разыменования (<code>*</code>) это не “сахар”, а возможность языка.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Feb 26, 2019 7:40 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 07:40:19 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>По второму. Судя по примерам, кажется, что речь идёт скорее не о “сахаре”, а о “магии”, когда компилятор знает конкретные типы/трейты, и воспроизвести это на других невозможно без патчинга компилятора. Такая магия реализуется в терминах lang items, полный список которых можно увидеть в <a href="https://doc.rust-lang.org/unstable-book/language-features/lang-items.html#list-of-all-language-items" rel="nofollow noopener">документации</a>. В него входят все “базовые” типы наподобие целых чисел разного размера и все типажи, описывающие применение конкретных операторов, кучка механики для реализации паники в терминах исключений, управление памятью, поддержка замыканий и ещё десятка полтора разной важной всячины, такой как <code>Clone</code>/<code>Copy</code>, <code>Send</code>/<code>Sync</code>, <code>Drop</code> и ещё некоторые.<br>
+Кроме того, существует некоторое количество типов и типажей, которые нестабильны и не могут использоваться на стабильной версии Rust, потому что их интерфейс ещё не окончательный и/или эта функциональность принципиально нестабильна.</p>
+<p>С другой стороны, именно “сахара” - сокращённой записи для того, что и так можно записать более длинно - в языке не очень много и он, в основном, стандартный (скажем, синтаксис вызова методов формально тоже сахар, но обычно это никого не интересует).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Feb 26, 2019 7:44 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 07:44:26 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Т.е. по сути, lang items это это возможность языка, просто реализованная в немного других терминах чтобы не вводить отдельное понятия?<br>
+В C++ перегрузка как-то явнее сделана.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Feb 26, 2019 7:56 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 07:56:56 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>lang items - это те детали реализации, про которые должне знать именно сам компилятор, существования типов в библиотеке недостаточно. По сути, это точки перехода между реализацией внутри компилятора и стандартными типами/трейтами, которые её поддерживают. В частности, сюда входит вся перегрузка операторов (компилятор должен знать, что <code>a + b</code> “расшифровывается” как <code>std::ops::Add(a, b)</code>). Есть в языке и вещи, которые такой явной поддержки не требуют, или которые считаются деталями реализации изначально и не попадают в этот список (например, ссылки).</p>
+<p>Что касается перегрузки, то тут есть забавный семантический момент. В C++ перегрузка описывается в терминах операторов (“для моего типа <code>&lt;&lt;</code> делает то-то”). В Rust она описывается в терминах поведения (“для моего типа “сдвиг влево” делается так-то”). Это не только отражает идею трейтов как единиц поведения типа, но и продвигает идею, что операторы должны перегружаться по назначению, с поведением, аналогичным оригинальному (а не плюсовое "<code>&lt;&lt;</code> - это сдвиг влево, за исключением кучки магических типов, для которых это вывод пользователю / добавление в коллекцию / ещё что-то совсем отдельное").</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Feb 26, 2019 8:10 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 08:10:27 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Всем спасибо!<br>
+Стало намного понятнее.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Feb 27, 2019 5:52 AM">
+            <time itemprop="datePublished" datetime="2019-02-27 05:52:46 +0000">Feb 27, 2019</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Выкладывал тут уже схему, которую скомпилировал для себя из разных источников<a href="https://github.com/cheblin/BlackBox/blob/master/Ref%2C%20Box%2C%20Rc%2C%20Cell%2C%20Arc.pdf" rel="nofollow noopener"> <strong>общая картина по указателям и контейнерам в Rust</strong> </a><br>
+обновлённая версия.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

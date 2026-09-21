@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Уточнение типа одного из методов трейта - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Уточнение типа одного из методов трейта</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Уточнение типа одного из методов трейта</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Nov 21, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Nov 21, 2018 11:07 AM">
+            <time itemprop="datePublished" datetime="2018-11-21 11:07:17 +0000">Nov 21, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>День добрый, господа.</p>
+<p>Коим образом для одной из функций трейта уточнить тип ?</p>
+<pre><code class="lang-rust">pub trait GetValue {
+    type Value;
+    fn get_value(self) -&gt; Option&lt;Self::Value&gt;;
+    fn get_mutref(&amp;self) -&gt; Option&lt;&amp;mut Self::Value&gt;;
+    fn get_cloned_value(self) -&gt; Option&lt;Self::Value&gt;;
+}
+</code></pre>
+<p>Так ругается что conflicting implementation</p>
+<pre><code class="lang-rust">impl&lt;T&gt; GetValue for UserType&lt;T&gt; {
+    type Value = T;
+ fn get_value(self) -&gt; Option&lt;T&gt;;
+ fn get_mutref(&amp;self) -&gt; Option&lt;&amp;mut T&gt;;
+}
+</code></pre>
+<pre><code class="lang-rust">impl&lt;T: Clone&gt; GetValue for UserType&lt;T&gt; {
+    type Value = T;
+fn get_cloned_value(self) -&gt; Option&lt;T&gt;;
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Nov 21, 2018 11:13 AM">
+            <time itemprop="datePublished" datetime="2018-11-21 11:13:37 +0000">Nov 21, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вероятно придётся новый трейт создавать. Неудобно, хочу всего лишь функцию вызывать как метод приходится трейты городить. Хочу как в D.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Nov 21, 2018 4:10 PM">
+            <time itemprop="datePublished" datetime="2018-11-21 16:10:35 +0000">Nov 21, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>я так понимаю что специализация сейчас реализована не полностью - <a href="http://aturon.github.io/2018/04/05/sound-specialization/" rel="nofollow noopener">http://aturon.github.io/2018/04/05/sound-specialization/</a></p>
+<p>сейчас можно только так:</p>
+<pre><code class="lang-auto">impl&lt;T&gt; GetValue for UserType&lt;T&gt; // для всех вообще
+impl GetValue for UserType&lt;ConcreteType&gt; // для конкретного
+
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Nov 22, 2018 3:36 PM">
+            <time itemprop="datePublished" datetime="2018-11-22 15:36:24 +0000">Nov 22, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="Cergo" data-post="1" data-topic="656">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/cergo/48/306_2.png" class="avatar"> Cergo:</div>
+<blockquote>
+<p>fn get_cloned_value(self) -&gt; Option&lt;Self::Value&gt;;</p>
+</blockquote>
+</aside>
+<p>Небольшое замечание: скорее всего данный метод должен получать <code>&amp;self</code></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">F</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/freecoder" class="user-link">Alexander</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Nov 23, 2018 6:41 PM">
+            <time itemprop="datePublished" datetime="2018-11-23 18:41:44 +0000">Nov 23, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А чем такой вариант не угодил?</p>
+<pre><code class="lang-rust">impl&lt;T&gt; UserType&lt;T&gt; {
+    fn get_value(self) -&gt; Option&lt;T&gt; { ... }
+    fn get_mutref(&amp;self) -&gt; Option&lt;&amp;mut T&gt; { ... }
+}
+
+impl&lt;T: Clone&gt; UserType&lt;T&gt; {
+    fn get_cloned_value(self) -&gt; Option&lt;T&gt; { ... }
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Nov 26, 2018 5:29 AM">
+            <time itemprop="datePublished" datetime="2018-11-26 05:29:42 +0000">Nov 26, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>О, хотел бы так, но там выходит такой вот тип</p>
+<pre><code class="lang-rust">impl&lt;T&gt; Option&lt;*mut Node&lt;T&gt;&gt; {
+     fn get_cloned_value(&amp;self) -&gt; Option&lt;T&gt; {}
+}
+</code></pre>
+<p>На что раст ругается: cannot define inherent <code>impl</code> for a type outside of the crate where the type is defined<br>
+Тайп алиас, естественно, всего лишь бантик, который ситуацию не спасает</p>
+<pre><code class="lang-rust">type UserType&lt;T&gt; = Option&lt;*mut Node&lt;T&gt;&gt;
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vitvakatu" class="user-link">Илья Богданов</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Nov 26, 2018 6:00 AM">
+            <time itemprop="datePublished" datetime="2018-11-26 06:00:49 +0000">Nov 26, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Newtype pattern тут поможет</p>
+<pre><code class="lang-rust">pub struct UserType&lt;T&gt; {
+inner: Option&lt;*mut Node&lt;T&gt;&gt;
+}
+</code></pre>
+<p>Хотя тут конечно очень стремно получается, надо смотреть все в целом.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">F</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/freecoder" class="user-link">Alexander</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Nov 26, 2018 8:42 AM">
+            <time itemprop="datePublished" datetime="2018-11-26 08:42:38 +0000">Nov 26, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><code>Option</code> тут вообще не нужно трогать, лучше сделать так:</p>
+<pre><code class="lang-rust">struct UserType&lt;T&gt;(*mut Node&lt;T&gt;);
+
+impl&lt;T&gt; UserType&lt;T&gt; {
+     fn get_cloned_value(&amp;self) -&gt; Option&lt;T&gt; {}
+}
+</code></pre>
+<p>Но вообще да, хорошо бы знать задачу, потому что использование <code>*mut</code> уже настораживает <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=6" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+<p>Если же хочется прямо в <code>Option</code> что-то добавить, то нужно использовать свой типаж:</p>
+<pre><code class="lang-rust">trait UserTrait&lt;T&gt; {
+    fn get_cloned_value(&amp;self) -&gt; Option&lt;T&gt;;
+}
+
+impl&lt;T&gt; UserTrait&lt;T&gt; for Option&lt;*mut Node&lt;T&gt;&gt; {
+     fn get_cloned_value(&amp;self) -&gt; Option&lt;T&gt; { None }
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

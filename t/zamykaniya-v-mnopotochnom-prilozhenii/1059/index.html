@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Замыкания в мнопоточном приложении - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Замыкания в мнопоточном приложении</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Замыкания в мнопоточном приложении</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Feb 1, 2020</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Feb 1, 2020 1:16 PM">
+            <time itemprop="datePublished" datetime="2020-02-01 13:16:37 +0000">Feb 1, 2020</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Здравствуйте!<br>
+Есть такой код</p>
+<pre><code class="lang-auto">pub struct A&lt;T&gt; {
+    list: Arc&lt;RwLock&lt;HashMap&lt;u32, T&gt;&gt;&gt;,
+}
+
+impl&lt;T: Send + Sync&gt; A&lt;T&gt; {
+    fn new&lt;C: Fn(T) + Send + Sync&gt;(cleaner: C) -&gt; Self {
+        let list = Arc::new(RwLock::new(HashMap::new()));
+        let res = Self {
+            list: list.clone(),
+        };
+
+        spawn(move || {
+            let c = cleaner;
+            let l = list;
+        });
+
+        return res;
+    }
+}
+</code></pre>
+<p>Rust отказывается компилировать, т.к. “the parameter type <code>C</code> may not live long enough” и “the parameter type <code>T</code> may not live long enough”. Подробнее можно посмотреть в <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=7b7e0363f9c1b8f005cf4e453f1f0901" rel="nofollow noopener">песочнице</a>.<br>
+Но как так? Они передаются во владение замыкания и там уже живут сколько нужно. Тем более, что T вообще в замыкании напрямую не используется, к тому же, обёрнуто в 2 контейнера, которые регулируют доступ!</p>
+<p>И попутный вопрос - зачем Rust потребовал ограничений на T: Send + Sync? К этому же типу нет непосредственного доступа из разных потоков, только через обёртки.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Feb 1, 2020 2:05 PM">
+            <time itemprop="datePublished" datetime="2020-02-01 14:05:02 +0000">Feb 1, 2020</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Они передаются во владение замыкания и там уже живут сколько нужно.</p>
+</blockquote>
+<p>И там уже живут до тех пор, пока замыкание не завершится, причём компилятор понятия не имеет, когда это произойдёт. Чтобы гарантировать возможность этого, компилятор должен быть уверен, что никакое внешнее событие не может их испортить - например, что они не содержат ссылок на что-нибудь, что основной поток может освободить раньше, чем новый поток перестанет ими пользоваться. А это и есть <code>'static</code>.</p>
+<blockquote>
+<p>И попутный вопрос - зачем Rust потребовал ограничений на T: Send + Sync? К этому же типу нет непосредственного доступа из разных потоков, только через обёртки.</p>
+</blockquote>
+<p><code>Send</code> нужен для любого доступа из других потоков, невзирая на то, есть ли там обёртки. Что касается <code>Sync</code>, то <code>RwLock</code> не запрещает двум потокам одновременно получить доступ на чтение и за счёт interior mutability что-нибудь в типе T сломать.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Feb 1, 2020 2:07 PM">
+            <time itemprop="datePublished" datetime="2020-02-01 14:07:38 +0000">Feb 1, 2020</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="tanriol" data-post="2" data-topic="1059">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/tanriol/48/285_2.png" class="avatar"> tanriol:</div>
+<blockquote>
+<p>что никакое внешнее событие не может их испортить - например, что они не содержат ссылок на что-нибудь, что основной поток может освободить раньше, чем новый поток перестанет ими пользоваться. А это и есть <code>'static</code> .</p>
+</blockquote>
+</aside>
+<p>Но ведь там передача владения! Это ж эксклюзивный доступ вообще, никаких ссылок там быть не может - это не позволят сделать проверки компилятора вызывающего кода.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Feb 1, 2020 2:18 PM">
+            <time itemprop="datePublished" datetime="2020-02-01 14:18:19 +0000">Feb 1, 2020</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вообще <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=d05409d75bd4763f3e01afcd7242b785" rel="nofollow noopener">вот такой</a> работает.<br>
+Но получается, что 'static - это не синоним глобальной переменной, а больше синоним “владения”? Хотя это, вроде-бы, и из декларации понятно…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Feb 1, 2020 5:59 PM">
+            <time itemprop="datePublished" datetime="2020-02-01 17:59:45 +0000">Feb 1, 2020</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Но ведь там передача владения! Это ж эксклюзивный доступ вообще, никаких ссылок там быть не может - это не позволят сделать проверки компилятора вызывающего кода.</p>
+</blockquote>
+<p>Вовсе нет. Тип <code>T</code> вполне мог бы быть ссылкой <code>&amp;str</code>, позаимствованной откуда-то.</p>
+<blockquote>
+<p>Но получается, что 'static - это не синоним глобальной переменной, а больше синоним “владения”? Хотя это, вроде-бы, и из декларации понятно…</p>
+</blockquote>
+<p>Верно. <code>'static</code> обозначает, что тип с этим свойством может жить до конца программы. Это может быть владение (тип без лайфтаймов вообще), это могут быть ссылки <code>&amp;'static</code> в код программы, это может быть динамически выделенная память, про которую с помощью <code>Box::leak</code> мы гарантируем, что она не будет освобождена до завершения программы. Вообще лайфтаймы у типов – это не “сколько живёт переменная такая-то”, а “каково максимальное разрешённое время жизни переменных этого типа”.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

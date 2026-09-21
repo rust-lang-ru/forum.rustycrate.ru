@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Почему данный код не компилится, или попытки постичь borrow checker - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Почему данный код не компилится, или попытки постичь borrow checker</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Почему данный код не компилится, или попытки постичь borrow checker</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Apr 12, 2017</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Apr 12, 2017 9:22 PM">
+            <time itemprop="datePublished" datetime="2017-04-12 21:22:09 +0000">Apr 12, 2017</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я тут воюю с borrow checker’ом…<br>
+Обращаю внимание - цель данного вопроса не в том, чтобы заставить это компилиться. а в том, чтобы понять, что происходит. То есть впринципе, мне понятно - неверно расставлено время жизни. Но почему такое время жизни неверно? Если убрать время жизни, то этот код откомпилится. Компилятор сам выведет времена жизни. То есть фактически, вопрос в том, как их расставляет компилятор.</p>
+<pre><code>use std::collections::HashMap;
+
+trait HasName{
+    fn print_name(&amp;self);
+}
+
+fn foo&lt;'a&gt;(map: &amp;'a mut HashMap&lt;i32, Box&lt;HasName+ 'a&gt;&gt;, k: i32){
+}
+
+fn main() {
+    let mut map:HashMap&lt;i32, Box&lt;HasName&gt;&gt; = HashMap::new();
+    foo(&amp;mut map, 1);
+}
+</code></pre>
+<p>Мне как бы здравый смысл подсказывает, что ссылка на мапу не может жить меньше, чем живет структура. Вот в коде выше я это и указал - как у мапы, так и у структуры время жизни 'a. Но это не прокатывает. Я не пойму - почему? Ведь по определению, когда мапа умирает - то она вызывает умирание HasName. То есть (согласно моему пониманию), время жизни получается одинаковое.</p>
+<p>Ладно…  Дадим каждой сущности свое время жизни.<br>
+Сигнатура получается такой:</p>
+<pre><code>fn foo&lt;'a, 'b&gt;(map: &amp;'a mut HashMap&lt;i32, Box&lt;HasName+ 'b&gt;&gt;, k: i32) 
+</code></pre>
+<p>В этом случае, компиляция и прокатывает - но я снова не пойму почему. Ведь нигде не указано, что 'a - более долгое время жизни, чем 'b. А вдруг я в эту функцию подам объекты, у которых время жизни будет перепутано?<br>
+Это навело меня на мысль, что времена жизни перечисляются в порядке от большего к меньшему. Проверим это, поменяв местами 'a с 'b:</p>
+<pre><code>fn foo&lt;'b, 'a&gt;....
+</code></pre>
+<p>Результат - все компилится. То есть получается, чекеру не важно какое время жизни больше, а какое меньше. Но когда они равны (как в первом примере) - это получается ошибка. Очень странное поведение. Тем более, что у нас де-факто они и есть равны: 'a=='b, с точностью до порядка создания и освобождения ресурсов.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Apr 13, 2017 6:16 AM">
+            <time itemprop="datePublished" datetime="2017-04-13 06:16:50 +0000">Apr 13, 2017</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>На самом деле <code>borrowchecker</code> - вещь довольно тупая и действует по принципу “лучше перебдеть…” <img src="https://forum.rustycrate.ru/images/emoji/twitter/sob.png?v=12" title=":sob:" class="emoji" alt=":sob:" loading="lazy" width="20" height="20"><br>
+<a href="https://github.com/ruRust/rustonomicon/blob/master/src/lifetime-mismatch.md" rel="noopener nofollow ugc">Границы времени жизни</a><br>
+Разработчики планируют конечно улучшить его работу: <a href="http://smallcultfollowing.com/babysteps/blog/2016/04/27/non-lexical-lifetimes-introduction/" rel="noopener nofollow ugc">Non-lexical lifetimes: introduction</a>, но это дело движется не очень быстро.</p>
+<p>В вашем примере, судя по всему, <code>map</code> заимствует саму себя:</p>
+<pre><code class="lang-auto">error: `map` does not live long enough
+  --&gt; &lt;anon&gt;:13:1
+   |
+12 |     foo(&amp;mut map, 1);
+   |              --- borrow occurs here
+13 | }
+   | ^ `map` dropped here while still borrowed
+   |
+</code></pre>
+<p>Тут просто нет других вариантов - функция получает одну ссылку и ничего не возвращает.</p>
+<p>Если времена жизни разные то компилятор, видимо понимает, что ссылка на <code>map</code> не связана с ее содержимым.</p>
+<blockquote>
+<p>Это навело меня на мысль, что времена жизни перечисляются в порядке от большего к меньшему.</p>
+</blockquote>
+<p>Это не так. Кто кого переживет можно задать в явном виде:</p>
+<pre><code class="lang-auto">fn foo&lt;'a,'b:'a&gt;(map: &amp;'a mut HashMap&lt;i32, Box&lt;HasName+ 'b&gt;&gt;, k: i32)
+</code></pre>
+<p><code>'b:'a</code> - означает что <code>'b</code> включает <code>'a</code> или <code>'b</code> больше чем <code>'a</code> . <a href="https://doc.rust-lang.org/nightly/nomicon/subtyping.html" rel="noopener nofollow ugc">Subtyping and Variance</a></p>
+<p>В большинстве случаев этого можно не делать т.к. Раст неплохо сам выводит эти зависимости.<br>
+Так работать не будет:</p>
+<pre><code class="lang-auto">fn foo&lt;'b,'a:'b&gt;(map: &amp;'a mut HashMap&lt;i32, Box&lt;HasName+ 'b&gt;&gt;, k: i32)
+</code></pre>
+<p>Интересно, что сообщение об ошибке в этом случае точно такое же как для случая с одним временем жизни.</p>
+<blockquote>
+<p>Если убрать время жизни, то этот код откомпилится. Компилятор сам выведет времена жизни. То есть фактически, вопрос в том, как их расставляет компилятор.</p>
+</blockquote>
+<p>Это легко проверить:</p>
+<pre><code class="lang-auto">fn foo(map: &amp;mut HashMap&lt;i32, Box&lt;HasName&gt;&gt;, k: i32){
+    let _:() = map;
+}
+</code></pre>
+<p>Получим:</p>
+<pre><code class="lang-auto"> = note: expected type `()`
+             found type `&amp;mut std::collections::HashMap&lt;i32, std::boxed::Box&lt;HasName + 'static&gt;&gt;`
+</code></pre>
+<pre><code class="lang-auto"></code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Apr 13, 2017 7:48 AM">
+            <time itemprop="datePublished" datetime="2017-04-13 07:48:38 +0000">Apr 13, 2017</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хочу пояснить один момент по поводу равных времен жизни.</p>
+<p>То что у разных ссылок в сигнатуре функции проставлено одно время жизни не означает что у исходных объектов оно одно. (Вообще сомневаюсь что такое возможно если вж не <code>'static</code>)<br>
+Это означает что внутри функции это вж будет считаться равным пересечению (или наименьшему из) исходных вж.</p>
+<p>Например:</p>
+<pre><code>fn test&lt;'t&gt;(x:&amp;'t str,_y:&amp;'t str) -&gt; &amp;'t str{
+    x
+}
+
+fn main() {
+    let x = "static str";
+    let z = {
+        let y = "local string".to_owned();
+        test(x, &amp;y)
+    };
+    println!("{}", z);
+}
+</code></pre>
+<p>Мы передаем в функцию <code>test()</code> два аргумента: <code>&amp;'static str</code>  и  <code>&amp;str</code>    с неким локальным вж. Функция возвращает первый аргумент (<code>&amp;'static str</code>) но время жизни у результата уже не <code>'static</code>.<br>
+Еще один побочный эффект - компилятор считает что результат заимствует оба аргумента, хотя по факту это не так.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FFI и интеграция в другие языки: мегатред - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">FFI и интеграция в другие языки: мегатред</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">FFI и интеграция в другие языки: мегатред</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Oct 18, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Oct 18, 2018 11:46 AM">
+            <time itemprop="datePublished" datetime="2018-10-18 11:46:53 +0000">Oct 18, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Предлагаю обсудить опыт интеграции Rust в другие языки, с целью расширения какой-то среды исполнения или при переписывании кода на другом языке на Rust.</p>
+<p>Начну и предлагаю всем делиться опытом использования Rust из других языков и других языков из Rust.</p>
+<p>У меня есть проект, который реализует движок исполнения скриптов на Lua, и предоставляет скриптам API для управления несколькими нативными объектами: виртуальными и физическими машинами (через единый API) и процессами на данной машине. Для примера, с машинами можно делать:</p>
+<ul>
+<li>запускать данный образ ОС на них</li>
+<li>включать/выключать/перезагружать</li>
+<li>получать вывод из последовательного порта</li>
+<li>писать в последовательный порт</li>
+<li>над выводом можно делать дальнейшие действия, типа сравнения с образцом (простым или с использованием регвыров)</li>
+</ul>
+<p>По сути это всё похоже на операционную систему в миниатюре. Когда в скрипте написано</p>
+<pre><code class="lang-auto">  machine = Machine.new(config)
+</code></pre>
+<p>Rust создаёт реальную структуру <code>Machine</code>, в которой лежит вся необходимая для управления информация, а в Lua отдаёт хэндл - просто индекс в массив машин на стороне Rust.</p>
+<p>Для всего этого я пользуюсь <code>hlua</code>.</p>
+<p>Что нравится:</p>
+<ul>
+<li>ядро на Rust - безопасно, удобно, легко расширять (например сериализовать результат выполнения скрипта в JSON);</li>
+</ul>
+<p>Что не нравится:</p>
+<ul>
+<li>
+<code>hlua</code> - довольно сырая штука, и там помимо багов встречаются полностью нереализованные возможности; некоторые фиксы заблокированы продвинутыми возможностями компилятора. На данный момент она не поддерживается и очень напрашивается форк.</li>
+</ul>
+<p>Подробнее можно посмотреть в <a href="https://github.com/mkpankov/foobar/blob/master/plan.slides.md">слайдах</a> к прошлогоднему докладу.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/webdesus" class="user-link">Denis Kurilenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Oct 18, 2018 2:25 PM">
+            <time itemprop="datePublished" datetime="2018-10-18 14:25:30 +0000">Oct 18, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А ты не думал взять какой ни будь скриптовый язык раста для этого дела?  Коих в принципе прилично (<a href="https://github.com/rust-unofficial/awesome-rust#scripting" rel="nofollow noopener">список</a>)</p>
+<p>Сам только раст с js дружил. Кроме проблем с enum-ами ни чего больше и не помню. Но они в принципе везде возникают, при работе с FFI</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vitvakatu" class="user-link">Илья Богданов</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Oct 18, 2018 4:55 PM">
+            <time itemprop="datePublished" datetime="2018-10-18 16:55:32 +0000">Oct 18, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Мы стараемся подружить Rust с Java: <a href="https://github.com/exonum/exonum-java-binding" rel="nofollow noopener">https://github.com/exonum/exonum-java-binding</a></p>
+<p>На данный момент используем библиотеку <a href="https://github.com/jni-rs/jni-rs" rel="nofollow noopener">jni-rs</a>, которая предоставляет Rust-байндинги для довольно известного Java Native Interface. Написание кода для связи двух языков выглядит довольно прямолинейно - в Java достаточно объявить нативный метод, в Rust - его реализовать с правильной сигнатурой.</p>
+<p>Основные проблемы - с передачей сложных структур данных между языками и с обработками исключений, которые могут возникать как с одной, так и с другой стороны.<br>
+Впрочем, работает все довольно неплохо и стабильно.</p>
+<p>Есть и другие проекты по взаимодействию Rust &lt;-&gt; Java: <a href="https://github.com/jnr/jnr-ffi" rel="nofollow noopener">JNR</a>, <a href="https://github.com/java-native-access/jna" rel="nofollow noopener">JNA</a> и перспективный <a href="https://www.graalvm.org/" rel="nofollow noopener">GraalVM</a>.</p>
+<p>Мы уже не раз рассказывали про проект на различных конференциях: <a href="https://youtu.be/UksXMCrI0z4" rel="nofollow noopener">раз</a>, <a href="https://youtu.be/ueK34q1Rspw" rel="nofollow noopener">два</a>, <a href="https://youtu.be/hUqN4-MzK2U" rel="nofollow noopener">три</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Oct 19, 2018 6:52 AM">
+            <time itemprop="datePublished" datetime="2018-10-19 06:52:23 +0000">Oct 19, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="webdesus" data-post="2" data-topic="587">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/webdesus/48/166_2.png" class="avatar"> webdesus:</div>
+<blockquote>
+<p>А ты не думал взять какой ни будь скриптовый язык раста для этого дела? Коих в принципе прилично (<a href="https://github.com/rust-unofficial/awesome-rust#scripting">список </a>)</p>
+</blockquote>
+</aside>
+<p>Не, не хочу кроме разработки проекта заниматься разработкой языка. Lua - проверенный вариант, который все хвалят за встраиваемость.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Oct 19, 2018 6:53 AM">
+            <time itemprop="datePublished" datetime="2018-10-19 06:53:59 +0000">Oct 19, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="vitvakatu" data-post="3" data-topic="587">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/vitvakatu/48/114_2.png" class="avatar"> vitvakatu:</div>
+<blockquote>
+<p>Основные проблемы - с передачей сложных структур данных между языками и с обработками исключений, которые могут возникать как с одной, так и с другой стороны.<br>
+Впрочем, работает все довольно неплохо и стабильно.</p>
+</blockquote>
+</aside>
+<p>Структуры бинарно передаёте или сериализуете?<br>
+А с исключениями что делаете? Кажется размотка стека через границу FFI это UB.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/webdesus" class="user-link">Denis Kurilenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Oct 19, 2018 9:45 AM">
+            <time itemprop="datePublished" datetime="2018-10-19 09:45:16 +0000">Oct 19, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Но твой вариант тоже  не сказать что стабильный, как ты пишешь. Да и потом вроде у тебя не такие сложные задачи требуются от скрипта решать. Хотя могу ошибаться. Я бы глянул от задач, если хватает, то может все таки стоит выбрать скриптовый язык который более удобно с растом конектится, да и вроде как развитие есть.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Oct 19, 2018 12:14 PM">
+            <time itemprop="datePublished" datetime="2018-10-19 12:14:22 +0000">Oct 19, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>уже несколько месяцев как вступил на “скользкую” дорожку раста… и не жалею.<br>
+Хотя несколько раз пребывал в таком тупике, что думал - а может ну его нафиг.</p>
+<p>В основном работаю над сопряжением работы ИЗ Rust с базовой библиотекой разбора протокола написанной на С.</p>
+<p>Непонятки были с тем что генерил bindgen  для undefined size array in struct<br>
+ну и поддержка сишных  Variadic functions вызывало вопросы и озабоченность.</p>
+<p>Rust подкинул мне несколько идей.<br>
+В частности, думал и решил - полностью перехожу на строки в формате UTF8 . Это позволит отказаться от необходимости при описании протокола указывать сколько байт занимает один char данной строки.<br>
+Да, вычисление количества символов в строке будет не таким простым, но мой анализ показывает, что чаще всего длинна строки была нужна, и использовалась, чтобы отвести под её хранение, перемещение необходимое число байт.</p>
+<p>Вот этот разрыв в мозгу, прямой зависимости между числом символов в строке и числом байт, потребовал усилий…</p>
+<ul>
+<li>архитектуру сишного кода в некоторых аспектах переосмыслил.</li>
+</ul>
+<p>А вообще команда у раста просто отличная. Страшно доволен языком и языковыми конструкциями.<br>
+Раньше подумывал после версии для Rust буду пилить версию для C++ … теперь однозначно решил, что C++ версии не будет.<br>
+атавизм ибо.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Oct 19, 2018 12:21 PM">
+            <time itemprop="datePublished" datetime="2018-10-19 12:21:49 +0000">Oct 19, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вариант стабильный, т.е. он не меняется спонтанно.</p>
+<p>Это известный язык с обширной документацией, и заведомо известно что сам язык достаточно матёрый, чтобы не иметь проблем с самим интерпретатором.</p>
+<p>Другой скриптовый язык, который на коленке делают в опенсорсе, будет также подвержен проблеме что его не поддерживают - только не поддерживают уже не только FFI-обёртку, а интерпретатор в целом.</p>
+<p>В конечном счёте пользуюсь этим не я один и Lua - это понятный выбор, а никому не известный скриптовый язык на расте - нет.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Oct 19, 2018 12:29 PM">
+            <time itemprop="datePublished" datetime="2018-10-19 12:29:52 +0000">Oct 19, 2018</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>согласен. LUA отличный выбор.<br>
+умудрился на нем под OpenWrt  HTTP tunnel написать.<br>
+работал даже на слабеньких роутерах.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Dushistov" class="user-link">Evgeniy Dushistov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Oct 26, 2018 5:36 AM">
+            <time itemprop="datePublished" datetime="2018-10-26 05:36:47 +0000">Oct 26, 2018</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="vitvakatu" data-post="3" data-topic="587">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/vitvakatu/48/114_2.png" class="avatar"> vitvakatu:</div>
+<blockquote>
+<p>На данный момент используем библиотеку <a href="https://github.com/jni-rs/jni-rs" rel="noopener nofollow ugc">jni-rs</a>, которая предоставляет Rust-байндинги для довольно известного Java Native Interface. Написание кода для связи двух языков выглядит довольно прямолинейно - в Java достаточно объявить нативный метод, в Rust - его реализовать с правильной сигнатурой.</p>
+</blockquote>
+</aside>
+<p>Я столкнувшись с подобной проблемой написал <a href="https://github.com/Dushistov/rust_swig" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Dushistov/flapigen-rs: Tool for connecting programs or libraries written in Rust with other languages</a> .<br>
+Так как во всех трех вариантах JNI, JNR и JNA нужно писать много почти одинакового кода,<br>
+причем в самом эффективном варианте, то есть JNI приходится еще много почти одинакового <code>unsafe</code> кода писать.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vitvakatu" class="user-link">Илья Богданов</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Oct 28, 2018 5:31 PM">
+            <time itemprop="datePublished" datetime="2018-10-28 17:31:04 +0000">Oct 28, 2018</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Каюсь, все никак не находил время на ответ.</p>
+<blockquote>
+<p>Структуры бинарно передаёте или сериализуете?</p>
+</blockquote>
+<p>Поступаем просто - не передаем <img src="https://forum.rustycrate.ru/images/emoji/twitter/upside_down_face.png?v=12" title=":upside_down_face:" class="emoji" alt=":upside_down_face:" loading="lazy" width="20" height="20">. На данный момент необходимости в передаче сложных структур данных нет, нам требуются только примитивы, с которыми проблем нет. Для обратного взаимодействия (Вызова Java-методов из Rust) используются прокси-объекты - указатель на Java-объект (инстанс класса) хранится в структуре, которая реализует нужный нам трейт, вызывая Java-методы. <a href="https://github.com/exonum/exonum-java-binding/blob/master/exonum-java-binding-core/rust/src/proxy/service.rs#L21">пример</a></p>
+<blockquote>
+<p>А с исключениями что делаете? Кажется размотка стека через границу FFI это UB.</p>
+</blockquote>
+<p>Хороший вопрос. Если не ошибаюсь, начиная с 1.25 (или 1.26) - размотка стека больше не UB, просто приводит к abort. В любом случае, исключения джавы и паники раста аккуратно ловятся, приводятся в читаемый вид и печатаются в лог, что сильно помогает находить ошибки. Вспомогательный код для этого дела написан методом проб и ошибок и может выглядеть <a href="https://github.com/exonum/exonum-java-binding/blob/master/exonum-java-binding-core/rust/src/utils/errors.rs#L56">страшно</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vitvakatu" class="user-link">Илья Богданов</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Oct 28, 2018 5:34 PM">
+            <time itemprop="datePublished" datetime="2018-10-28 17:34:25 +0000">Oct 28, 2018</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Я столкнувшись с подобной проблемой написал <a href="https://github.com/Dushistov/rust_swig">https://github.com/Dushistov/rust_swig </a> .</p>
+</blockquote>
+<p>Выглядит очень любопытно, спасибо!<br>
+На данный момент мы рассматриваем различные альтернативные подходы к байндингам, думаю на этот вариант тоже взглянем.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Почему переменная data заимствуется после вызова функции? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Почему переменная data заимствуется после вызова функции?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Почему переменная data заимствуется после вызова функции?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Aug 8, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Aug 8, 2018 12:20 PM">
+            <time itemprop="datePublished" datetime="2018-08-08 12:20:11 +0000">Aug 8, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <pre><code class="lang-rust">fn test&lt;'a&gt;(x:&amp;'a mut &amp;'a u8){ }
+
+fn main() {
+    let mut data = &amp;1;
+    test(&amp;mut data);
+    println!("{:p}", data);
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?gist=d5051e45be6cadc5035d4e3335866ea0&amp;version=stable&amp;mode=debug&amp;edition=2015" rel="nofollow noopener">Run</a></p>
+<p>Известно, что эта проблема решается разделением времен жизни в функции:</p>
+<pre><code class="lang-rust">fn test&lt;'a,'b&gt;(x:&amp;'a mut &amp;'b u8){ }
+</code></pre>
+<p>Вопрос в том, почему вообще это происходит?</p>
+<p>Одинаковые времена жизни должны приводить только к тому, что ссылка <code>data</code> будет не <code>'static</code>, а ограничится локальной областью функции <code>main()</code>.</p>
+<p>Нашел <a href="https://stackoverflow.com/questions/39827244/who-borrowed-a-variable" rel="nofollow noopener">древний вопрос на SO</a> в котором обсуждается похожий случай. Там пришли к выводу, что происходит самозаимствование.<br>
+В моем примере никакого самозаимствования теоретически не может быть.</p>
+<hr>
+<p>Ответ: <a href="https://forum.rustycrate.ru/t/pochemu-peremennaya-data-zaimstvuetsya-posle-vyzova-funkczii/476/24?u=ibuzpe9">42</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Aug 20, 2018 11:03 AM">
+            <time itemprop="datePublished" datetime="2018-08-20 11:03:51 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><img src="https://forum.rustycrate.ru/images/emoji/twitter/snail.png?v=5" title=":snail:" class="emoji" alt=":snail:">  Первая ссылка должна дожить до println + вторая (изменяемая ссылка) должна иметь точно такое же время жизни -&gt; println не может использовать первую ссылку, потому что жива вторая (изменяемая).</p>
+<p>Если убрать println, то все собирается, потому что не возникает конфликта уникальности.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Aug 20, 2018 1:18 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 13:18:52 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Время жизни самой ссылки не обязательно должно быть равно времени жизни данных на которые она указывает. Оно вполне может быть меньше, и для мутабельных ссылок тоже. Вторая ссылка не обязана быть живой весь интервал, вж первой  - это <strong>верхний</strong> предел второй.</p>
+<p>Даже если переписать вот так, то ничего не меняется:</p>
+<pre><code class="lang-auto">    let mut data = &amp;1;
+    {   
+        let t = &amp;mut data;
+        test(t);
+    }
+    println!("{:?}", data);
+</code></pre>
+<p>Тут вторая ссылка <code>t</code> никак не может быть живой к моменту вызова <code>println!()</code>. А в сообщении об ошибке Rust пишет, что mutable borrow длится до конца <code>main()</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Aug 20, 2018 1:22 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 13:22:32 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Это все да, но ты сам в сигнатуре явно требуешь что бы время жизни было одинаковым - оно и становится одинаковым, т.е. весь main. БЧ же довольно прямолинейная штуковина.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Aug 20, 2018 1:30 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 13:30:29 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>По-моему ты путаешь вж самой ссылки и вж данных на котрые она указывает. Тут одно правило для всех - вж ссылки не может быть больше чем вж данных  на которые она указывает. Вот это <code>'a</code> - это как раз время жизни значения <code>1u8</code>.</p>
+<p>Тут время жизни первой ссылки (самой переменной <code>data</code>) должно быть равно времени жизни значения на которое она указывает из-за того, что вторая ссылка - мутабельная (инвариантность и все дела). А время жизни второй ссылки (переменной <code>t</code>) определяется только скопом в котором она объявлена.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Aug 20, 2018 1:36 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 13:36:51 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Мне кажется что из-за явного требования одинаковости вж это просто некорректный код, который в принципе не должен работать. Но возможно я и правда туплю, хз. <a class="mention" href="/u/ibuzpe9/index.html">@IBUzPE9</a>, ты не против если я продублирую вопрос с <code>{ let t = &amp;mut data; test(t);}</code> на англоязычный SO? Вдруг кто из команды ядра посмотрит и прям по полочкам все разложит.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Aug 20, 2018 2:49 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 14:49:39 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да пожалуйста. Может быть даже лучше на <a href="https://users.rust-lang.org/" rel="nofollow noopener">https://users.rust-lang.org/</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Aug 20, 2018 3:38 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 15:38:01 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Что ж, на мою <a href="https://stackoverflow.com/questions/51933984/what-exactly-is-the-logic-of-a-borrow-checker-in-the-case-of-nested-references-w" rel="nofollow noopener">попытку</a> <a href="https://stackoverflow.com/users/155423/shepmaster" rel="nofollow noopener">Shepmaster</a> отправил искать отличия от этого вопроса:</p>
+<aside class="onebox stackexchange">
+  <header class="source">
+      <a href="https://stackoverflow.com/questions/32403837/mutable-borrow-seems-to-outlive-its-scope" target="_blank" rel="nofollow noopener">stackoverflow.com</a>
+  </header>
+  <article class="onebox-body">
+      <a href="https://stackoverflow.com/users/4917486/michael-eden" target="_blank" rel="nofollow noopener">
+    <img alt="Michael Eden" src="https://forum.rustycrate.ru/uploads/default/original/1X/1ea76ce461ed2cc1e2bee842b5c368b839267aa2.jpeg" class="thumbnail onebox-avatar" width="128" height="128">
+  </a>
+<h4>
+  <a href="https://stackoverflow.com/questions/32403837/mutable-borrow-seems-to-outlive-its-scope" target="_blank" rel="nofollow noopener">Mutable borrow seems to outlive its scope</a>
+</h4>
+
+<div class="tags">
+  <strong>rust</strong>
+</div>
+
+<div class="date">
+  asked by
+  
+  <a href="https://stackoverflow.com/users/4917486/michael-eden" target="_blank" rel="nofollow noopener">
+    Michael Eden
+  </a>
+  on <a href="https://stackoverflow.com/questions/32403837/mutable-borrow-seems-to-outlive-its-scope" target="_blank" rel="nofollow noopener">05:47PM - 04 Sep 15 UTC</a>
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>Который разжевывает то же, что я выше пытался сказать - жесткое требование одного времени жизни невозможно удовлетворить.<br>
+Правда, меня все равно немного смущает что в сообщении об ошибке говорится не об этом, а об уникальности. Но, видимо, код просто сломан слишком сильно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/matklad" class="user-link">Aleksey Kladov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Aug 20, 2018 4:36 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 16:36:40 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Привет! Не эксперт по lifetimeам, но, мне кажется, тут играет роль две вещи:</p>
+<ul>
+<li>
+<p><code>&amp;mut T</code> инвариантен по <code>T</code>, соответственно, <code>&amp;'a mut &amp;'a i32</code> означает, что lifetime должен быть ровно <code>'a</code> , не больше и не меньше</p>
+</li>
+<li>
+<p><code>&amp;</code> ссылки, в отличие от <code>&amp;mut</code>, не делают reborrowing автоматически. Т.е, такой код работает: <code>let t = &amp;mut (&amp;*data);</code></p>
+</li>
+</ul>
+<p>Соответственно, мы не можем ни через variance, ни через reborrowing сократить lifetime.</p>
+<p>EDIT: кто найдёт норм доку про reborrowing, тому конфетку. Я лучше чем второй пункт отсюда не знаю <img src="https://forum.rustycrate.ru/images/emoji/twitter/frowning.png?v=5" title=":frowning:" class="emoji" alt=":frowning:"> <a href="https://bluss.github.io/rust/fun/2015/10/11/stuff-the-identity-function-does/" rel="nofollow noopener">https://bluss.github.io/rust/fun/2015/10/11/stuff-the-identity-function-does/</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Aug 20, 2018 4:41 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 16:41:19 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="IBUzPE9" data-post="1" data-topic="476">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ibuzpe9/48/154_2.png" class="avatar"> IBUzPE9:</div>
+<blockquote>
+<p>Одинаковые времена жизни должны приводить только к тому, что ссылка <code>data</code> будет не <code>'static</code> , а ограничится локальной областью функции <code>main()</code> .</p>
+</blockquote>
+</aside>
+<p>Программа работает во время выполнения функции <code>main</code>. Время жизни <code>static</code> действует в это же время (условно, есть же еще и константы и статические переменные). У <code>data</code> вж будет <code>static</code>, оно не укоротится из-за того, что используется в <code>test</code>. Ответ на похожий вопрос: <a href="https://users.rust-lang.org/t/why-does-refcell-influence-lifetimes/19648/2" class="inline-onebox" rel="noopener nofollow ugc">Why does RefCell influence lifetimes? - #2 by matklad - help - The Rust Programming Language Forum</a>, — иначе никак не объяснить, мне кажется</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Aug 20, 2018 5:16 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 17:16:21 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a class="mention" href="/u/ozkriff/index.html">@ozkriff</a> Ну я бы не сказал что он там прямо все разжевал. По сути просто сказал что так нельзя и надо ввести разные времена жизни. Вобще там рассматривается более запутанный случай и понять, что происходит что-то не то гораздо сложнее.</p>
+<p><a class="mention" href="/u/virtuos86/index.html">@Virtuos86</a> Может быть я не совсем понятно сформулировал. Суть в том что если явно задать вж <code>'static</code>:</p>
+<pre><code class="lang-auto">   let mut data:&amp;'static u8 = &amp;1;
+   {
+       let t = &amp;mut data;
+       test(t);
+   }
+   println!("{:?}", data);
+</code></pre>
+<p>Rust начинает ругаться что <code>data</code> недостаточно долго живет и что она должна быть <code>'static</code>. А если вызов <code>test()</code> закомментировать все будет работать. Это как раз проявляется эффект инвариантности мутабельных ссылок о котором выше сказал <a class="mention" href="/u/matklad/index.html">@matklad</a>.</p>
+<p>Но <s>все эти интересные эффекты</s> заимствование должно закончиться когда <code>t</code> покидает область видимости. А оно почему-то не заканчиваются.</p>
+<p><a class="mention" href="/u/matklad/index.html">@matklad</a> Нету такой доки. Раньше это совсем вскользь упоминалось в номиконе, сейчас остался только <a href="https://github.com/ruRust/rustonomicon/blob/master/src/references.md#%D0%96%D0%B8%D0%B2%D1%83%D1%87%D0%B5%D1%81%D1%82%D1%8C" rel="nofollow noopener">русский перевод</a>. Там сложно что-то понять.<br>
+Я про это когда-то загадку придумал, <a href="https://forum.rustycrate.ru/t/naskolko-horosho-vy-znaete-rust/136">наверно все уже видели</a>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_13"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_13" title="Aug 20, 2018 5:38 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 17:38:20 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#13</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я переписал пример, как учит Nomicon:</p>
+<pre><code>fn test&lt;'a&gt;(x:&amp;'a mut &amp;'a u8){ }
+
+fn main() {
+    'b: {
+        let mut data = &amp;'b 1;
+        'c: {
+            test(&amp;'c mut data);
+            'd: {
+                println!("{:p}", data);
+            }
+        }
+    }
+}
+</code></pre>
+<p>Но единственное, что понял, что test должен быть таким:</p>
+<pre><code>fn test&lt;'a, 'b: 'a&gt;(x:&amp;'a mut &amp;'b u8) {}
+</code></pre>
+<p>после чего код компилируется. Кстати, как работает параметр “p” в строке формата:</p>
+<pre><code>println!("{:p}", data);
+</code></pre>
+<p>берется указатель на data,  и это считается reborowing?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_14"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/matklad" class="user-link">Aleksey Kladov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_14" title="Aug 20, 2018 5:41 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 17:41:11 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#14</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_12">Replying to #12</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="IBUzPE9" data-post="12" data-topic="476">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ibuzpe9/48/154_2.png" class="avatar"> IBUzPE9:</div>
+<blockquote>
+<p>Но <s>все эти интересные эффекты</s> заимствование должно закончиться когда <code>t</code> покидает область видимости.</p>
+</blockquote>
+</aside>
+<p>Так а почему должны? Вроде бы не должны, ровно потому что нет reborrowing. Сигнатура <code>test</code> говорит, что вж в <code>t</code> и в <code>data</code> ровно совпадают, и вж в data должно как минимум покрывать println, значит и вж в <code>t</code> должно его покрывать. Ну и дальше, в зависимости от скоупа, получаем либо вж, которое оказывается дольше дольше скоупа переменной, либо уникальную и шаренную ссылку одновременно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_15"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_15" title="Aug 20, 2018 6:06 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 18:06:21 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#15</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_12">Replying to #12</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="IBUzPE9" data-post="12" data-topic="476">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ibuzpe9/48/154_2.png" class="avatar"> IBUzPE9:</div>
+<blockquote>
+<p>Но <s>все эти интересные эффекты</s> заимствование должно закончиться когда <code>t</code> покидает область видимости. А оно почему-то не заканчиваются.</p>
+</blockquote>
+</aside>
+<p>Я думаю, вся фигня в том, что текущая система лайфтаймов лексическая. Конечно, t уничтожится, но системе на это пофиг. Если в сигнатуре test указано, что обе ссылки имеют одинаковое время жизни, но они и не используются в функции (а значит, и не удаляются по выходе из нее, т.е. “внутренний”, более узкий лайфтайм не используется), значит берется другой лайфтайм, и обе ссылки считаются валидными до конца main.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_16"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_16" title="Aug 20, 2018 6:14 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 18:14:55 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#16</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_14">Replying to #14</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a class="mention" href="/u/virtuos86/index.html">@Virtuos86</a> Да <code>{:p}</code> просто от экспериментов осталось, можно заменить на <code>{:?}</code>. Там data просто заимствуется немутабельно. Reborrowing вот так <code>&amp;*data</code>.</p>
+<blockquote>
+<p>Я думаю, вся фигня в том, что текущая система лайфтаймов лексическая</p>
+</blockquote>
+<p>По моему всей фигни это не объясняет. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"> В доке как минимум такие частные случаи не описаны почему-то.</p>
+<p><a class="mention" href="/u/matklad/index.html">@matklad</a>  Ну так вж того на что указывет <code>t</code> не означает что само <code>t</code> должно покрывать это вж.</p>
+<pre><code class="lang-auto">{
+    let x:&amp;'static = &amp;1;
+}
+println!("{}", x);
+</code></pre>
+<p>То что <code>x</code> указывает на статик не делает его доступным вне собственного скоупа?</p>
+<p>Ну с явным reborrowing работает т.к. там видимо временная переменная создается которую уже заимствует <code>t</code>. Такое работает:</p>
+<pre><code class="lang-auto">    let mut data:&amp;'static u8 = &amp;1;
+    {
+        let mut s = &amp;*data;
+        let t = &amp;mut s;
+        test(t);
+    }
+    println!("{:?}", data);
+</code></pre>
+<p>Тут в <code>s</code> вж изменился и оно уже не статик</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_17"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_17" title="Aug 20, 2018 6:15 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 18:15:10 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#17</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_15">Replying to #15</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Что-то я ошибся: используются, к “x” ведь биндится ссылка. Ну,  не знаю…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_18"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/matklad" class="user-link">Aleksey Kladov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_18" title="Aug 20, 2018 6:36 PM">
+            <time itemprop="datePublished" datetime="2018-08-20 18:36:15 +0000">Aug 20, 2018</time>
+          </a>
+          <span class="post-number">#18</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_16">Replying to #16</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="IBUzPE9" data-post="16" data-topic="476">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ibuzpe9/48/154_2.png" class="avatar"> IBUzPE9:</div>
+<blockquote>
+<p>Ну так вж того на что указывет <code>t</code> не означает что само <code>t</code> должно покрывать это вж.</p>
+</blockquote>
+</aside>
+<p>Да, это я фигню спорол, мы прост получаем уникальную и шаренную ссылку одновременно, всегда, вне зависимости от скоупов.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_19"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_19" title="Aug 21, 2018 3:37 PM">
+            <time itemprop="datePublished" datetime="2018-08-21 15:37:01 +0000">Aug 21, 2018</time>
+          </a>
+          <span class="post-number">#19</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Запостил <a href="https://stackoverflow.com/a/51951910/5138648" rel="nofollow noopener">альтернативный ответ</a> с отсылкой к твоему вопросу. По-моему, не стоило соглашаться что это дубликат.</p>
+<p>Вот облом, такое решение небезопасно. Придется удалить, <a href="https://play.rust-lang.org/?gist=f06292af0defca4df232f79416ab1b24&amp;version=stable&amp;mode=debug&amp;edition=2015" rel="nofollow noopener">вот что там было</a>.</p>
+<p>То есть получается что так делать тоже нельзя?</p>
+<pre><code class="lang-auto">    let mut data:&amp;'static u8 = &amp;1;
+    {
+        let mut s = &amp;*data;
+        let t = &amp;mut s;
+        test(t);
+    }
+    println!("{:?}", data);
+</code></pre>
+<p>Кажется я нашел почему заимствование продолжается. Если бы оно заканчивалось то вот это бы приводило к использованию после освобождения:</p>
+<pre><code class="lang-auto">fn test&lt;'a&gt;(_x:&amp;'a mut &amp;'a str){}
+
+fn main() {
+    let mut data:&amp;'static str = "hello";
+    {
+        let x = "ups".to_owned();
+        let mut s = &amp;*data;
+        let t = &amp;mut s;
+        test(t);
+        *t = &amp;x;
+    }
+    println!("{:?}", data);
+}
+</code></pre>
+<p>Да нет тут все было бы норм. После перезаимствования через <code>t</code> можно менять <code>s</code>, а <code>data</code> уже никак с <code>t</code> не связана и ее изменить нельзя.<br>
+А в своем ответе я этим “волшебным” трансмьютом как раз переписал времена жизни как-будто  <code>t</code> ссылается на локальную переменную <code>s</code>, в то время как она указывала на внешнюю <code>data</code>.<br>
+Заслуженный фейл. <img src="https://forum.rustycrate.ru/images/emoji/twitter/frowning_face.png?v=5" title=":frowning_face:" class="emoji" alt=":frowning_face:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_20"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_20" title="Aug 22, 2018 6:06 AM">
+            <time itemprop="datePublished" datetime="2018-08-22 06:06:05 +0000">Aug 22, 2018</time>
+          </a>
+          <span class="post-number">#20</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Видел что Леша завел в IRLO тему</p>
+<aside class="onebox whitelistedgeneric">
+  <header class="source">
+      <img src="https://aws1.discourse-cdn.com/business6/uploads/rustlang/optimized/1X/e260a60b8dca4dae6ce7db98c45bb5008e6fdc62_2_32x32.png" class="site-icon" width="32" height="32">
+      <a href="https://internals.rust-lang.org/t/is-reborrowing-documented-anywhere/8245" target="_blank" title="04:47PM - 20 August 2018">Rust Internals – 20 Aug 18</a>
+  </header>
+  <article class="onebox-body">
+    <img src="https://aws1.discourse-cdn.com/business6/uploads/rustlang/original/2X/b/b71959a2097ce0b5c3a193ce0a6466a42d4c4952.png" class="thumbnail onebox-avatar" width="500" height="500">
+
+<h3><a href="https://internals.rust-lang.org/t/is-reborrowing-documented-anywhere/8245" target="_blank">Is reborrowing documented anywhere?</a></h3>
+
+<p>An important bit to understand when writing Rust code is that passing &amp;'a mut around often inserts automatic reborrows, like &amp;mut *x, which allows to “shorten” a unique lifetime and can easy be confused with variance.  Is this behavior...</p>
+
+  <p><span class="label1">Reading time: 1 mins 🕑</span>
+    <span class="label2">Likes: 3 ❤</span></p>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_21"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_21" title="Aug 23, 2018 7:48 AM">
+            <time itemprop="datePublished" datetime="2018-08-23 07:48:28 +0000">Aug 23, 2018</time>
+          </a>
+          <span class="post-number">#21</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хм, оказывается на небезопасные мутабельные статики правила заимствования не действуют:</p>
+<pre><code class="lang-auto">    unsafe{
+        static mut data:u8 = 1;
+        let tmp_mut = &amp;mut data;
+        data = 2;
+        println!("{:?}", tmp_mut);
+    }
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+  <nav class="pagination" role="navigation" aria-label="Post pages">
+    
+
+    <span class="pagination-info">Page 1 of 2</span>
+
+    
+    <a href="/t/pochemu-peremennaya-data-zaimstvuetsya-posle-vyzova-funkczii/476/2.html" class="pagination-next" rel="next">Next</a>
+    
+  </nav>
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

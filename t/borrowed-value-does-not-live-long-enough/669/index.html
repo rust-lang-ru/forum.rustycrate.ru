@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Borrowed value does not live long enough - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Borrowed value does not live long enough</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Borrowed value does not live long enough</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Nov 29, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Nov 29, 2018 12:21 PM">
+            <time itemprop="datePublished" datetime="2018-11-29 12:21:46 +0000">Nov 29, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вот не понимаю почему, такой код:</p>
+<pre><code class="lang-auto">pub fn run_blocks(cnc: Rc&lt;RefCell&lt;Controller&gt;&gt;, blocks: Blocks) -&gt; impl Future&lt;Item=(), Error=Error&gt;  {
+    let cnc_start = cnc.clone();
+    let cnc_load = cnc.clone();
+    load(cnc, blocks)
+    .and_then(move |(blocks, runtime)| cnc_start.borrow_mut().start().map(|_| (blocks, runtime)))
+    .and_then(move |(blocks, runtime)| loop_fn((blocks, runtime), move |(blocks, runtime)| {
+            let cnc_load_clone = cnc_load.clone();
+            Delay::new(Instant::now() + runtime - Duration::from_secs(1))
+            .map_err(|err| panic!("timer failed; err={:?}", err))
+            .and_then(move |_| load(cnc_load_clone, blocks).map(|(blocks, runtime)| {
+                if blocks.is_empty() {
+                    Loop::Break((blocks, runtime))
+                } else {
+                    Loop::Continue( (blocks, runtime) )
+                }
+            }))
+        }).map(|_| () )
+    )
+}
+</code></pre>
+<p>вызывает ошибку:</p>
+<pre><code class="lang-auto">error[E0597]: `cnc_start` does not live long enough
+  --&gt; plc/src/lib.rs:78:40
+   |
+78 |     .and_then(move |(blocks, runtime)| cnc_start.borrow_mut().start().map(|_| (blocks, runtime)))
+   |                                        ^^^^^^^^^ borrowed value does not live long enough      - `cnc_start` dropped here while still borrowed
+   |
+   = note: values in a scope are dropped in the opposite order they are created
+</code></pre>
+<p>and_then - принимает <code>FnOnce</code> и в замыкание передано значение. Что не так?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Nov 29, 2018 1:12 PM">
+            <time itemprop="datePublished" datetime="2018-11-29 13:12:18 +0000">Nov 29, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>нарывался на подобное когда пытался максимально близко переписывать на Rust  С код.<br>
+попробуй заинлайнить<br>
+убрав<br>
+let cnc_start = cnc.clone() совсем</p>
+<pre><code class="lang-auto"> load(cnc, blocks)
+    .and_then(move |(blocks, runtime)| cnc.clone().borrow_mut().start().map(|_| (blocks, runtime)))
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Nov 29, 2018 1:21 PM">
+            <time itemprop="datePublished" datetime="2018-11-29 13:21:44 +0000">Nov 29, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>попробовал, та же самая ошибка.<br>
+<a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2015&amp;gist=0f265364f703bf958766ebee259233b7" rel="nofollow noopener">код для экспериментов</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/irbis" class="user-link">Alexander Irbis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Nov 29, 2018 2:13 PM">
+            <time itemprop="datePublished" datetime="2018-11-29 14:13:35 +0000">Nov 29, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Похоже несовершенство borrow checker’а в Rust’2015.<br>
+Разбивка цепочки вызовов фиксит проблему</p>
+<pre><code class="lang-rust">            let res = cnc_start
+                .borrow_mut()
+                .start();
+            res
+                .map(move |_| (blocks, runtime))
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Sep 2, 2019 10:54 AM">
+            <time itemprop="datePublished" datetime="2019-09-02 10:54:38 +0000">Sep 2, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Еще раз те-же грабли:</p>
+<pre><code class="lang-rust">use std::sync::{Arc, Mutex};
+
+fn main() {
+    let a = Arc::new(Mutex::new(String::new()));
+    let b = Arc::new(Mutex::new(String::new()));
+    
+    match a.lock().and_then(|a| b.lock().map(|b| (a, b))) {
+        Ok((a, b)) =&gt; {
+            println!("a = {}, b = {}", a, b);
+        }
+        Err(err) =&gt; {
+            println!("{}", err);
+        }
+    }
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=eb1f2db1432620eb4f7087e2f3c6bba0" rel="nofollow noopener">Playground</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Sep 2, 2019 12:47 PM">
+            <time itemprop="datePublished" datetime="2019-09-02 12:47:04 +0000">Sep 2, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Так работает:</p>
+<pre><code class="lang-auto">    let tuple = a.lock().and_then(|a|  b.lock().map(|b| (a, b)));
+    match tuple {
+        //...
+    }
+</code></pre>
+<p>Похоже на баг в NLL. Стоит наверно создать ишью.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Sep 3, 2019 7:04 AM">
+            <time itemprop="datePublished" datetime="2019-09-03 07:04:49 +0000">Sep 3, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хм, будет работать если просто добавить точку с запятой после <code>match</code>.<br>
+Баг воспроизводится с одним <code>Arc</code>:</p>
+<pre><code class="lang-auto">    let a = Arc::new(Mutex::new(String::new()));
+
+    match a.lock() {
+        Ok(a) =&gt; {}
+        Err(_) =&gt; {}
+    }
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=966c5d38febbec0a258bebcd2d7afdd0" rel="noopener nofollow ugc">Playground</a></p>
+<p>И кстати, в сообщении об ошибке компилятор пишет:</p>
+<blockquote>
+<p>note: The temporary is part of an expression at the end of a block. Consider adding semicolon after the expression so its temporaries are dropped sooner, before the local variables declared by the block are dropped.</p>
+</blockquote>
+<p>Так что это не баг, а фича. <img src="https://forum.rustycrate.ru/images/emoji/twitter/sunglasses.png?v=12" title=":sunglasses:" class="emoji" alt=":sunglasses:" loading="lazy" width="20" height="20"></p>
+<hr>
+<p>Судя по всему <code>match</code> создает неявную временную переменную, которая дропается после переменных объявленных в его блоке.<br>
+Т.е. происходит что-то вроде этого:</p>
+<pre><code class="lang-auto">    let t;
+    let a = Arc::new(Mutex::new(String::new()));
+    t = a.lock();
+    match t {_ =&gt; {}}
+</code></pre>
+<p>Получим почти тоже самое сообщение об ошибке:</p>
+<pre><code class="lang-auto">error[E0597]: `a` does not live long enough
+ --&gt; src/lib.rs:6:9
+  |
+6 |     t = a.lock();
+  |         ^ borrowed value does not live long enough
+7 |     match t {_ =&gt; {}}
+8 | }
+  | -
+  | |
+  | `a` dropped here while still borrowed
+</code></pre>
+<p>Не знаю что мешает создавать временную переменную как все нормальные люди:</p>
+<pre><code class="lang-auto">    let a = Arc::new(Mutex::new(String::new()));
+    let t = a.lock();
+    match t {_ =&gt; {}}
+</code></pre>
+<hr>
+<p>Мне не удаётся воспроизвести этот эффект с простыми ссылками. Работает (в смысле выдает ошибку) только с <code>Mutex</code> и <code>RefCell</code>.</p>
+<p>И даже с самодельным <code>RefCell</code> (все скопировано из <code>std::cell</code>) ошибка не воспроизводится. А если раскоментировать стандартый <code>RefCell</code>  Rust начинает ругаться. <img src="https://forum.rustycrate.ru/images/emoji/twitter/thinking.png?v=12" title=":thinking:" class="emoji" alt=":thinking:" loading="lazy" width="20" height="20"><br>
+Это магия какая-то? Или я что-то делаю не так?</p>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=de9a0c624647b25e73b12e65d37a84c7" rel="noopener nofollow ugc">Playground</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Sep 4, 2019 7:15 AM">
+            <time itemprop="datePublished" datetime="2019-09-04 07:15:15 +0000">Sep 4, 2019</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Нашел что это за магия. Все дело в типаже <code>Drop</code>. Если его заимплементить для <code>MyBorrowRef</code> из примера выше, то самодельный <code>RefCell</code> начинает работать также как стандартный.</p>
+<p>Вот пример воспроизводящий эту багофичу без всяких <code>Mutex</code>-ов и <code>RefCell</code>-ов:</p>
+<pre><code class="lang-auto">struct MyRefHaveDrop&lt;'x&gt;(&amp;'x usize);
+
+impl Drop for MyRefHaveDrop&lt;'_&gt; {
+    #[inline]
+    fn drop(&amp;mut self) {}
+}
+
+fn main() {
+    let data = 451;
+    match MyRefHaveDrop(&amp;data) { _ =&gt; {} }
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=32a27173362e6515763e7a276d9b37a9" rel="nofollow noopener">Playground</a></p>
+<p>Структура со ссылкой, для которой реализован <code>Drop</code>, уничтожается позже чем данные на которые она ссылается.<br>
+Такой же эффект наблюдается если заменить <code>match</code> на <code>if let</code>.</p>
+<hr>
+<p>P.S.: По-моему это очень плохая фича. Она позволяет ломать компиляцию зависимых крейтов. Добавил реализацию <code>Drop</code> к публичной структуре и всё.<br>
+Если такое поведение <code>match</code> нельзя исправить, то компилятору стоило бы выдавать ошибку для всех типов независимо от наличия у них типажа <code>Drop</code>.</p>
+<p>P.P.S.: Хотя если подумать, то <code>Drop</code>-ом можно сломать вообще все что угодно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

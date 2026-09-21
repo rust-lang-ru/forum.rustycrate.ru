@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rust и Imap - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Rust и Imap</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Rust и Imap</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Sep 15, 2023</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/digymonster" class="user-link">Digymonster</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Sep 15, 2023 1:03 AM">
+            <time itemprop="datePublished" datetime="2023-09-15 01:03:34 +0000">Sep 15, 2023</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Совершенный новичек.<br>
+В наличии только:</p>
+<ol>
+<li>Блэнди Дж., Орендорф Дж. - Программирование на языке Rust</li>
+<li>Abhishek Chanda - Network Programming with Rust</li>
+</ol>
+<p>Пытаюсь написать парсер электронной почты.<br>
+Нагуглил некий код начинающийся на:</p>
+<pre><code class="lang-auto">extern crate imap;
+extern crate native_tls;
+use imap::client::Client;
+use native_tls::TlsConnector;
+</code></pre>
+<p>карго выдает ошибку:</p>
+<pre><code class="lang-auto">   Compiling mail v0.1.0 (/home/digymonster/codding/rust/mail)
+error[E0603]: module `client` is private
+  --&gt; src/main.rs:4:11
+   |
+4  | use imap::client::Client;
+   |           ^^^^^^ private module
+   |
+note: the module `client` is defined here
+  --&gt; /home/digymonster/.cargo/registry/src/github.com-1ecc6299db9ec823/imap-2.4.1/src/lib.rs:86:1
+   |
+86 | mod client;
+   | ^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0603`.
+error: could not compile `mail` due to previous error
+
+</code></pre>
+<p>Файл Cargo.toml:</p>
+<pre><code class="lang-auto">[package]
+name = "mail"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+native-tls = "0.2"
+imap = "2.4"
+
+</code></pre>
+<p>Как побороть?<br>
+Спасибо!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vitvakatu" class="user-link">Илья Богданов</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Sep 15, 2023 7:02 AM">
+            <time itemprop="datePublished" datetime="2023-09-15 07:02:10 +0000">Sep 15, 2023</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Никак не бороть, в используемой версии imap структура Client доступна по импорту use imap::Client. С документацией можно ознакомиться по адресу <a href="https://docs.rs/imap" class="inline-onebox">imap - Rust</a>, там есть и базовые примеры использования.</p>
+<p>Кроме того, использовать extern crate в текущих версиях раста нет необходимости - это сильно устаревший сиетаксис, работать будет и без него.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/digymonster" class="user-link">Digymonster</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Sep 15, 2023 9:18 AM">
+            <time itemprop="datePublished" datetime="2023-09-15 09:18:31 +0000">Sep 15, 2023</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>ну, собственно, код:</p>
+<pre><code class="lang-auto">extern crate imap;
+extern crate native_tls;
+use imap::client::Client;
+use native_tls::TlsConnector;
+fn main() {
+    let imap_server = "imap.mail.ru";
+    let imap_port = 993;
+    let username = "*****@mail.ru";
+    let password = "**********";
+    let tls_connector = TlsConnector::new().unwrap();
+    let client = Client::new(imap_server, imap_port);
+    let mut session = client.login(username, password).unwrap();
+    let mailbox = "INBOX";
+    session.select(mailbox).unwrap();
+    let mailbox_info = session.fetch("1:1", "FLAGS").unwrap();
+    let unseen = mailbox_info.first().unwrap().flags.is_empty();
+    if unseen {
+        println!("${{alignr -8}}{{color grey}}пусто");
+    } else {
+        println!("${{alignr -10}}{{color green}}что-то есть");
+    }
+    session.logout().unwrap();
+}
+
+</code></pre>
+<p>ошибка:</p>
+<blockquote>
+<p>error[E0603]: module <code>client</code> is private<br>
+ → src/main.rs:3:11<br>
+|<br>
+3  | use imap::client::Client;<br>
+|           ^^^^^^ private module<br>
+|<br>
+note: the module <code>client</code> is defined here<br>
+ → /home/digymonster/.cargo/registry/src/github.com-1ecc6299db9ec823/imap-2.4.1/src/lib.rs:86:1<br>
+|<br>
+86 | mod client;<br>
+| ^^^^^^^^^^</p>
+</blockquote>
+<p>вот из этого:<br>
+rustc --explain E0603<br>
+ничего не понял</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

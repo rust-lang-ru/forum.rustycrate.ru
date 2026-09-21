@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Как передать в функцию разные типы итераторов - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Как передать в функцию разные типы итераторов</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Как передать в функцию разные типы итераторов</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jun 19, 2016</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">L</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/lexxvir" class="user-link">Lexxvir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jun 19, 2016 8:59 AM">
+            <time itemprop="datePublished" datetime="2016-06-19 08:59:55 +0000">Jun 19, 2016</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Добрый день,</p>
+<p>В моей задаче необходимо, чтобы функция принимала как обычный std::iter::Iterator так и std::iter::Take.</p>
+<p>Код:</p>
+<pre><code class="lang-auto">use std::iter;
+use std::slice;
+
+fn f1(iter: &amp;mut slice::Iter&lt;u8&gt;) {
+    iter.next();
+}
+
+fn f2(iter: &amp;mut iter::Take&lt;&amp;mut slice::Iter&lt;u8&gt;&gt;) {
+    iter.next();
+}
+
+fn main() {
+    let a = vec![0u8;10];
+
+    let mut i = a.iter();
+    f1(&amp;mut i);
+    
+    {
+        let ref mut iref = i;
+        f2(&amp;mut iref.take(2));
+    }
+    
+    println!("{:?}", i.as_slice());
+}
+</code></pre>
+<p>Нужно сделать так, чтобы вместо f1 и f2 была одна функция.<br>
+Пробовал использовать Generic параметры, но ничего не вышло.<br>
+Это вообще возможно сделать?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jun 19, 2016 11:26 AM">
+            <time itemprop="datePublished" datetime="2016-06-19 11:26:50 +0000">Jun 19, 2016</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://play.rust-lang.org/?gist=62068d611ffc167d26a58dd1a275816b" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?gist=62068d611ffc167d26a58dd1a275816b</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">L</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/lexxvir" class="user-link">Lexxvir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jun 19, 2016 1:08 PM">
+            <time itemprop="datePublished" datetime="2016-06-19 13:08:57 +0000">Jun 19, 2016</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо, но такой вариант не учитывает, что я использую итератор по u8.<br>
+Например так работать не будет:</p>
+<pre><code class="lang-auto">fn f3&lt;I: Iterator&gt;(iter: &amp;mut I) {
+    if let Some(x) = iter.next() {
+        println!("{:?}", *x);
+    }
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?gist=da15a44325cfc36fed8793a5e72ded74&amp;version=stable&amp;backtrace=0" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?gist=da15a44325cfc36fed8793a5e72ded74&amp;version=stable&amp;backtrace=0</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jun 19, 2016 9:05 PM">
+            <time itemprop="datePublished" datetime="2016-06-19 21:05:30 +0000">Jun 19, 2016</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://play.rust-lang.org/?gist=8cb04c9e45a38bba9af3641fff5b3dc2" rel="nofollow noopener">https://play.rust-lang.org/?gist=8cb04c9e45a38bba9af3641fff5b3dc2</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">L</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/lexxvir" class="user-link">Lexxvir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jun 20, 2016 8:28 AM">
+            <time itemprop="datePublished" datetime="2016-06-20 08:28:47 +0000">Jun 20, 2016</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо, окончательный вариант вышел такой, так как хотелось бы ограничить тип, по которому создан итератор:</p>
+<pre><code class="lang-auto">use std::iter::Iterator;
+
+fn f3&lt;'a, I: Iterator&lt;Item = &amp;'a u8&gt;&gt;(iter: &amp;mut I) {
+    if let Some(x) = iter.next() {
+        println!("{:?}", *x);
+    }
+}
+
+fn main() {
+    let a = vec![0u8;10];
+    let mut i = a.iter();
+    f3(&amp;mut i);
+    {
+        let ref mut iref = i;
+        f3(&amp;mut iref.take(2));
+    }
+    println!("{:?}", i.as_slice());
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">L</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/lexxvir" class="user-link">Lexxvir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Jun 20, 2016 9:30 AM">
+            <time itemprop="datePublished" datetime="2016-06-20 09:30:07 +0000">Jun 20, 2016</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хм, попробовал использовать рекурсию для этой функции и получил ошибку:</p>
+<pre><code class="lang-auto">&lt;anon&gt;:3:1: 9:2 error: reached the recursion limit during monomorphization
+&lt;anon&gt;:3 fn f3&lt;'a, I: Iterator&lt;Item = &amp;'a u8&gt;&gt;(iter: &amp;mut I) {
+&lt;anon&gt;:4     if let Some(x) = iter.next() {
+&lt;anon&gt;:5         println!("{:?}", *x);
+&lt;anon&gt;:6     }
+&lt;anon&gt;:7     
+&lt;anon&gt;:8     f3(&amp;mut iter.take(1));
+</code></pre>
+<p><a href="https://play.rust-lang.org/?gist=99d8e25e06322b0778ce0ba5f5cf34bc&amp;version=stable&amp;backtrace=0" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?gist=99d8e25e06322b0778ce0ba5f5cf34bc&amp;version=stable&amp;backtrace=0</a></p>
+<p>Кроме того как перейти на цикл, это никак нельзя исправить?</p>
+<p>В реальной задаче я хотел бы передавать в f3() часть значений перебираемых итератором, поэтому пытаюсь ограничить кол-во с помощью take().</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kstep" class="user-link">Kstep</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Jun 21, 2016 6:09 AM">
+            <time itemprop="datePublished" datetime="2016-06-21 06:09:28 +0000">Jun 21, 2016</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Можно использовать динамическую диспетчеризацию. <code>fn f(iter: &amp;mut Iterator&lt;Item=u8&gt;)</code></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">L</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/lexxvir" class="user-link">Lexxvir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Jun 21, 2016 7:24 AM">
+            <time itemprop="datePublished" datetime="2016-06-21 07:24:15 +0000">Jun 21, 2016</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Тоже смотрю в сторону динамической диспетчеризации, но пока не осилил написать рабочий вариант.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kstep" class="user-link">Kstep</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Jun 21, 2016 7:44 AM">
+            <time itemprop="datePublished" datetime="2016-06-21 07:44:01 +0000">Jun 21, 2016</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Тут в случае рекурсии никак по другому не сделать, у тебя получается в результате мономорфизации куча функций вида <code>f&lt;Take&lt;Take&lt;Take&lt;...&gt;&gt;&gt;</code> с постоянно увеличивающейся глубиной типа, отсюда и ошибка с превышением рекурсии.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">L</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/lexxvir" class="user-link">Lexxvir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Jun 21, 2016 7:57 AM">
+            <time itemprop="datePublished" datetime="2016-06-21 07:57:12 +0000">Jun 21, 2016</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо, все получилось с динамической диспетчеризацией (почему-то я считал, что она обязательно связана с <code>Box&lt;T&gt;</code>).</p>
+<p>На всякий случай финальный вариант кода:</p>
+<pre><code class="lang-auto">use std::iter::Iterator;
+
+fn f3(iter: &amp;mut Iterator&lt;Item = &amp;u8&gt;) {
+    if let Some(x) = iter.next() {
+        println!("{:?}", *x);
+    }
+    else {
+        return;
+    }
+
+    f3(&amp;mut iter.take(1));
+}
+
+fn main() {
+    let a = vec![0u8;10];
+    let mut i = a.iter();
+    f3(&amp;mut i);
+    println!("{:?}", i.as_slice());
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kstep" class="user-link">Kstep</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Jun 21, 2016 10:37 AM">
+            <time itemprop="datePublished" datetime="2016-06-21 10:37:21 +0000">Jun 21, 2016</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><code>Box&lt;Trait&gt;</code> нужен, если нужно передать владение трейт-объектом. Если владения передавать не надо, можно обойтись <code>&amp;Trait</code> или <code>&amp;mut Trait</code>, как в данном случае.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

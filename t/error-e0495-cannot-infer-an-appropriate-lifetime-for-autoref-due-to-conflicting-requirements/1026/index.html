@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>error[E0495]: cannot infer an appropriate lifetime for autoref due to conflicting requirements - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">error[E0495]: cannot infer an appropriate lifetime for autoref due to conflicting requirements</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">error[E0495]: cannot infer an appropriate lifetime for autoref due to conflicting requirements</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Nov 22, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">H</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/hrrrxppp" class="user-link">hrrrxppp</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Nov 22, 2019 6:02 PM">
+            <time itemprop="datePublished" datetime="2019-11-22 18:02:01 +0000">Nov 22, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Добрый день.<br>
+Опять прошу помощи.<br>
+Есть структура в ней HashMap в которой лежат ссылки, код внизу, не дает файл rs прицепить…<br>
+При компиляции получаю ошибку, что ниже.<br>
+Не могу разобраться как мне вернуть ссылку из этого HashMap.<br>
+Объясните, пожалуйста, в чем проблема?<br>
+Ну и в идеале, как работают указываемые лайфтаймы в возвращаемых ссылках или поделитесь ссылкой что читать.</p>
+<p>error[E0495]: cannot infer an appropriate lifetime for autoref due to conflicting requirements<br>
+–&gt; src/executor/mod.rs:62:37<br>
+|<br>
+62 |         let ref res = self.func_map.get( lib_name );<br>
+|                                     ^^^<br>
+|<br>
+note: first, the lifetime cannot outlive the anonymous lifetime <span class="hashtag">#1</span> defined on the method body at 61:5…<br>
+–&gt; src/executor/mod.rs:61:5<br>
+|<br>
+61 | /     fn get_lib&lt;'lf&gt;( &amp;self, lib_name: &amp;str ) -&gt; &amp;'lf libloading::Library {<br>
+62 | |         let ref res = self.func_map.get( lib_name );<br>
+63 | |         let mut result : &amp;libloading::Library;<br>
+64 | |         if res.is_some() {<br>
+…  |<br>
+72 | |         return result<br>
+73 | |     }<br>
+| |_____^<br>
+note: …so that reference does not outlive borrowed content<br>
+–&gt; src/executor/mod.rs:62:23<br>
+|<br>
+62 |         let ref res = self.func_map.get( lib_name );<br>
+|                       ^^^^^^^^^^^^^<br>
+note: but, the lifetime must be valid for the lifetime 'lf as defined on the method body at 61:16…<br>
+–&gt; src/executor/mod.rs:61:16<br>
+|<br>
+61 |     fn get_lib&lt;'lf&gt;( &amp;self, lib_name: &amp;str ) -&gt; &amp;'lf libloading::Library {<br>
+|                ^^^<br>
+note: …so that reference does not outlive borrowed content<br>
+–&gt; src/executor/mod.rs:72:16<br>
+|<br>
+72 |         return result<br>
+|                ^^^^^^</p>
+<p>use std::collections::{ HashMap };<br>
+use std::result::{ Result };<br>
+use crate::traits::WorkWithHashMap;<br>
+extern crate libloading;<br>
+extern crate json;</p>
+<p>type RunFunc = unsafe fn( &amp;str, &amp;str ) -&gt; String;</p>
+<p>pub struct Executor{<br>
+func_desc_map: HashMap&lt; String, String&gt;,<br>
+func_map: HashMap&lt; String, libloading::Library &gt;<br>
+}</p>
+<p>impl Executor{<br>
+fn split_action( action: &amp;str ) -&gt; ( &amp;str, &amp;str ) {<br>
+let offset = action.find( “.” ).unwrap_or( action.len() );<br>
+let ( first, mut last) = action.split_at(offset);<br>
+last = &amp;last[1…];<br>
+return ( first, last );<br>
+}</p>
+<pre><code>fn split_method( method: &amp;str ) -&gt; ( &amp;str, &amp;str ) {
+    let offset = method.find( '(' ).unwrap_or( method.len() );
+    let ( first, mut last) = method.split_at(offset);
+    last = &amp;last[1..];
+    let offset1 = last.find( ')' ).unwrap_or( last.len() );
+    let ( first1, last1 ) = last.split_at(offset1);
+    return ( first, first1 );
+}
+
+fn create_args&lt;'life_time&gt;( args_desc: &amp;'life_time str, args: &amp;'life_time str ) -&gt; Result&lt;String, &amp;'life_time str&gt; {
+    let desc_vec: Vec&lt;&amp;str&gt; = args_desc.split( ',' ).collect();
+    let args_vec: Vec&lt;&amp;str&gt; = args.split( ',' ).collect();
+    if desc_vec.len() != args_vec.len() {
+        return Err( "Description arguments and arguments have different size!" );
+    }
+    let mut res_args = json::JsonValue::new_array();
+    for ( i, desc ) in desc_vec.iter().enumerate() {
+        let arg = args_vec[ i ];
+        println!( "{}-ые элементы имеет значение {} {}", i, desc, arg );
+        res_args.push(
+            json::object!{
+                "type"    =&gt; desc,
+                "value"   =&gt; arg
+            }
+        );
+    }
+    let mut res = json::JsonValue::new_object();
+    res[ "Args" ] = res_args.into();
+    return Ok( json::stringify( res ) );
+}
+
+fn get_params&lt;'lf&gt;( &amp;self, action: &amp;'lf str, args: &amp;'lf str ) -&gt; ( &amp;'lf str, &amp;'lf str, &amp;'lf str ) {
+    let ( lib, method ) = Executor::split_action( action );
+    let ( real_method, args_desc ) = Executor::split_method( method );
+    let arsg = Executor::create_args( args_desc, args );
+    return ( lib, real_method, args );
+}
+
+fn get_lib&lt;'lf&gt;( &amp;self, lib_name: &amp;str ) -&gt; &amp;'lf libloading::Library {
+    let res = self.func_map.get( lib_name );
+    let mut result : &amp;libloading::Library;
+    if res.is_some() {
+        result = res.unwrap();
+    }
+    else {
+        let lib = libloading::Library::new( lib_name ).unwrap();
+        self.func_map.insert( lib_name.to_string(), lib );
+        result = self.func_map.get( lib_name ).unwrap();
+    }
+    return result
+}
+
+pub fn run( &amp;self, action: &amp;str, args: &amp;str ) -&gt; String {
+    let ( lib, method, args ) = self.get_params( action, args );
+    let real_lib = self.get_lib( lib );
+    unsafe {
+        let func: libloading::Symbol&lt;RunFunc&gt; = real_lib.get(b"run").unwrap();
+        return func( method, args );
+    }
+}
+</code></pre>
+<p>}</p>
+<p>impl WorkWithHashMap for Executor{<br>
+fn new&lt;'lf&gt;( filename: &amp;str ) -&gt;Executor {<br>
+let mut new_executor = Executor{ func_desc_map: HashMap::new(), func_map: HashMap::new() };<br>
+new_executor.load( filename );<br>
+return new_executor;<br>
+}</p>
+<pre><code>fn get_hash_map( &amp;mut self ) -&gt; &amp;mut HashMap&lt;String, String&gt;{
+    return &amp;mut self.func_desc_map;
+}
+</code></pre>
+<p>}</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">H</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/hrrrxppp" class="user-link">hrrrxppp</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Nov 23, 2019 3:46 AM">
+            <time itemprop="datePublished" datetime="2019-11-23 03:46:28 +0000">Nov 23, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Выкрутился через Box, но вопрос с лайфтаймами остался для изучения, подскажите что почитать на этут тему?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Nov 23, 2019 9:45 AM">
+            <time itemprop="datePublished" datetime="2019-11-23 09:45:01 +0000">Nov 23, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Просьба оборачивать код и многострочные ошибки в тройные обратные кавычки (```) на отдельных строчках, чтобы это был нормальный читаемый блок кода, а не тот ужас, который там сейчас.</p>
+<p>По сути: сигнатура проблемной функции <code>fn get_lib&lt;'lf&gt;( &amp;self, lib_name: &amp;str ) -&gt; &amp;'lf libloading::Library</code> читается как “функция получает ссылку <code>&amp;self</code> с каким-то временем жизни, имя как ссылку на строку с каким-то (возможно, другим) временем жизни и возвращает библиотеку с временем жизни <code>'lf</code>, заданным извне”. Очевидно, она не может позаимствовать эту библиотеку из <code>&amp;self</code> без гарантий того, что <code>&amp;self</code> будет жить не меньше, чем требуемое время жизни <code>'lf</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">H</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/hrrrxppp" class="user-link">hrrrxppp</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Nov 25, 2019 5:26 AM">
+            <time itemprop="datePublished" datetime="2019-11-25 05:26:54 +0000">Nov 25, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Про кавычки скасибо, не нашел как форматированный фрагмент вставить.<br>
+Про лайфтаймы тоже, благодарю, понятнее стало.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

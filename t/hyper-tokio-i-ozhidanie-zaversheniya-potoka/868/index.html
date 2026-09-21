@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hyper, Tokio и ожидание завершения потока - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Hyper, Tokio и ожидание завершения потока</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Hyper, Tokio и ожидание завершения потока</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Apr 3, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Apr 3, 2019 6:39 PM">
+            <time itemprop="datePublished" datetime="2019-04-03 18:39:48 +0000">Apr 3, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Здравствуйте.<br>
+Продолжаю пытаться для обучения сделать OAuth авторизацию гугла. Сначала код</p>
+<pre><code class="lang-auto">enum RequestFinished {Ready, NotReady}
+
+impl Future for RequestFinished {
+    type Item = ();
+    type Error = ();
+
+    fn poll(&amp;mut self) -&gt; Result&lt;Async&lt;Self::Item&gt;, Self::Error&gt; {
+        match self {
+            RequestFinished::Ready =&gt; Ok(Ready(())),
+            RequestFinished::NotReady =&gt; Ok(NotReady)
+        }
+    }
+}
+
+fn retrieve_auth() {
+    let addr: SocketAddr = ([127, 0, 0, 1], 3000).into();
+    let (sender, receiver) = futures::sync::oneshot::channel::&lt;()&gt;();
+    let sender = RefCell::new(Some(sender));
+    let waiter: &amp;mut RefCell&lt;RequestFinished&gt; = &amp;mut RefCell::new(RequestFinished::NotReady);
+    let proc = move || {
+        let res = service_fn_ok(got_response);
+        sender.borrow_mut().take().unwrap().send(());
+        waiter.replace(RequestFinished::Ready); &lt;--------------------
+        res
+    };
+
+    let server = Server::bind(&amp;addr)
+        .serve(proc)
+        .with_graceful_shutdown(receiver)
+        .map_err(|e| eprintln!("server error: {}", e));
+
+    hyper::rt::run(server);
+
+    let uri = Url::parse_with_params(GOOGLE_AUTH_URL, [
+        ("client_id", CLIENT_ID),
+        ("redirect_uri", "http://[::1]:3000"),
+        ("response_type", "code"),
+        ("scope", "https://www.googleapis.com/auth/drive")
+    ].iter());
+
+    let https = HttpsConnector::new(1).unwrap();
+    let res = Client::new()
+        .get(uri.unwrap().as_str().parse::&lt;Uri&gt;().unwrap());
+
+    waiter.into_inner().wait(); &lt;--------------------
+}
+</code></pre>
+<p>Сейчас он не компилируются по причине двойного заимствования waiter. И у меня никаких идей как это исправить. Ведь, по сути, нужна одна и та же Future в 2-х разных потока, ещё и во втором потке в качестве значения!<br>
+Как вариант, я думал использовать каналы, по аналогии, как сделано с sender-ом. Но для этого нужно создавать ещё один поток в Tokio - слишком тяжело, по-моему.</p>
+<p>Подскажите, как проще реализовать паузу до возврата значения из потока?<br>
+Спасибо.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tyranron" class="user-link">Kai Ren</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Apr 4, 2019 6:57 AM">
+            <time itemprop="datePublished" datetime="2019-04-04 06:57:43 +0000">Apr 4, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вам действительно нужно использовать ещё один канал, чтобы оповестить одну нить выполнения о завершении второй. При этом не требуется отдельный поток, всё может работать в рамках вообще одного потока. <code>futures::sync::oneshot::channel</code> не блокирует потоки на манер обычных каналов.</p>
+<p>То, что Вы пытаетесь сделать, это оповестить одну нить выполнения (где отправляете запрос) о завершении другой нити выполнения (где получаете ответ). В данный момент Вы пытаетесь сделать это с помощью одной и той же кастомной <code>Future</code> ожидая её резолва в одной нити выполнения и меняя в другой. По сути, Вы пытаетесь повторить логику <code>futures::sync::oneshot::channel</code> (он резолвит <code>receiver</code>, когда выполняется <code>sender.send()</code>). Проще переиспользовать уже существующую абстракцию. Либо же, если действительно нужна более умная кастомная футура, то, как правило, делается обёртка над всё тем же каналом. Общий принцип: две отдельные нити выполнения связываются каналом.</p>
+<p>Также, учтите, что <code>hyper::rt::run(server);</code> блокирует текущий поток. Потому весь код после него у Вас просто не выполнится. Исправить это можно, понапихав футур в футуру, которая скармливается в <code>run()</code>.</p>
+<pre><code class="lang-rust">hyper::rt::run(server.join(future_where_request_is_done));
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Apr 4, 2019 7:28 AM">
+            <time itemprop="datePublished" datetime="2019-04-04 07:28:30 +0000">Apr 4, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо за подробный ответ, буду пробовать.</p>
+<p>Нитью, я так понимаю, называется отдельный поток выполнения в рамках одного “физического” потока ОС? Ну, аналог горутины?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Apr 4, 2019 8:30 AM">
+            <time itemprop="datePublished" datetime="2019-04-04 08:30:48 +0000">Apr 4, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Прочитай <a href="https://docs.rs/futures/0.1.26/futures/sync/oneshot/fn.channel.html" rel="nofollow noopener">https://docs.rs/futures/0.1.26/futures/sync/oneshot/fn.channel.html</a></p>
+<p>Этот прием и после переделки на oneshot не будет работать, потому что <code>client.get</code> возвращает Future, которая должна быть выполнена на рантайме. Как я понимаю, ты хочешь в одном коде и сервер поднять, и клиентом дернуть запрос. Для этого есть несколько решений:</p>
+<ol>
+<li>
+</li>
+</ol>
+<p>// в этом примере ошибка, т.к. hyper::rt::spawn можно выполнить только внутри футуры, которая выполняется внутри hyper::rt::run</p>
+<pre><code class="lang-rust">let server = Server::bind... // все как у тебя и было, но без waiter
+hyper::rt::spawn(server); // крутить сервер в отдельной треде
+let (tx, rx) = oneshot::channel();
+let get = Client::new().get...
+    .and_then(|r| tx.send(r)); // засовываем в oneshot результат гета
+hyper::rt::run(get); // тем не менее футуру надо выполнить на рантайме
+// run - это блокирующая операция, т.е. пока все футуры не выполнятся, ты дальше не пройдешь
+let res = rx.wait(); // а вот тут ты достаешь результат из oneshot channel
+// и дальше можешь с этим работать
+</code></pre>
+<ol start="2">
+<li>
+</li>
+</ol>
+<p>Если тебе жалко выделять аж целый тред под сервер, можно воспользоваться комбинаторами select или join, как это было сделано у нас: <a href="https://github.com/tox-rs/tox/blob/master/src/toxcore/tcp/handshake/mod.rs#L309" rel="nofollow noopener">https://github.com/tox-rs/tox/blob/master/src/toxcore/tcp/handshake/mod.rs#L309</a></p>
+<pre><code class="lang-auto">let server = Server::bind...
+let (tx, rx) = oneshot::channel::&lt;i32&gt;();
+let client = Client::new().get...
+    .and_then(|r| tx.send(r));
+let both = client.select(server).map... map_err; // или клиент удачно выполнится, или сервер
+hyper::rt::run(both);// на одном рантайме поднимаем и клиент и сервер
+let res = rs.wait();
+</code></pre>
+<p>Но не стоит забывать, что в данном варианте у тебя может быть ошибка, т.к. твой поток выполнения не всегда попадает в tx.send®, и ты будешь бесконечно ждать. для этого надо во всех вариантах завершений правильно в tx положить значение, там может лежать как Ok(res), так и Err(e) из .map_err</p>
+<ol start="3">
+<li>Забить на oneshot и воспользоваться комбинаторным адом:</li>
+</ol>
+<pre><code class="lang-auto">let server = Server::bind...
+let (tx, rx) = oneshot::channel::&lt;i32&gt;();
+let client = Client::new().get...
+    .and_then(|r| do what ever you want with the result);
+let both = client.select(server).map... map_err;
+hyper::rt::run(both);
+</code></pre>
+<p>Ну и так далее.</p>
+<ol start="4">
+<li>Можно извратиться и запустить это вообще в одном потоке, если ты жаден до ресурсов</li>
+</ol>
+<p>Для этого надо вместо hyper::rt::run использовать tokio::current_thread::Runtime <a href="https://docs.rs/tokio/0.1/tokio/runtime/current_thread/index.html" rel="nofollow noopener">https://docs.rs/tokio/0.1/tokio/runtime/current_thread/index.html</a> , который поднимает рантайм на текущем треде, т.е. у тебя не будут подняты доп. треды</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Apr 4, 2019 8:38 AM">
+            <time itemprop="datePublished" datetime="2019-04-04 08:38:29 +0000">Apr 4, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо!<br>
+Только у меня вот этот код</p>
+<pre><code class="lang-auto">hyper::rt::spawn(server);
+</code></pre>
+<p>почему-то падает. Ругается, что нет дефолтного рантайма или что-то такое.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Apr 4, 2019 9:21 AM">
+            <time itemprop="datePublished" datetime="2019-04-04 09:21:51 +0000">Apr 4, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А, блин. Точно. hyper::rt::spawn можно выполнить только внутри футуры, которая выполняется внутри hyper::rt::run</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Apr 4, 2019 9:41 AM">
+            <time itemprop="datePublished" datetime="2019-04-04 09:41:13 +0000">Apr 4, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Ага. Кое-что стало понятнее. Где-то видел такой вариант</p>
+<pre><code class="lang-auto">hyper::rt::run(|| {
+...
+    hyper::rt::spawn(...);
+...
+    hyper::rt::spawn(...)
+});
+</code></pre>
+<p>Вроде, должно получиться.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Apr 4, 2019 9:44 AM">
+            <time itemprop="datePublished" datetime="2019-04-04 09:44:02 +0000">Apr 4, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да, что-то типа того.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tyranron" class="user-link">Kai Ren</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Apr 4, 2019 7:11 PM">
+            <time itemprop="datePublished" datetime="2019-04-04 19:11:11 +0000">Apr 4, 2019</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Концептуально - да. Я имел в виду именно логическую нить выполнения (цепочку футур).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

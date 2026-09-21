@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Проблема с временами жизни - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Проблема с временами жизни</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Проблема с временами жизни</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Mar 3, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/dmi3" class="user-link">dmi3</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Mar 3, 2019 10:48 AM">
+            <time itemprop="datePublished" datetime="2019-03-03 10:48:50 +0000">Mar 3, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Имеется массив u8 (принятый по TCP), нужно получить строковый срез этого массива. Массив и &amp;str желательно держать в одной структуре.<br>
+То есть должно получиться что-то типа СИшного union’a - возможность чтения существующего массива как строкового среза без выделения дополнительных векторов, String и т.д.</p>
+<p>Проблемы с временами жизни.<br>
+Можно ли как-нибудь это сделать не используя глобальную переменную static?<br>
+Как понять, какое время жизни имеет массив input_buf в структуре (видимо не 'static)?</p>
+<pre><code class="lang-rust">use std::str;
+use std::io::Write;
+use std::io::Read;
+use std::net::TcpListener;
+
+pub struct Packet &lt;'a&gt; //Тут 'a, чтобы сделать src_packet не 'static
+{
+    pub input_buf: [u8; 512], //Какое время жизни у этого массива?
+    pub src_packet: Option&lt;&amp;'a str&gt;,
+}
+
+
+impl Packet &lt;'static&gt; //Тут просит указать время жизни. Какое указывать?
+{
+    ///Конструктор
+    fn new() -&gt; Packet &lt;'static&gt; //Тут просит указать время жизни. Какое указывать?
+    {
+        Packet
+        {
+            input_buf: [0u8; 512],
+            src_packet: None,
+        }
+    }
+
+    fn extract_pkt(&amp;self)
+    {
+        self.src_packet = Some( str::from_utf8(&amp;self.input_buf).unwrap() ); //Создание среза &amp;str
+    }
+}
+
+
+fn main()
+{
+    let mut pkt = Packet::new();
+
+    let addr = "127.0.0.1:9999";
+    let listener = TcpListener::bind(addr).unwrap();
+    println!("Server listening at {}", addr);
+
+
+    for stream in listener.incoming() //stream типа TcpStream
+    {
+        let mut stream = stream.unwrap();
+        stream.read(&amp;mut pkt.input_buf);
+
+        pkt.extract_pkt(); //Вызов метода
+    }
+}
+</code></pre>
+<p>Build:</p>
+<pre><code class="lang-nohighlight">error[E0495]: cannot infer an appropriate lifetime for borrow expression due to conflicting requirements
+  --&gt; src\main.rs:29:48
+   |
+29 |         self.src_packet = Some( str::from_utf8(&amp;self.input_buf).unwrap() );
+   |                                                ^^^^^^^^^^^^^^^
+   |
+note: first, the lifetime cannot outlive the anonymous lifetime #1 defined on the body at 28:4...
+  --&gt; src\main.rs:28:5
+   |
+28 | /     {
+29 | |         self.src_packet = Some( str::from_utf8(&amp;self.input_buf).unwrap() );
+30 | |     }
+   | |_____^
+note: ...so that reference does not outlive borrowed content
+  --&gt; src\main.rs:29:48
+   |
+29 |         self.src_packet = Some( str::from_utf8(&amp;self.input_buf).unwrap() );
+   |                                                ^^^^^^^^^^^^^^^
+   = note: but, the lifetime must be valid for the static lifetime...
+note: ...so that expression is assignable (expected std::option::Option&lt;&amp;'static str&gt;, found std::option::Option&lt;&amp;str&gt;)
+  --&gt; src\main.rs:29:27
+   |
+29 |         self.src_packet = Some( str::from_utf8(&amp;self.input_buf).unwrap() );
+   |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to previous error
+
+</code></pre>
+<p>То есть, насколько я понял что-то не так со временем жизни input_buf.<br>
+Не соответствуют времена жизни массива input_buf и среза src_packet, При этом, я не понимаю какое время у input_buf.<br>
+Или проблема со временем жизни всей структуры?</p>
+<p>Помогите пожалуйста разобраться, уже кучу вариантов перепробовал.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Mar 3, 2019 11:11 AM">
+            <time itemprop="datePublished" datetime="2019-03-03 11:11:29 +0000">Mar 3, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group quote-modified" data-username="dmi3" data-post="1" data-topic="835">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/d/47e85d/48.png" class="avatar"> dmi3:</div>
+<blockquote>
+<p>fn extract_pkt(&amp;self) {<br>
+//Создание среза &amp;str<br>
+self.src_packet = Some( str::from_utf8(&amp;self.input_buf).unwrap() );<br>
+}</p>
+</blockquote>
+</aside>
+<p>Что я вижу, так это самоссылающуюся структуру. Почитай цикл статей про это, чтобы понять, что такое самоссылающиеся структуры, почему возникла проблема, и как это можно решить:<br>
+<a href="https://boats.gitlab.io/blog/post/2018-01-25-async-i-self-referential-structs/" rel="noopener nofollow ugc">Async/Await I: Self-Referential Structs</a><br>
+<a href="https://boats.gitlab.io/blog/post/2018-01-30-async-ii-narrowing-the-scope/" rel="noopener nofollow ugc">Async/Await II: Narrowing the Scope of the Problem</a><br>
+<a href="https://boats.gitlab.io/blog/post/2018-01-30-async-iii-moving-forward/" rel="noopener nofollow ugc">Async/Await III: Moving Forward with Something Shippable</a><br>
+<a href="https://boats.gitlab.io/blog/post/2018-02-07-async-iv-an-even-better-proposal/" rel="noopener nofollow ugc">Async/Await IV: An Even Better Proposal</a></p>
+<p>Что в итоге вылилось в то, что недавно в стабильном Расте появился модуль <a href="https://doc.rust-lang.org/stable/std/pin/index.html" rel="noopener nofollow ugc">std::pin</a>, с помощью которого можно решить твой вопрос.</p>
+<p>Но я бы предпочел изменить архитектуру и подход, обойтись без pin’ов, без диких времен жизни.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vessd" class="user-link">Сергей Веселков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Mar 3, 2019 1:38 PM">
+            <time itemprop="datePublished" datetime="2019-03-03 13:38:39 +0000">Mar 3, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Думаю тебе не нужно хранить &amp;str в структуре<br>
+<code>str::from_utf8</code> не выделяет память под строку, а просто возвращает ссылку на эти же байты в виде строки, если это валидный <code>utf8</code>.</p>
+<pre><code class="lang-rust">use std::io::Read;
+use std::io::Write;
+use std::net::TcpListener;
+use std::str;
+
+pub struct Packet&lt;'a&gt; {
+    pub input_buf: &amp;'a mut [u8],
+}
+
+impl&lt;'a&gt; Packet&lt;'a&gt; {
+    fn new(input_buf: &amp;mut [u8]) -&gt; Packet&lt;'_&gt; {
+        Packet { input_buf }
+    }
+
+    fn extract_pkt(&amp;self) -&gt; Option&lt;&amp;str&gt; {
+        str::from_utf8(self.input_buf).ok()
+    }
+}
+
+fn main() {
+    let mut buf = vec![0; 512];
+    let pkt = Packet::new(&amp;mut buf);
+
+    let addr = "127.0.0.1:9999";
+    let listener = TcpListener::bind(addr).unwrap();
+    println!("Server listening at {}", addr);
+
+    for stream in listener.incoming()
+    {
+        let mut stream = stream.unwrap();
+        stream.read(pkt.input_buf).unwrap();
+
+        pkt.extract_pkt();
+    }
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/dmi3" class="user-link">dmi3</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Mar 5, 2019 8:41 AM">
+            <time itemprop="datePublished" datetime="2019-03-05 08:41:20 +0000">Mar 5, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><strong>kpp</strong>, спасибо за информацию.<br>
+<strong>vesss</strong>, спасибо за информацию и пример.</p>
+<p><strong>vessd</strong>, я понимаю, что str::from_utf8(…) не выделяет память, а возвращает &amp;str, поэтому его и использую.<br>
+У меня тоже была идея не хранить в стуктуре &amp;str, а возвращать через метод. Но дело в том, что на самом деле мне нужен срез &amp;str не всего буфера input_buf, а только содержимого самого принятого пакета, кроме того нужны &amp;str на определенные данные (куски) внутри этого пакета. Пакет внутри буфера input_buf может быть принят любой длины. Мне бы хотелось сформировать все эти &amp;str за раз в одном методе (который будет вызван в начале программы), и не тратить время на парсинг пакета в середине программы.</p>
+<p>Не хотел использовать static-переменную, но ничего другого не придумал.<br>
+Так не слишком отстойно будет?</p>
+<p>И все-таки, для общего понимания, какое время жизни у массива input_buf в моей первой реализации?</p>
+<pre><code class="lang-auto">use std::str;
+use std::io::Write;
+use std::io::Read;
+use std::net::TcpListener;
+
+pub static mut INPUT_BUF: [u8; 512] = [0u8; 512];
+pub struct Packet
+{
+    len: Option&lt;usize&gt;, //Длина пакета в буфере
+    pub src_packet: Option&lt;&amp;'static str&gt;, //&amp;str на пакет
+    pub cs: Option&lt;&amp;'static str&gt;,
+}
+
+
+impl Packet
+{
+    ///Конструктор
+    pub fn new() -&gt; Packet
+    {
+        Packet
+        {
+            len: None,
+            src_packet: None,
+            cs: None,
+        }
+    }
+
+    ///Переинициализация
+    unsafe fn reset() -&gt; Packet
+    {
+        INPUT_BUF = [0u8; 512];
+        Packet
+        {
+            len: None,
+            src_packet: None,
+            cs: None,
+        }
+    }
+
+    unsafe fn extract_pkt(&amp; mut self)
+    {
+        self.src_packet = str::from_utf8(&amp;INPUT_BUF[0..self.len.unwrap()]).ok();
+        self.cs = str::from_utf8(&amp;INPUT_BUF[self.len.unwrap()-2..self.len.unwrap()]).ok();
+    }
+}
+
+
+fn main()
+{
+    let mut pkt = Packet::new();
+
+    let addr = "127.0.0.1:9999";
+    let listener = TcpListener::bind(addr).unwrap();
+    println!("Server listening at {}", addr);
+
+    for stream in listener.incoming() //stream типа TcpStream
+    {
+        let mut stream = stream.unwrap();
+        loop
+        {
+                unsafe{
+                    pkt = Packet::reset();
+                    pkt.len = stream.read(&amp;mut INPUT_BUF).ok();
+                    pkt.extract_pkt();
+                };
+
+                //Работа с данными из пакета...
+        }
+    }
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="3 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          3 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Mar 5, 2019 10:39 AM">
+            <time itemprop="datePublished" datetime="2019-03-05 10:39:03 +0000">Mar 5, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="dmi3" data-post="4" data-topic="835">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/d/47e85d/48.png" class="avatar"> dmi3:</div>
+<blockquote>
+<p>Не хотел использовать static-переменную, но ничего другого не придумал.</p>
+</blockquote>
+</aside>
+<p>То что вы хотите можно сделать без статических переменных:</p>
+<pre><code class="lang-auto">use std::str;
+use std::io::Read;
+use std::net::TcpListener;
+
+
+pub struct PacketStr&lt;'a&gt;
+{
+    pub src_packet: &amp;'a str, //&amp;str на пакет
+    pub cs: &amp;'a str,
+}
+
+
+impl&lt;'a&gt; PacketStr&lt;'a&gt;
+{
+    pub fn new(buf:&amp;'a[u8], len:usize) -&gt; Option&lt;PacketStr&lt;'a&gt;&gt;
+    {
+        //parse buf and get strings offsets
+        let src_offset = 1..10;
+        let cs_offset = 22..33;      
+        Some(
+            PacketStr
+            {
+                src_packet: str::from_utf8(&amp;buf[src_offset]).ok()?,
+                cs: str::from_utf8(&amp;buf[cs_offset]).ok()?,
+            }
+        )
+    }
+}
+
+
+fn main()
+{
+
+    let addr = "127.0.0.1:9999";
+    let listener = TcpListener::bind(addr).unwrap();
+    println!("Server listening at {}", addr);
+    let mut buf = [0u8;512];
+    let mut len = 0;
+    for stream in listener.incoming() //stream типа TcpStream
+    {
+        let mut stream = stream.unwrap();
+        loop
+        {
+            len = stream.read(&amp;mut buf).expect("cant read from stream");
+            let pkt_strs = PacketStr::new(&amp;buf, len).expect("cant get strings");
+            //Работа с данными из пакета...
+        }
+    }
+}
+</code></pre>
+<p>Как начинающему могу посоветовать:</p>
+<ol>
+<li>Разберитесь как работают времена жизни в Rust;</li>
+<li>Никогда не используйте unsafe и мутабельные статики;</li>
+</ol>
+<p>Если  выполните п.1, у вас пропадет желание нарушать п.2.<br>
+Иногда без unsafe дейстивельно нельзя обойтись, но такое бывает очень редко.</p>
+<aside class="quote no-group" data-username="dmi3" data-post="4" data-topic="835">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/d/47e85d/48.png" class="avatar"> dmi3:</div>
+<blockquote>
+<p>И все-таки, для общего понимания, какое время жизни у массива input_buf в моей первой реализации?</p>
+</blockquote>
+</aside>
+<p>Ваша первая реализация не работает. Нельзя хранить ссылку в той же структуре, где хранятся данные на которые вы ссылаетесь (подробнее см. ссылки в ответе <a class="mention" href="/u/kpp/index.html">@kpp</a>).<br>
+Время жизни в объявлении структуры <code>pub struct Packet&lt;'a&gt;{...</code> -  это что-то вроде обобщенного параметра, оно определяется компилятором при создании конкретного экземпляра.<br>
+У вас структура владеет массивом, так что время жизни массива равно времени жизни всей структуры <code>Packet</code>. Оно будет разным для каждого экземпляра структуры.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vessd" class="user-link">Сергей Веселков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Mar 5, 2019 12:24 PM">
+            <time itemprop="datePublished" datetime="2019-03-05 12:24:18 +0000">Mar 5, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="dmi3" data-post="4" data-topic="835">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/d/47e85d/48.png" class="avatar"> dmi3:</div>
+<blockquote>
+<p>И все-таки, для общего понимания, какое время жизни у массива input_buf в моей первой реализации?</p>
+</blockquote>
+</aside>
+<p>Указывать время жизни для него не требуется, это <a href="https://doc.rust-lang.org/std/primitive.array.html" rel="noopener nofollow ugc">массив фиксированной длинны</a>, который размещается на стеке.<br>
+В общем случае лучше использовать <code>Vec</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Mar 5, 2019 2:06 PM">
+            <time itemprop="datePublished" datetime="2019-03-05 14:06:50 +0000">Mar 5, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Пожалуйста, откройте для себя <a href="https://github.com/tokio-rs/tokio" rel="nofollow noopener">tokio</a>. В нем есть монстр, который может быть полезен: <a href="https://docs.rs/tokio/0.1.16/tokio/codec/length_delimited/index.html" rel="nofollow noopener">tokio::codec::length_delimited</a>.</p>
+<p>А вот тут прочитайте как думать каналами и как использовать tokio с его framed структурами: <a href="https://github.com/jgallagher/tokio-chat-example/blob/master/tokio-chat-server/src/main.rs" rel="nofollow noopener">https://github.com/jgallagher/tokio-chat-example/blob/master/tokio-chat-server/src/main.rs</a></p>
+<p>И упаси вас Феррис от написания сниппетов в 15 строк с тремя unsafe.</p>
+<p>Вообще забудьте про оптимизацию, про эти reset/очищения структур и переиспользование.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

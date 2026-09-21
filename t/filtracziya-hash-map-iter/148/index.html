@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Фильтрация hash_map::Iter - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Фильтрация hash_map::Iter</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Фильтрация hash_map::Iter</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Dec 14, 2016</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Dec 14, 2016 8:39 AM">
+            <time itemprop="datePublished" datetime="2016-12-14 08:39:54 +0000">Dec 14, 2016</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Привет полумертвый форум.</p>
+<p>Разгребаю я тут <a href="https://github.com/ozkriff/zoc/issues/106" rel="nofollow noopener">старую ошибку в ZoC</a> и возникла у меня вот такая проблема:</p>
+<pre><code class="lang-rust">use std::collections::HashMap;
+
+#[derive(Debug)]
+struct Object(i32);
+
+trait State {
+    fn objects(&amp;self) -&gt; &amp;HashMap&lt;i32, Object&gt;;
+}
+
+struct FullState {
+    objects: HashMap&lt;i32, Object&gt;,
+}
+
+impl FullState {
+    fn new() -&gt; FullState {
+        let mut objects = HashMap::new();
+        objects.insert(0, Object(100));
+        objects.insert(1, Object(101));
+        objects.insert(2, Object(102));
+        objects.insert(3, Object(103));
+        FullState {
+            objects: objects,
+        }
+    }
+}
+
+impl State for FullState {
+    fn objects(&amp;self) -&gt; &amp;HashMap&lt;i32, Object&gt; {
+        &amp;self.objects
+    }
+}
+
+struct TmpPartialState&lt;'a&gt; {
+    full_state: &amp;'a FullState,
+}
+
+impl&lt;'a&gt; TmpPartialState&lt;'a&gt; {
+    fn new(full_state: &amp;'a FullState) -&gt; TmpPartialState&lt;'a&gt; {
+        TmpPartialState {
+            full_state: full_state,
+        }
+    }
+}
+
+impl&lt;'a&gt; State for TmpPartialState&lt;'a&gt; {
+    fn objects(&amp;self) -&gt; &amp;HashMap&lt;i32, Object&gt; {
+        // Хочется, что бы эта функция возвращала не все объекты из полного
+        // состояния, а, допустим, только с нечетными идентификаторами.
+        // 
+        // Типажа State можно менять, лишь бы этот метод в итоге был дешевым,
+        // принимал &amp;self и возвращал что-то, что сразу можно скормить
+        // в for цикл.
+        //
+        self.full_state.objects()
+    }
+}
+
+fn main() {
+    let full_state = FullState::new();
+    for (id, object) in full_state.objects() {
+        println!("{:?} -&gt; {:?}", id, object);
+    }
+    println!("---");
+    let partial_state = TmpPartialState::new(&amp;full_state);
+    for (id, object) in partial_state.objects() {
+        println!("{:?} -&gt; {:?}", id, object);
+    }
+}
+</code></pre>
+<p>(<a href="https://play.rust-lang.org/?gist=74b077340a3be2665304acf29581477c" rel="nofollow noopener">https://play.rust-lang.org/?gist=74b077340a3be2665304acf29581477c</a>)</p>
+<p>И я пока додумался только до довольно громоздкого решения с реализацией своих собственных итераторов:</p>
+<pre><code class="lang-rust">use std::collections::hash_map::{self, HashMap};
+
+#[derive(Debug)]
+struct Object(i32);
+
+trait State&lt;'a&gt; {
+    type It: Iterator;
+
+    fn objects(&amp;'a self) -&gt; Self::It;
+}
+
+struct FullState {
+    objects: HashMap&lt;i32, Object&gt;,
+}
+
+impl FullState {
+    fn new() -&gt; FullState {
+        let mut objects = HashMap::new();
+        objects.insert(0, Object(100));
+        objects.insert(1, Object(101));
+        objects.insert(2, Object(102));
+        objects.insert(3, Object(103));
+        FullState {
+            objects: objects,
+        }
+    }
+}
+
+impl&lt;'a&gt; State&lt;'a&gt; for FullState {
+    type It = hash_map::Iter&lt;'a, i32, Object&gt;;
+
+    fn objects(&amp;'a self) -&gt; Self::It {
+        self.objects.iter()
+    }
+}
+
+struct TmpPartialState&lt;'a&gt; {
+    full_state: &amp;'a FullState,
+}
+
+impl&lt;'a&gt; TmpPartialState&lt;'a&gt; {
+    fn new(full_state: &amp;'a FullState) -&gt; TmpPartialState&lt;'a&gt; {
+        TmpPartialState {
+            full_state: full_state,
+        }
+    }
+}
+
+struct StateIter&lt;'a&gt; {
+    hashmap_iter: hash_map::Iter&lt;'a, i32, Object&gt;,
+}
+
+impl&lt;'a&gt; Iterator for StateIter&lt;'a&gt; {
+    type Item = (&amp;'a i32, &amp;'a Object);
+
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        while let Some(pair) = self.hashmap_iter.next() {
+            let (id, _) = pair;
+            if id % 2 == 0 {
+                return Some(pair);
+            }
+        }
+        None
+    }
+}
+
+impl&lt;'a&gt; State&lt;'a&gt; for TmpPartialState&lt;'a&gt; {
+    type It = StateIter&lt;'a&gt;;
+
+    fn objects(&amp;self) -&gt; Self::It {
+        StateIter {
+            hashmap_iter: self.full_state.objects(),
+        }
+    }
+}
+
+fn main() {
+    let full_state = FullState::new();
+    for (id, object) in full_state.objects() {
+        println!("{:?} -&gt; {:?}", id, object);
+    }
+    println!("---");
+    let partial_state = TmpPartialState::new(&amp;full_state);
+    for (id, object) in partial_state.objects() {
+        println!("{:?} -&gt; {:?}", id, object);
+    }
+}
+</code></pre>
+<p>(<a href="https://play.rust-lang.org/?gist=5b0140649e250e6daa6004e97272fa33" rel="nofollow noopener">https://play.rust-lang.org/?gist=5b0140649e250e6daa6004e97272fa33</a>)</p>
+<p>Может я какое-то более простое решение упускаю из виду? Нет ни у кого идей?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Dec 14, 2016 10:02 AM">
+            <time itemprop="datePublished" datetime="2016-12-14 10:02:38 +0000">Dec 14, 2016</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Гм, у меня еще сложность:</p>
+<p>Я не хочу что бы у типажа был параметр &lt;'a&gt;. Оно там нужно чисто для type It = hash_map::Iter&lt;'a, i32, Object&gt;; в одной из реализаций.</p>
+<p>Попробовал через фантомов перенести этот параметр в саму структуру, для которой типаж реализуется:</p>
+<p><a href="https://play.rust-lang.org/?gist=e46b32b6d48eface077c462a9ce6e6aa" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?gist=e46b32b6d48eface077c462a9ce6e6aa</a></p>
+<p>Не работает, есть чувство что я делаю какую-то дичь <img src="https://forum.rustycrate.ru/images/emoji/twitter/frowning.png?v=5" title=":frowning:" class="emoji" alt=":frowning:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="3 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          3 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Dec 14, 2016 10:56 AM">
+            <time itemprop="datePublished" datetime="2016-12-14 10:56:30 +0000">Dec 14, 2016</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Насчет второй сложности - так будет работать если <code>FullState</code> будет содержать ссылку на <code>HashMap</code> а не владеть им. Метод <code>iter()</code> берет <code>НashMap</code> по ссылке из которой он и выводит время жизни элементов итератора. Если <code>FullState</code> владеет хэшмапом, то время жизни элементов никак не соотносится с временем жизни хэшмапа (время жизни сохраненное в <code>PhantomData</code> не обязательно будет соответствовать вр.жизни хэшмапа).</p>
+<p>В принципе можно одурачить компилятор:</p>
+<pre><code class="lang-auto">impl&lt;'a&gt; State for FullState&lt;'a&gt; {
+    type It = hash_map::Iter&lt;'a, i32, Object&gt;;
+
+    fn objects(&amp;self) -&gt; Self::It {
+        unsafe{std::mem::transmute(self.objects.iter())}
+    }
+}
+</code></pre>
+<p>Но я не уверен, что это всегда будет корректно работать, так что использовать не советую. Взял отсюда <a href="http://stackoverflow.com/a/39442814/5138648" rel="nofollow noopener">http://stackoverflow.com/a/39442814/5138648</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Dec 14, 2016 2:24 PM">
+            <time itemprop="datePublished" datetime="2016-12-14 14:24:56 +0000">Dec 14, 2016</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Еще по второй сложности - можно изменить функцию типажа <code>State</code> чтобы она брала <code>self</code> по значению, а не по ссылке. А имплементацию делать для ссылки <code>&amp;'a FullState&lt;'a&gt;</code>.</p>
+<p><a href="https://play.rust-lang.org/?gist=ccea16a0482378d3a47a6a439e11e15a&amp;version=stable&amp;backtrace=0" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?gist=ccea16a0482378d3a47a6a439e11e15a&amp;version=stable&amp;backtrace=0</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/irbis" class="user-link">Alexander Irbis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Dec 14, 2016 3:29 PM">
+            <time itemprop="datePublished" datetime="2016-12-14 15:29:44 +0000">Dec 14, 2016</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="ozkriff" data-post="2" data-topic="148">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p>Я не хочу что бы у типажа был параметр &lt;'a&gt;.</p>
+</blockquote>
+</aside>
+<p>Вопрос: чем плохо вермя жизни у типажа? Имхо, обходные реализации выглядят неоправданно сложней.</p>
+<pre data-code-wrap="rust"><code class="lang-rust">impl&lt;'a&gt; State&lt;'a&gt; for FullState&lt;'a&gt; {
+    type It = hash_map::Iter&lt;'a, i32, Object&gt;;
+
+    fn objects(&amp;'a self) -&gt; Self::It {
+        self.objects.iter()
+    }
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Dec 15, 2016 6:46 AM">
+            <time itemprop="datePublished" datetime="2016-12-15 06:46:58 +0000">Dec 15, 2016</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a href="https://play.rust-lang.org/?gist=0aae6d1137df9c521b24927e52bafe1a" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?gist=0aae6d1137df9c521b24927e52bafe1a</a></p>
+<p>Вот черт, не подумал. Помогло, даже без всяких фантомов и лишних ВЖ в типаже. Спасибо! <img src="https://forum.rustycrate.ru/images/emoji/twitter/smiley.png?v=5" title=":smiley:" class="emoji" alt=":smiley:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Dec 15, 2016 6:50 AM">
+            <time itemprop="datePublished" datetime="2016-12-15 06:50:59 +0000">Dec 15, 2016</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Вопрос: чем плохо вермя жизни у типажа?</p>
+</blockquote>
+<p>Как минимум, у меня есть куча свободных функций со статическим полиморфизмом по этому типажу, вроде:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">fn is_obstacle&lt;S: GameState&gt;(state: &amp;S, pos: MapPos) -&gt; bool {...}
+</code></pre>
+<p>Сигнатуры у многих из этих функций и так не маленькие, очень не хочется просто так в каждой заменять <code>&lt;S: GameState&gt;</code> на <code>&lt;'a, S: GameState&lt;'a&gt;&gt;</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/irbis" class="user-link">Alexander Irbis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Dec 15, 2016 8:49 AM">
+            <time itemprop="datePublished" datetime="2016-12-15 08:49:45 +0000">Dec 15, 2016</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хм, ловкость рук и никакого мошенничества. Круто. Это надо осознать и запомнить <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=5" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+<pre><code class="lang-rust">impl&lt;'a&gt; State for &amp;'a FullState
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Dec 15, 2016 9:21 AM">
+            <time itemprop="datePublished" datetime="2016-12-15 09:21:24 +0000">Dec 15, 2016</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Попробовал вставить гист выше в реальный код и напоролся еще на ряд косяков.</p>
+<p>Во первых, если я пытаюсь добавить в свой супер-пупер типаж метод по получению ссылки на конкретный объект (а в реальном коде мне оно нужно)</p>
+<pre><code class="lang-rust"> trait State {
+    type Iter: Iterator;
+
+    fn objects(self) -&gt; Self::Iter;
+
+    fn object(self, id: i32) -&gt; &amp;Object; // &lt;- вот этот
+}
+</code></pre>
+<p>то я получаю:</p>
+<pre><code class="lang-nohighlight"> error[E0106]: missing lifetime specifier
+  --&gt; &lt;anon&gt;:11:33
+   |
+11 |     fn object(self, id: i32) -&gt; &amp;Object;
+   |                                 ^ expected lifetime parameter
+   |
+   = help: this function's return type contains a borrowed value with an elided lifetime, but the lifetime cannot be derived from the arguments
+   = help: consider giving it an explicit bounded or 'static lifetime
+</code></pre>
+<p>И это намекает что таки не выйдет обойтись без явных ВЖ и что типаж все-таки придется реализовывать для самого типа, а не ссылки на него. Это ладно, в принципе могу я пережить эти лишние <code>'a</code> повсюду, наверное.</p>
+<p>Во вторых, я ничего не могу сделать с этим своим итератором, если нет доступа к оригинальному типу:</p>
+<pre><code class="lang-rust"> fn foo&lt;S: State&gt;(state: &amp;S) {
+    for (id, object) in state.objects() {
+        println!("{:?} -&gt; {:?}", id, object);
+    }
+}
+</code></pre>
+<pre><code class="lang-nohighlight"> error[E0308]: mismatched types
+  --&gt; &lt;anon&gt;:80:9
+   |
+80 |     for (id, object) in state.objects() {
+   |         ^^^^^^^^^^^^ expected associated type, found tuple
+   |
+   = note: expected type `&lt;&lt;S as State&gt;::Iter as std::iter::Iterator&gt;::Item`
+   = note:    found type `(_, _)`
+</code></pre>
+<p>(<a href="https://play.rust-lang.org/?gist=4c54a9ccec31bf19ec0128a225cf13e6" rel="nofollow noopener">https://play.rust-lang.org/?gist=4c54a9ccec31bf19ec0128a225cf13e6</a>)</p>
+<p>Как-то я в растерянности. Сообщение об ошибке намекает что надо то-ли чего-то дописывать в сам типаж, то ли навешивать здоровенный <code>where</code> на саму функцию, но я туплю.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Dec 15, 2016 10:44 AM">
+            <time itemprop="datePublished" datetime="2016-12-15 10:44:23 +0000">Dec 15, 2016</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вот так вроде работает:</p>
+<pre><code class="lang-auto">fn foo&lt;S,A,B&gt;(state: S) 
+where
+    S: State,
+    S::Iter:Iterator&lt;Item=(A, B)&gt;,
+    A: std::fmt::Debug,
+    B: std::fmt::Debug,
+{
+    for (id, object) in state.objects() {
+        println!("{:?} -&gt; {:?}", id, object);
+    }
+}
+</code></pre>
+<p>Надо прописать какой <code>Item</code> у итератора. И еще там ссылка была лишняя в аргументе ф-ции. Но т.к. <code>State</code> реализован для &amp;FullState то вызывать надо все равно по ссылке:</p>
+<pre><code class="lang-auto">foo(&amp;full_state);
+</code></pre>
+<p><a href="https://play.rust-lang.org/?gist=1e7c544bd32a43cf002fdc5f9fbbd8bb&amp;version=nightly&amp;backtrace=0" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?gist=1e7c544bd32a43cf002fdc5f9fbbd8bb&amp;version=nightly&amp;backtrace=0</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Dec 15, 2016 11:07 AM">
+            <time itemprop="datePublished" datetime="2016-12-15 11:07:50 +0000">Dec 15, 2016</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="ozkriff" data-post="9" data-topic="148">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p>если я пытаюсь добавить в свой супер-пупер типаж метод по получению ссылки на конкретный объект</p>
+</blockquote>
+</aside>
+<p>Можно отдельный типаж сделать:</p>
+<pre><code class="lang-auto">trait GetObject {
+    fn object(&amp;self, id: i32) -&gt; &amp;Object;
+}
+</code></pre>
+<p>Но если он должен зависеть от <code>State</code> то от лайфтаймов избавиться не выйдет:</p>
+<pre><code class="lang-auto">trait GetObject&lt;'s&gt; where &amp;'s Self:State+'s {
+    fn object(&amp;'s self, id: i32) -&gt; &amp;'s Object;
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Dec 16, 2016 9:23 PM">
+            <time itemprop="datePublished" datetime="2016-12-16 21:23:47 +0000">Dec 16, 2016</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Пока ближе всего к моим хотелкам вот что приблизилось:</p>
+<p><a href="https://play.rust-lang.org/?gist=8a54b411ccb0b07825be885db447331c" rel="nofollow noopener">https://play.rust-lang.org/?gist=8a54b411ccb0b07825be885db447331c</a></p>
+<p>upd:</p>
+<p>даже вот так, что бы совсем близко к коду ZoC:</p>
+<p><a href="https://play.rust-lang.org/?gist=b5cf2366785848bb02b304799979cdfd" class="onebox" target="_blank" rel="nofollow noopener">https://play.rust-lang.org/?gist=b5cf2366785848bb02b304799979cdfd</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_13"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_13" title="Dec 17, 2016 8:01 AM">
+            <time itemprop="datePublished" datetime="2016-12-17 08:01:23 +0000">Dec 17, 2016</time>
+          </a>
+          <span class="post-number">#13</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да, занятно.<br>
+Проблема с типажом <code>State</code> была в том что его функция <code>objects()</code> возвращала некий обобщенный тип ограниченный <code>Iterator</code>-ом и время жизни этого обобщенного типа не удавалось связать с <em>вж</em> <code>&amp;self</code> без ввода <em>вж</em> в типаж <code>State</code>.<br>
+Теперь <code>State::objects()</code> возвращает конкретный  тип <code>ObjectIter</code> <em>вж</em> которого легко связывается с <code>&amp;self</code>. Хотя  <code>ObjectIter</code> и имеет параметр - другой обобщенный тип, <em>вж</em> этого другого обобщенного типа не требуется связывать с <code>&amp;self</code> типажа <code>State</code>.<br>
+<img src="https://forum.rustycrate.ru/images/emoji/twitter/dizzy.png?v=5" title=":dizzy:" class="emoji" alt=":dizzy:"> <img src="https://forum.rustycrate.ru/images/emoji/twitter/dizzy_face.png?v=5" title=":dizzy_face:" class="emoji" alt=":dizzy_face:"> <img src="https://forum.rustycrate.ru/images/emoji/twitter/dizzy.png?v=5" title=":dizzy:" class="emoji" alt=":dizzy:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_14"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kvark" class="user-link">Dzmitry Malyshau</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_14" title="Dec 21, 2016 7:23 PM">
+            <time itemprop="datePublished" datetime="2016-12-21 19:23:59 +0000">Dec 21, 2016</time>
+          </a>
+          <span class="post-number">#14</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Is external iteration acceptable? In which case it would be solved trivially:</p>
+<pre><code class="lang-rust">trait State {
+    fn per_object&lt;F: FnMut(&amp;Object)&gt;(&amp;self, fun :F);
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_15"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_15" title="Jan 6, 2017 10:44 AM">
+            <time itemprop="datePublished" datetime="2017-01-06 10:44:38 +0000">Jan 6, 2017</time>
+          </a>
+          <span class="post-number">#15</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Нет, итерация через замыкания для моего случая тже не очень подходит. <img src="https://forum.rustycrate.ru/images/emoji/twitter/frowning.png?v=5" title=":frowning:" class="emoji" alt=":frowning:"></p>
+<p>В итоге решил все максимально упростить в коде и вообще по-другому сделать: <a href="https://github.com/ozkriff/zoc/issues/255" rel="nofollow noopener">https://github.com/ozkriff/zoc/issues/255</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

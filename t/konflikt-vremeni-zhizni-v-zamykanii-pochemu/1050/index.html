@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Конфликт времени жизни в замыкании. Почему? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Конфликт времени жизни в замыкании. Почему?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Конфликт времени жизни в замыкании. Почему?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jan 15, 2020</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jan 15, 2020 6:13 AM">
+            <time itemprop="datePublished" datetime="2020-01-15 06:13:53 +0000">Jan 15, 2020</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Здравствуйте.<br>
+Есть вот такой код:</p>
+<pre><code class="lang-auto">...
+
+impl&lt;'a, M&gt; Parser&lt;'a&gt; for ElementsSet&lt;'a, M&gt;
+where
+    M: Fn(&amp;'a str) -&gt; String,
+{
+    fn parse(&amp;self, in_string: &amp;'a str) -&gt; (Result&lt;String, ()&gt;, &amp;'a str) {
+        let res = self.parser.parse(in_string);
+        return if let Ok(r) = res.0 {
+            (Ok((self.mapper)(&amp;r)), res.1)
+        } else {
+            res
+        };
+    }
+}
+
+...
+
+impl&lt;'a&gt; Parser&lt;'a&gt; for ElementAny {
+    fn parse(&amp;self, in_string: &amp;'a str) -&gt; (Result&lt;String, ()&gt;, &amp;'a str) {
+        let mut parser = And::new();
+
+        parser.add_parser(BoxedParser::new(ElementOpen::new()));
+        parser.add_parser(BoxedParser::new(ZeroOrMore::new(ElementsSet::new(
+            |parsed: &amp;str| {
+                let ident = " ".repeat(self.level * 4);
+                ident
+            },
+            self.level + 1,
+        ))));
+        parser.add_parser(BoxedParser::new(ElementClose::new()));
+
+        return parser.parse(in_string);
+    }
+}
+</code></pre>
+<p>Компилятор ругается так:</p>
+<pre><code class="lang-auto">error[E0495]: cannot infer an appropriate lifetime due to conflicting requirements
+   --&gt; src/xml_formater.rs:453:13
+    |
+453 | /             |parsed: &amp;str| {
+454 | |                 let ident = " ".repeat(self.level * 4);
+455 | |                 ident
+456 | |             },
+    | |_____________^
+    |
+note: first, the lifetime cannot outlive the anonymous lifetime #1 defined on the method body at 448:5...
+   --&gt; src/xml_formater.rs:448:5
+    |
+448 | /     fn parse(&amp;self, in_string: &amp;'a str) -&gt; (Result&lt;String, ()&gt;, &amp;'a str) {
+449 | |         let mut parser = And::new();
+450 | |
+451 | |         parser.add_parser(BoxedParser::new(ElementOpen::new()));
+...   |
+461 | |         return parser.parse(in_string);
+462 | |     }
+    | |_____^
+    = note: ...so that the types are compatible:
+            expected &amp;&amp;xml_formater::ElementAny
+               found &amp;&amp;xml_formater::ElementAny
+note: but, the lifetime must be valid for the lifetime `'a` as defined on the impl at 447:6...
+   --&gt; src/xml_formater.rs:447:6
+    |
+447 | impl&lt;'a&gt; Parser&lt;'a&gt; for ElementAny {
+    |      ^^
+    = note: ...so that the expression is assignable:
+            expected (std::result::Result&lt;std::string::String, ()&gt;, &amp;'a str)
+               found (std::result::Result&lt;std::string::String, ()&gt;, &amp;str)
+</code></pre>
+<p>Насколько я понимаю, его не удовлетворяет время жизни переменной ident. С одной стороны, оно не должно выходить за пределы метода parse, с другой - должно удовлетворять времени жизни 'a.</p>
+<p>А с чего он это взял? ident - вообще независимая переменная, возвращается её не ссылка, а владение. Т.е. вообще никаких нестыковок не вижу. С parsed тоже вроде всё в порядке - это часть самой исходной строки, она существует на всё время работы парсера.</p>
+<p>Объясните, что не так?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jan 15, 2020 11:12 AM">
+            <time itemprop="datePublished" datetime="2020-01-15 11:12:30 +0000">Jan 15, 2020</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Кажется, причина в самом замыкании</p>
+<pre><code class="lang-auto">|parsed| {
+                let ident = " ".repeat(self.level * 4).to_string();
+                ident
+            }
+</code></pre>
+<p>А именно - в использовании поля self.level. Но всё ещё не могу понять - почему?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jan 15, 2020 8:01 PM">
+            <time itemprop="datePublished" datetime="2020-01-15 20:01:20 +0000">Jan 15, 2020</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А как выглядят остальные определения, в том числе <code>ElementsSet</code>?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tyranron" class="user-link">Kai Ren</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jan 15, 2020 8:02 PM">
+            <time itemprop="datePublished" datetime="2020-01-15 20:02:37 +0000">Jan 15, 2020</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>А с чего он это взял?</p>
+</blockquote>
+<p>C той сигнатуры, которую Вы ему скормили:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">fn parse(&amp;self, in_string: &amp;'a str) -&gt; (Result&lt;String, ()&gt;, &amp;'a str) {
+</code></pre>
+<blockquote>
+<p>А именно - в использовании поля self.level. Но всё ещё не могу понять - почему?</p>
+</blockquote>
+<p>Ну, <code>self.level</code> закреплен за тем же лайтайм-параметром, что и <code>self</code> (он ведь его часть). Само замыкание у Вас захватывает ссылку на <code>self.level</code> (это <code>Fn</code> замыкание), соотвественно является объектом, который ссылается на <code>self.level</code>, а значит не может пережить <code>self</code>. При этом это замыкание уезжает в <code>parser</code>, а результат <code>parser.parse()</code> должен не пережить некий лайфтайм <code>'a</code>, с которым <code>self</code> у Вас никак не связан.</p>
+<p>Вам надо пошаманить над сигнатуркой,</p>
+<p>По идее, что-то типа этого должно сработать:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">fn parse&lt;'s, 'r: 's + 'a&gt;(&amp;'s self, in_string: &amp;'a str) -&gt; (Result&lt;String, ()&gt;, &amp;'r str) {
+</code></pre>
+<p>Либо же избавиться в замыкании ссылки на <code>self.level</code> скопировав/склонировав значение и смувнув его в <code>move ||</code> замыкание, тогда зависимости от <code>self</code> лайфтайма не будет.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jan 16, 2020 6:06 AM">
+            <time itemprop="datePublished" datetime="2020-01-16 06:06:49 +0000">Jan 16, 2020</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>А как выглядят остальные определения, в том числе <code>ElementsSet</code> ?</p>
+</blockquote>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=b226ec2adf58ad59271c4a932de6107a" rel="noopener nofollow ugc">Вот так</a>. Это не весь модуль, там ещё много чего. Только связанные с ошибкой.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Jan 16, 2020 6:16 AM">
+            <time itemprop="datePublished" datetime="2020-01-16 06:16:58 +0000">Jan 16, 2020</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="tyranron" data-post="4" data-topic="1050">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/tyranron/48/484_2.png" class="avatar"> tyranron:</div>
+<blockquote>
+<p>а результат <code>parser.parse()</code> должен не пережить некий лайфтайм <code>'a</code> , с которым <code>self</code> у Вас никак не связан</p>
+</blockquote>
+</aside>
+<p>Да, но при чём тут само замыкание? Результат - да. Это просто ссылка на часть входящей строки. А второй результат - вообще значение. Но само по себе замыкание и не будет жить дольше функции parse. Не пойму, на чём компилятор спотыкается.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Jan 16, 2020 8:14 AM">
+            <time itemprop="datePublished" datetime="2020-01-16 08:14:38 +0000">Jan 16, 2020</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Мне кажется, что проблема может быть в неправильной реализации <code>And</code> или <code>Or</code>, но я не видел их, потому не могу точно сказать. Что-нибудь в стиле <code>impl&lt;'a&gt; Parser&lt;'a&gt; for Or&lt;'a&gt;</code>, по идее, может сцепить лайфтаймы данных и парсера, вызвав подобную ошибку.<br>
+Кстати, именно из-за возможности таких ошибок я обычно использую хотя бы чуть-чуть говорящие названия лайфтаймов - хотя бы на уровне <code>'i</code> для входных данных, <code>'p</code> для парсера, <code>'s</code> для состояния.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Jan 16, 2020 9:02 AM">
+            <time itemprop="datePublished" datetime="2020-01-16 09:02:35 +0000">Jan 16, 2020</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо за подсказку. Поищу.<br>
+Могу, в общем-то, выложить и весь модуль, если есть желание в нём ковыряться )</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/n0dwis" class="user-link">n0dwis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Jan 19, 2020 5:03 PM">
+            <time itemprop="datePublished" datetime="2020-01-19 17:03:54 +0000">Jan 19, 2020</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Решил, но так и не понял как именно )<br>
+Просто начал заново расставлять все времена жизни в каждой структуре и характеристике.<br>
+Всем спасибо!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

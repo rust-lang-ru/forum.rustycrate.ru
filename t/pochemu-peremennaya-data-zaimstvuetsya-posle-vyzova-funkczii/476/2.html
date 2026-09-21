@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Почему переменная data заимствуется после вызова функции? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Почему переменная data заимствуется после вызова функции?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Почему переменная data заимствуется после вызова функции?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Aug 8, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_22"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/cheblin" class="user-link">Chikirev Sirguy</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_22" title="Aug 23, 2018 10:38 AM">
+            <time itemprop="datePublished" datetime="2018-08-23 10:38:35 +0000">Aug 23, 2018</time>
+          </a>
+          <span class="post-number">#22</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_21">Replying to #21</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<h2><a href="https://doc.rust-lang.org/reference/items/static-items.html#mutable-statics" rel="noopener nofollow ugc">Mutable statics</a></h2>
+<p>If a static item is declared with the  <code>mut</code>  keyword, then it is allowed to be modified by the program. One of Rust’s goals is to make concurrency bugs hard to run into, and this is obviously a very large source of race conditions or other bugs. For this reason, an  <code>unsafe</code>  block is required when either reading or writing a mutable static variable. Care should be taken to ensure that modifications to a mutable static are safe with respect to other threads running in the same process.</p>
+<p>Mutable statics are still very useful, however. They can be used with C libraries and can also be bound from C libraries in an  <code>extern</code>  block.</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_23"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_23" title="Aug 23, 2018 11:29 AM">
+            <time itemprop="datePublished" datetime="2018-08-23 11:29:05 +0000">Aug 23, 2018</time>
+          </a>
+          <span class="post-number">#23</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_22">Replying to #22</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="cheblin" data-post="22" data-topic="476">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/cheblin/48/219_2.png" class="avatar"> cheblin:</div>
+<blockquote>
+<p>Care should be taken to ensure that modifications to a mutable static are safe with respect to <strong>other threads</strong> running in the same process</p>
+</blockquote>
+</aside>
+<p>Тут получается и с одним потоком можно легко “застрелиться”. Думаю что в одном потоке все таки можно было бы отслеживать ссылки во время компиляции. Сделали видимо как проще, все равно unsafe.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_24"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_24" title="Aug 25, 2018 9:16 AM">
+            <time itemprop="datePublished" datetime="2018-08-25 09:16:27 +0000">Aug 25, 2018</time>
+          </a>
+          <span class="post-number">#24</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>На stackowerflow мне объяснили <a href="https://chat.stackoverflow.com/rooms/178618/conversation/how-lifetimes-actually-work" rel="noopener nofollow ugc">как на самом деле работают времена жизни</a>. Мне  не слишком нравится эта концепция, но она объясняет что происходит в примере в шапке.<br>
+Суть вот в чем:</p>
+<blockquote>
+<p>Длительность заимствования определяется только временем жизни в ссылке, которое вычисляется компилятором.</p>
+</blockquote>
+<p>Компилятор в своих вычислениях конечно учитывает области видимости ссылок и обычно заимствование заканчивается, когда ссылка выходит из области видимости. Но в примере в шапке эти вычисления приводят к тому, что время жизни в ссылке должно быть равно области определения переменной <code>data</code> и оно больше чем область видимости ссылки на <code>data</code>.</p>
+<p>Похоже, что единственная ситуация, когда явно проявляется то что заимствование может продолжаться после выхода ссылки из области видимости - это ссылка вида <code>&amp;'a mut T&lt;'a&gt;</code>. Во всяком случае я не смог найти других примеров. Если кто-нибудь сможет -  кидайте сюда.</p>
+<p>В рамках этой концепции становится понятно, почему правила заимствования не действуют на статические переменные. Мутабельное заимствование по ссылке с временем жизни <code>'static</code> должно длится вечно, и когда ссылка вышла бы из области видимости, доступ к данным был бы заблокирован навсегда.</p>
+<p>Честно говоря не вижу смысла в такой реализации времен жизни. Назначение механизма заимствования - предотвращение гонок при изменении данных. Зачем может быть нужно продолжать блокировать доступ к данным после того, как мутабельная ссылка на эти данные, покинула область видимости? Всегда считал что время жизни в ссылке - это верхняя граница, до котрой эта ссылка может дожить, а длительность заимствования данных определяется тем, где ссылка покидает область видимости (или в случае NLL тем где ссылка последний раз использовалась).</p>
+<p>Документация в этом вопросе не особенно вдается в подробности. Вот <a href="https://doc.rust-lang.org/nomicon/lifetimes.html#lifetimes" rel="noopener nofollow ugc">определение времени жизни из Растономикона</a>:</p>
+<blockquote>
+<p>Each reference, and anything that contains a reference, is tagged with a lifetime specifying the scope it’s valid for.</p>
+</blockquote>
+<p>То есть время жизни определяет область в которой ссылка действительна. Не знаю можно ли “область в которой <strong>ссылка</strong> действительна” трактовать как “область в которой <strong>заимствование</strong> действительно”?</p>
+<p>Хотя дальше есть пара примеров, в комментариях которых говорится что длительность заимствования равна выбранному времени жизни:</p>
+<p><a href="https://doc.rust-lang.org/nomicon/lifetimes.html#example-references-that-outlive-referents" rel="noopener nofollow ugc">Пример 1</a>:</p>
+<pre><code class="lang-auto">fn as_str&lt;'a&gt;(data: &amp;'a u32) -&gt; &amp;'a str {
+    'b: {
+        let s = format!("{}", data);
+        return &amp;'a s
+    }
+}
+
+fn main() {
+    'c: {
+        let x: u32 = 0;
+        'd: {
+            // An anonymous scope is introduced because the borrow does not
+            // need to last for the whole scope x is valid for. The return
+            // of as_str must find a str somewhere before this function
+            // call. Obviously not happening.
+            println!("{}", as_str::&lt;'d&gt;(&amp;'d x));
+        }
+    }
+}
+</code></pre>
+<p><a href="https://doc.rust-lang.org/nomicon/lifetimes.html#example-aliasing-a-mutable-reference" rel="noopener nofollow ugc">Пример 2</a>:</p>
+<pre><code class="lang-auto">'a: {
+    let mut data: Vec&lt;i32&gt; = vec![1, 2, 3];
+    'b: {
+        // 'b is as big as we need this borrow to be
+        // (just need to get to `println!`)
+        let x: &amp;'b i32 = Index::index::&lt;'b&gt;(&amp;'b data, 0);
+        'c: {
+            // Temporary scope because we don't need the
+            // &amp;mut to last any longer.
+            Vec::push(&amp;'c mut data, 4);
+        }
+        println!("{}", x);
+    }
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+  <nav class="pagination" role="navigation" aria-label="Post pages">
+    
+    <a href="/t/pochemu-peremennaya-data-zaimstvuetsya-posle-vyzova-funkczii/476/index.html" class="pagination-prev" rel="prev">Previous</a>
+    
+
+    <span class="pagination-info">Page 2 of 2</span>
+
+    
+  </nav>
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

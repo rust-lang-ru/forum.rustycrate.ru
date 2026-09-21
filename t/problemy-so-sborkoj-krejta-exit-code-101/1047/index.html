@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Проблемы со сборкой крейта(exit code: 101) - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Проблемы со сборкой крейта(exit code: 101)</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Проблемы со сборкой крейта(exit code: 101)</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jan 10, 2020</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Damir" class="user-link">Damir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jan 10, 2020 7:25 PM">
+            <time itemprop="datePublished" datetime="2020-01-10 19:25:18 +0000">Jan 10, 2020</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вот, собственно, сам крейт - <a href="https://crates.io/crates/rug" class="inline-onebox" rel="noopener nofollow ugc">crates.io: Rust Package Registry</a>. При его компиляции возникает такая ошибка:</p>
+<blockquote>
+<pre><code>C:\Users\Usvers\Desktop\Rust_projects\Practice\experiment&gt;cargo run --release
+   Compiling winapi-x86_64-pc-windows-gnu v0.4.0
+   Compiling winapi v0.3.8
+   Compiling libc v0.2.66
+   Compiling rug v1.6.0
+   Compiling dirs-sys v0.3.4
+   Compiling dirs v2.0.2
+   Compiling gmp-mpfr-sys v1.1.14
+error: failed to run custom build command for `gmp-mpfr-sys v1.1.14`
+
+Caused by:
+  process didn't exit successfully: `C:\Users\Usvers\Desktop\Rust_projects\Practice\experiment\target\release\build\gmp-mpfr-sys-d57c059d74cad242\build-script-build` (exit code: 101)
+--- stdout
+cargo:rerun-if-env-changed=GMP_MPFR_SYS_CACHE
+$ mkdir -p "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\try_maybe_uninit"
+$ cd "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\try_maybe_uninit"
+$ printf '%s' "// try_may"... &gt; "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\try_maybe_uninit\\try_maybe_uninit.rs"
+$ "rustc" "try_maybe_uninit.rs" "--emit=dep-info,metadata" &gt;&amp; /dev/null
+cargo:rustc-cfg=maybe_uninit
+$ rm -r "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\try_maybe_uninit"
+$ mkdir -p "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\lib"
+$ mkdir -p "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\include"
+$ mkdir -p "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\build\\try_47048"
+$ cd "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\build\\try_47048"
+$ #Check for bug 47048
+$ printf '%s' "/* say_hi."... &gt; "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\build\\try_47048\\say_hi.c"
+$ printf '%s' "/* c_main."... &gt; "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\build\\try_47048\\c_main.c"
+$ printf '%s' "// r_main."... &gt; "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\build\\try_47048\\r_main.rs"
+$ printf '%s' "/* workaro"... &gt; "C:\\Users\\Usvers\\Desktop\\Rust_projects\\Practice\\experiment\\target\\release\\build\\gmp-mpfr-sys-4575602167241fbe\\out\\build\\try_47048\\workaround.c"
+$ "gcc" "-fPIC" "-c" "say_hi.c"
+
+--- stderr
+thread 'main' panicked at 'Unable to execute: "gcc" "-fPIC" "-c" "say_hi.c"', C:\Users\Usvers\.cargo\registry\src\github.com-1ecc6299db9ec823\gmp-mpfr-sys-1.1.14\build.rs:891:29
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+</code></pre>
+</blockquote>
+<p>В каком направлении смотреть, чтобы её исправить?</p>
+<p>P.S.: Установил все зависимости до которых только смог докопаться(хоть и не исключаю, что мог что-то не докопать или не так установить).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jan 11, 2020 11:58 PM">
+            <time itemprop="datePublished" datetime="2020-01-11 23:58:20 +0000">Jan 11, 2020</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>gcc же установлен, да?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Damir" class="user-link">Damir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jan 12, 2020 11:18 AM">
+            <time itemprop="datePublished" datetime="2020-01-12 11:18:12 +0000">Jan 12, 2020</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Конечно. Как уже писал в P.S. установил все зависимости до которых только смог докопаться, но это, увы, не помогло.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jan 13, 2020 5:57 AM">
+            <time itemprop="datePublished" datetime="2020-01-13 05:57:29 +0000">Jan 13, 2020</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Права на директорию?</p>
+<p>Попробуй запустить этот <code>gcc</code> руками с командной строкой из лога.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">E</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/etatarkin" class="user-link">Evgeniy Tatarkin</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jan 13, 2020 11:12 AM">
+            <time itemprop="datePublished" datetime="2020-01-13 11:12:12 +0000">Jan 13, 2020</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Посмотрите секцию  <code>Building on Windows</code> вот этой зависимости <a href="https://crates.io/crates/gmp-mpfr-sys" rel="nofollow noopener">https://crates.io/crates/gmp-mpfr-sys</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Damir" class="user-link">Damir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Jan 13, 2020 5:49 PM">
+            <time itemprop="datePublished" datetime="2020-01-13 17:49:08 +0000">Jan 13, 2020</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Уже смотрел. Выполнял все шаги и не один раз. К сожалению, от ошибки не спасло.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Damir" class="user-link">Damir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Jan 13, 2020 5:50 PM">
+            <time itemprop="datePublished" datetime="2020-01-13 17:50:47 +0000">Jan 13, 2020</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Можете написать немного подробнее, что надо сделать? Думаю я вас не понял.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

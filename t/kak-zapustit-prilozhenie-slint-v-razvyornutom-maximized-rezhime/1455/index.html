@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Как запустить приложение Slint в развёрнутом (maximized) режиме? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Как запустить приложение Slint в развёрнутом (maximized) режиме?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Как запустить приложение Slint в развёрнутом (maximized) режиме?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">May 21, 2024</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Danila_Karpenko" class="user-link">Данила Карпенко</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="May 21, 2024 2:23 PM">
+            <time itemprop="datePublished" datetime="2024-05-21 14:23:22 +0000">May 21, 2024</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я разрабатываю десктопное приложение на rust и очень хочу, чтобы оно при запуске разворачивалось на всю рабочую область экрана (параметр maximized).<br>
+Однако я столкнулся с проблемой, если просто присвоить окну приложения slint этот параметр равный true и после запустить приложение, оно запустится в состоянии развёрнутого, но будет иметь стандартный размер, то есть запустится в левом верхнем углу, с соответствующим значком на тулбаре, но при этом с тем же размером, с которым оно запускается по умолчанию.</p>
+<p><img src="https://forum.rustycrate.ru/uploads/default/original/1X/f3fe7fe77f2333ce15fc31fc3ac2aca017b1ae5e.png" alt="image" data-base62-sha1="yOthS2Q4zP2YsxxX4soi1P8G9lk" width="134" height="105"></p>
+<p>При этом функция MyApp.run()  блокирует поток, из-за чего присвоить параметру нужное значение уже после запуска приложения не выходит.<br>
+Пробовал отображать окно перед изменением параметра, результат тот же. Пробовал делать это в отдельном потоке, ругается что не удаётся безопасно передать ссылку на приложение (как я понял это связано с тем что GUI-элементы должны быть доступны только в основном потоке). Чат GPT предложил использовать функцию slint on_ready, но ничего об этой функции я не нашёл, а код предложенный gpt-шкой просто не работает.<br>
+Подскажите что можно сделать в такой ситуации?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Danila_Karpenko" class="user-link">Данила Карпенко</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="May 22, 2024 3:23 PM">
+            <time itemprop="datePublished" datetime="2024-05-22 15:23:02 +0000">May 22, 2024</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Смог найти ответ самостоятельно. решение с потоками частично правильное, но нужно будет обернуть вызов set_maximized в функцию <a href="https://snapshots.slint.dev/master/docs/rust/slint/fn.invoke_from_event_loop" rel="noopener nofollow ugc">invoke_from_event_loop</a>, рабочий код:</p>
+<pre><code class="lang-auto">fn main() {
+    let app = AppWindow::new().unwrap();
+    let app_weak = app.as_weak();
+
+    let thread = std::thread::spawn(move || {
+        let app_copy = app_weak.clone();
+        //Разворачиваем окнов в потоке событий slint
+        slint::invoke_from_event_loop(move || app_copy.unwrap().window().set_maximized(true)).unwrap();
+
+        //Выполняем тут какой ни будь код, который нужно выполнить по факту запуска приложения
+        //Например: скрываем окно консоли свойственное для slint 
+    });
+
+    thread.join().unwrap();
+    app.run().unwrap();
+}
+</code></pre>
+<p>Так же event loop в slint запускается уже после отображения окна, так что в поток так же можно добавить любой код который мы бы хотели написать в on_ready</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

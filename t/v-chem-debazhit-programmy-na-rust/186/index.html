@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>В чем дебажить программы на rust? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">В чем дебажить программы на rust?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">В чем дебажить программы на rust?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+        <div class="topic-tags">
+          
+            <a href="/tag/ide" class="tag-badge">ide</a>
+          
+        </div>
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Mar 29, 2017</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Mar 29, 2017 6:59 AM">
+            <time itemprop="datePublished" datetime="2017-03-29 06:59:30 +0000">Mar 29, 2017</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Погуглил я эту тему. Первое, что советуют - RustDT, и первое, что понимаешь, когда пытаешься работать с этой программой - авторы сами ни разу с ней не работали. Компилить проект можно только 1 раз, все последующие - компилятор ожидает разлочивания директории build. Дебаггер глючит, у меня напечатал переменную дважды, причем, например, если это ссылка на i32, то он печатает ее адрес, а не значение по этому адресу. И как заставить его напечатать значение - я так и не нашел. При этом само окошко переменных глчит - выделения мигают, работать невозможно.</p>
+<p>idea. Где-то в issue я находил, что в идею добавили возможность дебага, но пока это существует только в исходниках, и из за бага в cargo позволяет дебажить только программы, запущенные без аргументов. Ставить еще не пробовал.</p>
+<p>rust-gdb. ваппер вокруг gdb. Наверное, для 70ых это было бы круто, но для 2017 так дэбажить - это же извращение.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Mar 29, 2017 9:25 AM">
+            <time itemprop="datePublished" datetime="2017-03-29 09:25:18 +0000">Mar 29, 2017</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <ul>
+<li><a href="https://forge.rust-lang.org/ides.html" rel="nofollow noopener">https://forge.rust-lang.org/ides.html</a></li>
+<li><a href="https://areweideyet.com/" rel="nofollow noopener">https://areweideyet.com/</a></li>
+</ul>
+<p>Говорят что в VS Code удобная отладка.</p>
+<p>Лично я как раз извращенец - пишу в vim и отлаживаюсь логами или принтами. С типажом <code>Debug</code> это, как по мне, довольно удобно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Mar 29, 2017 10:50 AM">
+            <time itemprop="datePublished" datetime="2017-03-29 10:50:17 +0000">Mar 29, 2017</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Это ж вижуал студия. Она только для винды.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Mar 29, 2017 11:01 AM">
+            <time itemprop="datePublished" datetime="2017-03-29 11:01:40 +0000">Mar 29, 2017</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Нет, VS Code это другой проект, он вообще открытый: <a href="https://github.com/Microsoft/vscode" rel="nofollow noopener">https://github.com/Microsoft/vscode</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/wiz" class="user-link">Alexander Bondarenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Mar 30, 2017 8:46 AM">
+            <time itemprop="datePublished" datetime="2017-03-30 08:46:50 +0000">Mar 30, 2017</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>С небольшими приседаниями мне удалось натравить дебаггер на либку:<br>
+<div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/b0996e723a191f5836eb1d45b81ac42d3c0b76d3.png" data-download-href="https://forum.rustycrate.ru/uploads/default/b0996e723a191f5836eb1d45b81ac42d3c0b76d3" title="Screenshot from 2017-03-30 11-44-09.png"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/b0996e723a191f5836eb1d45b81ac42d3c0b76d3_2_690x388.png" width="690" height="388" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/b0996e723a191f5836eb1d45b81ac42d3c0b76d3_2_690x388.png, https://forum.rustycrate.ru/uploads/default/optimized/1X/b0996e723a191f5836eb1d45b81ac42d3c0b76d3_2_1035x582.png 1.5x, https://forum.rustycrate.ru/uploads/default/optimized/1X/b0996e723a191f5836eb1d45b81ac42d3c0b76d3_2_1380x776.png 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/b0996e723a191f5836eb1d45b81ac42d3c0b76d3_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">Screenshot from 2017-03-30 11-44-09.png</span><span class="informations">1920×1080 267 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p>плагины: rust, lldb</p>
+<p>конфиг дебага:</p>
+<pre><code class="lang-json">{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug",
+      "program": "${workspaceRoot}/target/debug/deps/l6-a2c0a35411de4316",
+      "args": [],
+      "cwd": "${workspaceRoot}",
+      "sourceLanguages": ["rust"]
+    }
+  ]
+}
+</code></pre>
+<p>“program” для либы надо указывать как-то более человечно, для бинаря наверно попроще будет.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Mar 30, 2017 10:09 AM">
+            <time itemprop="datePublished" datetime="2017-03-30 10:09:31 +0000">Mar 30, 2017</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Да, я вчера тоже посмотрел VS code - юзабельно, хотя  кодкомплитер “из коробки” совершенно идиотский, бессмысленный и беспощадный.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/wiz" class="user-link">Alexander Bondarenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Mar 30, 2017 11:08 AM">
+            <time itemprop="datePublished" datetime="2017-03-30 11:08:24 +0000">Mar 30, 2017</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="chabapok" data-post="6" data-topic="186">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chabapok/48/102_2.png" class="avatar"> chabapok:</div>
+<blockquote>
+<p>хотя  кодкомплитер “из коробки”</p>
+</blockquote>
+</aside>
+<p>Это который? Там два плагина. И в любом случае дополнение поставляется рейсером - оно одинаковое во всех IDE.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Mar 30, 2017 11:29 AM">
+            <time itemprop="datePublished" datetime="2017-03-30 11:29:38 +0000">Mar 30, 2017</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>не знаю, я поставил плагин Rust, он предложил доставить всякого барахла, долго качал, компилил, ставил. Никаких новых расширений он не доставил, но после этого стал работать автокомплит, но стал предлагать слишком много: нажимаешь stru - он тебе предлагает не только структуру - но и скобочки и поля в ней, при этом, если ты согласен - то добавлял в конец набраного тобой. Сегодня баг куда-то делся, он заменят твое, но все равно предлагает чрезмерно много. Еще и #[derive(Debug)] над структурой ставит. Но это уже неособо критичный момент</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/wiz" class="user-link">Alexander Bondarenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Mar 30, 2017 11:46 AM">
+            <time itemprop="datePublished" datetime="2017-03-30 11:46:15 +0000">Mar 30, 2017</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="chabapok" data-post="8" data-topic="186">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chabapok/48/102_2.png" class="avatar"> chabapok:</div>
+<blockquote>
+<p>Еще и #[derive(Debug)] над структурой ставит.</p>
+</blockquote>
+</aside>
+<p>А мне наоборот понравилось… Сервис…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">D</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/DarkEld3r" class="user-link">Stanislav</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Mar 30, 2017 3:11 PM">
+            <time itemprop="datePublished" datetime="2017-03-30 15:11:54 +0000">Mar 30, 2017</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="chabapok" data-post="1" data-topic="186">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chabapok/48/102_2.png" class="avatar"> chabapok:</div>
+<blockquote>
+<p>idea. Где-то в issue я находил, что в идею добавили возможность дебага</p>
+</blockquote>
+</aside>
+<p>Насколько я знаю, оно ещё и работает не во всех “редакциях” IDE и в IDEA как раз не работает. Нужен, например, Clion. Хотя сам тоже не пробовал (пользуюсь IDEA, обхожусь логами).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Mar 30, 2017 8:52 PM">
+            <time itemprop="datePublished" datetime="2017-03-30 20:52:38 +0000">Mar 30, 2017</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>да, там говорили, что запустили дебаг в CLion</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Mar 30, 2017 11:25 PM">
+            <time itemprop="datePublished" datetime="2017-03-30 23:25:18 +0000">Mar 30, 2017</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="wiz" data-post="5" data-topic="186">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/wiz/48/81_2.png" class="avatar"> wiz:</div>
+<blockquote>
+<p>плагины: rust, lldb</p>
+<p>конфиг дебага:</p>
+</blockquote>
+</aside>
+<p>А у вас оно во время дебага не ругается, что не может открыть системные файлы?<br>
+Например:</p>
+<p>Unable to open ‘pthread_cond_timedwait.S’: File not found (/build/buildd/eglibc-2.19/nptl/sysdeps/unix/sysv/linux/x86_64/pthread_cond_timedwait.S)</p>
+<p>это при попытке сдеать step over такой строке:<br>
+let s = CString::new(“abcd”).unwrap();</p>
+<p>При этом, gdb тоже ругается, но не так как lldb:<br>
+Unable to open ‘c_str.rs’: File not found (/checkout/src/libstd/ffi/c_str.rs).</p>
+<p>Но мне ненадо туда заходить! Я хочу сделать шаг step over а не step into!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_13"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/wiz" class="user-link">Alexander Bondarenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_13" title="Mar 31, 2017 9:51 AM">
+            <time itemprop="datePublished" datetime="2017-03-31 09:51:19 +0000">Mar 31, 2017</time>
+          </a>
+          <span class="post-number">#13</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_12">Replying to #12</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="chabapok" data-post="12" data-topic="186">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chabapok/48/102_2.png" class="avatar"> chabapok:</div>
+<blockquote>
+<p>А у вас оно во время дебага не ругается, что не может открыть системные файлы?</p>
+</blockquote>
+</aside>
+<p>Да, ругается. Вообще у меня выкачаны исходники стдлиба (для рейсера или чего-то такого) и надо source mapping настроить. Но мне пока недостаточно не лень.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_14"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_14" title="Mar 31, 2017 9:56 AM">
+            <time itemprop="datePublished" datetime="2017-03-31 09:56:28 +0000">Mar 31, 2017</time>
+          </a>
+          <span class="post-number">#14</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Причем, что самое интересное, если создать такой же проект, но типа bin, то дебаг работает относительно нормально. При том, что все равно ссылки на эти файлы  бинарнике есть. Если выполнить <code>objdump -g target/debug/binproba &gt;file.txt</code>, то помимо остального, там можно найти такое:</p>
+<pre><code> The Directory Table (offset 0x1b):
+  1     /hitachi-hdd/sources_razn/rust/src-my/3/binproba/src
+  2     /checkout/src/libcore
+  3     /checkout/src/libcore/fmt
+  4     /checkout/src/libcore/fmt/rt
+  5     /checkout/src/libcollections
+  6     /checkout/src/libstd/ffi
+  7     /checkout/src/libstd
+  8     /checkout/src/liballoc
+  9     /checkout/src/libcore/str
+  10    /checkout/src/libcore/slice
+  11    /checkout/src/libcore/iter
+
+ The File Name Table (offset 0x151):
+  Entry Dir     Time    Size    Name
+  1     1       0       0       main.rs
+  2     0       0       0       &lt;println macros&gt;
+  3     0       0       0       &lt;panic macros&gt;
+  4     0       0       0       &lt;assert_eq macros&gt;
+  5     2       0       0       lib.rs
+  6     2       0       0       result.rs
+  7     3       0       0       mod.rs
+  8     4       0       0       v1.rs
+  9     2       0       0       option.rs
+  10    5       0       0       slice.rs
+  11    5       0       0       lib.rs
+  12    6       0       0       c_str.rs
+  13    7       0       0       lib.rs
+  14    6       0       0       mod.rs
+  15    8       0       0       raw_vec.rs
+  16    8       0       0       lib.rs
+  17    2       0       0       ptr.rs
+  18    2       0       0       nonzero.rs
+  19    2       0       0       marker.rs
+  20    9       0       0       mod.rs
+  21    5       0       0       vec.rs
+  22    2       0       0       cmp.rs
+  23    10      0       0       mod.rs
+  24    2       0       0       mem.rs
+  25    2       0       0       macros.rs
+  26    2       0       0       convert.rs
+  27    11      0       0       traits.rs
+  28    11      0       0       mod.rs
+  29    8       0       0       heap.rs
+  30    2       0       0       ops.rs
+</code></pre>
+<p>С одной стороны, это проясняет, почему дебажные файлы такие больше - в них есть дебажная инфа либ, и возможно, это хорошо. С другой, возникает вопрос - а что за каталог /checkout, у меня такого нет, есть только тот, что под номером 1. И почему когда дебажишь bin - то все работает, а когда пытаешься дебажить тест - не работает. И вот эта ошибка, которая выскакивает - она в VS code валит всю сессию. Хотя, консольный rust-gdb работает в обеих случаях.</p>
+<blockquote>
+<p>Вообще у меня выкачаны исходники стдлиба (для рейсера или чего-то такого) и надо source mapping настроить.</p>
+</blockquote>
+<p>сейчас пойду смотреть, как его настраивать…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_15"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_15" title="Mar 31, 2017 3:33 PM">
+            <time itemprop="datePublished" datetime="2017-03-31 15:33:47 +0000">Mar 31, 2017</time>
+          </a>
+          <span class="post-number">#15</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Так… Как настраивать source mapping я так и не разобрался. Но зато вот что я выяснил. Оно по-разному работает с разными версиями gdb и lldb.</p>
+<p>У убунте 14.04 доступна одна какая-то версия gdb, консольно оно работает, с VS code - может выбрыкиваться и ругаться на исходники, если отлаживаешь либы.</p>
+<p>lldb доступно в версиях: 3.{3,4,5,6,8}<br>
+И так же к vs code есть 2 плагина: LLDB debugger и Native debug.</p>
+<p>Native debug работает с lldb-mi. В чем отличие mi от не mi - вроде бы mi это более продвинутая версия, но как мы видим, это ей не помогло.<br>
+LLDB debugger - по всей видимости, работает с lldb</p>
+<p>Оба дебаггера про rust вроде как ничего не  знают.</p>
+<p>3.8 - не показывает переменные в консольнм режиме и не работает нормально ни с одним из плагинов.<br>
+3.6 - вроде работает консольно, вроде работает с плагином LLDB debugger (правда, не умеет разворачивать Result - но это понт) но не работает с Native debug.<br>
+3.5 - судя по rust-lldb не рабочий по жизни.<br>
+Остальные не пробовал.</p>
+<p>Впринципе - неплохой повод разобраться с консольным дебажиньем кода. Всегда было интересно что люди в этом находят - но никогда руки до этого не доходили.</p>
+<p>как узнать, какой версии llvm в rustc?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_16"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_16" title="Mar 31, 2017 8:03 PM">
+            <time itemprop="datePublished" datetime="2017-03-31 20:03:58 +0000">Mar 31, 2017</time>
+          </a>
+          <span class="post-number">#16</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>можно еще <a href="https://github.com/cs01/gdbgui" rel="nofollow noopener">https://github.com/cs01/gdbgui</a> пощупать</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_17"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_17" title="Mar 31, 2017 9:15 PM">
+            <time itemprop="datePublished" datetime="2017-03-31 21:15:50 +0000">Mar 31, 2017</time>
+          </a>
+          <span class="post-number">#17</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_16">Replying to #16</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>задумка, возможно, хорошая, но при попытке загрузить исходник выдало такое:</p>
+<pre><code>[2017-03-31 23:59:42,309] ERROR in app: Exception on /read_file [GET]
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/usr/local/lib/python2.7/dist-packages/gdbgui/backend.py", line 311, in read_file
+    highlight = json.loads(request.args.get('highlight', 'true'))
+  File "/usr/lib/python2.7/json/__init__.py", line 338, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python2.7/json/decoder.py", line 366, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python2.7/json/decoder.py", line 384, in raw_decode
+    raise ValueError("No JSON object could be decoded")
+ValueError: No JSON object could be decoded
+</code></pre>
+<p>При попытке нажать “run” тоже ругается: INTERNAL SERVER ERROR (500 error)<br>
+И ddd я тоже пробовал - вообще глючная штука.</p>
+<p>В настоящий момент я выяснил в чем был баг. Плагин LLDB debugger рассчитан на lldb-4.0<br>
+ее в репозиториях убунты 14.04 нету - но есть репозитории самого lldb. Оттуда можно ее поставить - и тогда vscode работает. И кроме того, там консольный дебаггер, скажем так - можно привыкнуть. Единственное, что плохо - в консольном дебаггере стрелки вверх-вниз не листают по истории, а выводят в консоль “^[[A” и “^[[B”. Так же, не работают стрелки вправо-влево. Я даже на лор спросил об этом, может там можно что-то доставить, и оно заработает.</p>
+<p>Да что ж оно все такое глючное и нестабильное? Или это я разбалован java где всегда все работало идеально.</p>
+<p>в репах llvm есть 3.9, и ее можно поставить. В ней стрелки в консоли работают - но все переменные показывает равными None, и с vs code оно не работает.</p>
+<p>Наиболее рабочей выглядит 3.6 - она в репах убунты, но руст собран с llvm-4.0.</p>
+<p>Возможно, завтра попытаюсь собрать lldb-4.0 из исходников.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_18"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_18" title="Apr 1, 2017 11:38 PM">
+            <time itemprop="datePublished" datetime="2017-04-01 23:38:52 +0000">Apr 1, 2017</time>
+          </a>
+          <span class="post-number">#18</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Собрал lldb с исходников. Вобщем да, работает, и баги с клавиатурой ушли. Видимо, тот что в идет в репах плохо собран: размер либы <a href="http://liblldb.so" rel="nofollow noopener">liblldb.so</a> около 25мб, а мой собранный - 75мб. Что свидетельствует о неполном функционале lldb с репозитория.</p>
+<p>В lldb в четвертом даже есть гуи - включается командой gui. Но к сожалению - недоделано. Согластно <a href="http://stackoverflow.com/questions/27957058/documentation-for-lldbs-gui" rel="nofollow noopener">http://stackoverflow.com/questions/27957058/documentation-for-lldbs-gui</a> оно появилось совсем недавно, и еще недоделано.</p>
+<p>Итог такой.</p>
+<p>Дебажить можно:</p>
+<ol>
+<li>
+<p>В связке vscode + LLDB debugger+ lldb-4.0</p>
+</li>
+<li>
+<p>Или, rust-gdb (ставится когда ставишь раст) - при этом мне пришлось пересобрать gdb - и тогда даже как-то работает TUI хотя в реальной работе не пробовал. Но вообще, можно и без пересборки.</p>
+</li>
+<li>
+<p>Или rust-lldb. gui там недоделан, так что про него можно забыть, а вот консольный дебаг работает относительно хорошо, хотя свои приколы тоже имеются. При этом, lldb тоже желательно пересобрать, т.к. в репах оно собрано не всегда хорошо.</p>
+</li>
+</ol>
+<p>Может по свободе попробую еще собрать пятый lldb. Пока мне с дебагами разбираться надоело.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_19"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/snuk182" class="user-link">Serhii Plyhun</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_19" title="Apr 4, 2017 2:40 PM">
+            <time itemprop="datePublished" datetime="2017-04-04 14:40:47 +0000">Apr 4, 2017</time>
+          </a>
+          <span class="post-number">#19</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Официально в идее дебага еще нет.<br>
+<aside class="onebox githubissue">
+  <header class="source">
+      <a href="https://github.com/intellij-rust/intellij-rust/issues/535" target="_blank" rel="nofollow noopener">github.com/intellij-rust/intellij-rust</a>
+  </header>
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/intellij-rust/intellij-rust/issues/535" target="_blank" rel="nofollow noopener">Implement debugger</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2016-07-18" data-time="08:52:25" data-timezone="UTC">08:52AM - 18 Jul 16 UTC</span>
+      </div>
+
+        <div class="date">
+          closed <span class="discourse-local-date" data-format="ll" data-date="2019-12-12" data-time="07:02:52" data-timezone="UTC">07:02AM - 12 Dec 19 UTC</span>
+        </div>
+
+      <div class="user">
+        <a href="https://github.com/matklad" target="_blank" rel="nofollow noopener">
+          <img alt="matklad" src="https://avatars3.githubusercontent.com/u/1711539?v=4" class="onebox-avatar-inline" width="20" height="20">
+          matklad
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="github-row">
+  <p class="github-content">The work has started: https://github.com/intellij-rust/intellij-rust/tree/fc2cfb8e0fc76984495a34ae6a83cbb37188c699/debugger
+State of the art
+The debugger is officially available in CLion since 2018.1. Note, CLion doesn't support debugging...</p>
+</div>
+
+<div class="labels">
+    <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">feature</span>
+    <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">subsystem::debugger</span>
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+<br>
+CLion может что-то прожевать, выдаваемое Rust, но все это неприглядно выглядит.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_20"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chabapok" class="user-link">chabapok</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_20" title="Apr 8, 2017 6:42 PM">
+            <time itemprop="datePublished" datetime="2017-04-08 18:42:20 +0000">Apr 8, 2017</time>
+          </a>
+          <span class="post-number">#20</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Тут я в очередной раз баловался - и свалил lldb. Интерсно, у вас падает (падать по идее должно и в графическом дебаггере, если у него “снизу” lldb)<br>
+Значит, есть следующий код:</p>
+<pre><code>use std::collections::HashMap;
+
+#[derive(Debug)]
+enum En&lt;'a&gt; {
+    None,
+    Bar(&amp;'a Bar&lt;'a&gt;),
+}
+
+#[derive(Debug)]
+struct Bar&lt;'a&gt; {
+    next: En&lt;'a&gt;,
+}
+
+
+fn main() {
+    let mut all_objects = HashMap::new();
+    let bar: Bar = Bar {
+        next: En::None,
+    };
+    all_objects.insert(1, bar);
+    let b1 = all_objects.get(&amp;1).unwrap();
+    println!("b1={:?}", b1); //это строка номер 22
+    println!("end");
+}
+</code></pre>
+<p>Пытаюсь дебажить через lldb (собраный, или посталенный из пакетов - не важно), ставлю брикпоинт на 22 строку, выполняю, пытаюсь распечатать b1. Получается так:</p>
+<pre><code>(lldb) target create "target/debug/test"
+Current executable set to 'target/debug/test' (x86_64).
+(lldb) b 22
+Breakpoint 1: 2 locations.
+(lldb) r
+Process 16849 launched: '/home/chabapok/RustProjects/2/test1/target/debug/test' (x86_64)
+Process 16849 stopped
+* thread #1, name = 'test', stop reason = breakpoint 1.1
+    frame #0: 0x000055555556501f test`test::main at main.rs:22
+   19  	    };
+   20  	    all_objects.insert(1, bar);
+   21  	    let b1 = all_objects.get(&amp;1).unwrap();
+-&gt; 22  	    println!("b1={:?}", b1);
+   23  	    println!("end");
+   24  	}
+(lldb) p b1
+error: test DWARF DIE at 0x0000007c (class En) has a member variable 0x00000082 (RUST$ENCODED$ENUM$0$None) whose type is a forward declaration, not a complete definition.
+Please file a bug against the compiler and include the preprocessed output for /home/chabapok/RustProjects/2/test1/./src/main.rs
+Stack dump:
+0.	HandleCommand(command = "p b1")
+1.	&lt;eof&gt; parser at end of file
+2.	Parse:41:1: Generating code for declaration '$__lldb_expr'
+Segmentation fault
+</code></pre>
+<p>пробовал снять коредамп и посмотреть стек. Там 14964 стакфреймов, оно там входит в рекурсию.<br>
+Фиг его знает, чей это баг - то ли lldb, то ли clang, то ли плохой формат dwarf. В рекурсию оно входит в файле, который относится к clang (tools/clang/AST/RecordLayoutBuilder.cpp)</p>
+<p>Фиг его знает, че дальше делать. Я не настолько еще гуру, чтобы знать это… Куда правильно слать багрепотры в такой ситуации? Или что еще можно попробовать? Я слышал, что rust работает на патченой llvm, но вроде бы(если я правильно нашел репозиторий) последние коммиты в патченную llvm были несколько лет назад.</p>
+<p>llvm собирал с исходников, с ветки stable, lldb и clang - с ветки master. Наверное сейчас надо попробовать llvm взять тоже из master. Хотя, вряд ли это поможет, ведь падает в коде clang. (апдейт: собрал, не помогло)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+  <nav class="pagination" role="navigation" aria-label="Post pages">
+    
+
+    <span class="pagination-info">Page 1 of 2</span>
+
+    
+    <a href="/t/v-chem-debazhit-programmy-na-rust/186/2.html" class="pagination-next" rel="next">Next</a>
+    
+  </nav>
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

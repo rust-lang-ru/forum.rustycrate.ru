@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Предлагаю оживить форум - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/site-feedback/3/index.html">Про этот форум</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Предлагаю оживить форум</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Предлагаю оживить форум</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/site-feedback/3" class="category-badge" style="--cat-color: #808281"><span class="category-bullet" aria-hidden="true"></span>Про этот форум</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jul 18, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jul 18, 2018 5:07 PM">
+            <time itemprop="datePublished" datetime="2018-07-18 17:07:19 +0000">Jul 18, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Уже н-цать лет сижу в <a href="https://gitter.im/ruRust">rurust гиттере</a> и до сих пор до конца не понимаю, почему именно гиттер стихийно стал центром сообщества. Наверное, дело в отсутствии необходимости что-то организовывать и простоте подключения к процессу общения. В любом случае, форум у нас есть давно, но живет в режиме зомби и меня это несколько печалит.</p>
+<p><strong>TLDR</strong>: предлагаю перенести большую часть “информационного” общения на форум, не отказываясь при этом от чатов как инструмента помощи с тривиальными или срочными вопросами (и просто флудильни).</p>
+<h1><a name="p-965-h-1" class="anchor" href="#p-965-h-1" aria-label="Heading link"></a>Что мне не нравится в чатах и что может исправить форум</h1>
+<p>По сути, если отставить в сторону очевидную глючность конкретно гиттера, то все мои претензии сводятся к проблемам <em>масштабирования</em> и <em>обнаружения</em>.</p>
+<h2><a name="p-965-h-2" class="anchor" href="#p-965-h-2" aria-label="Heading link"></a>Чатопроблема первая: масштабирумость</h2>
+<ul>
+<li>
+<p><strong>Плохая асинхронность</strong>.</p>
+<p>Полноценно пользоваться чатом можно только если ты вот прям присутствуешь в нем все время.<br>
+Т.е. чат удобен в первую очередь тем, кому подходит постоянно мониторить его с перерывами не больше чем на пару часов (+ на сон, все равно все спят примерно в одно время).</p>
+<p>Потому что, если ты заходишь в гиттер и видишь 100+ непрочитанных сообщений в комнате, то все, скорее всего реально только нажать “отметить все как прочитанное” и забить. Какие ты при этом упускаешь важные ссылки-обсуждения - черт его знает.</p>
+</li>
+<li>
+<p><strong>Сложность параллельного обсуждения нескольких тем</strong>.</p>
+<p>Обыденная ситуация в гиттере, даже с учетом того что у нас есть несколько отдельных комнат: одновременно обсуждается простой вопрос про конфликт ВЖ, более сложный вопрос про футуры, какой-нибудь вообще полуфилосовский вопрос организации кода и внезапно еще прилетает некро-ответ на четвертое вчерашнее обсуждение, запускающий лютый срач, который перекрывает наглухо первые три обсуждения.</p>
+</li>
+<li>
+<p><strong>Сильно ограниченная масштабируемость</strong>.</p>
+<p>Я не знаю как это называется по-умному, но у чата есть параметр, который я обзову “скоростью” - насколько быстро в нем появляются новые сообщения.</p>
+<p>У каждого читателя чата тоже есть некая максимальная скорость. Если чат движется быстрее ее, то человек скорее всего перестанет нормально воспринимать информацию и или отпишется, или будет на автомате просто прокручивать сообщения. Если это происходит постоянно, то человек скорее всего перестает активно следить за чатом.</p>
+<p>Из-за этого чаты тяготеют к подавлению менее активно присутствующих людей и постепенному их выдавливанию на перефирию сообщества, какие бы ценные знания-мнения у этих людей не были. И сила такого выдавливания обычно пропорциональна размеру сообщества, т.е. постепенно растет со временем в нашем случае.</p>
+</li>
+</ul>
+<p>Насколько я представляю, с асинхронностью чаты помочь не могут вообще. Они все заточены под общение с малыми задержками. В интересах же растущего сообщества - двигаться к более медленным, но обстоятельным и информативным обсуждениям.</p>
+<p>Что касается тем, то когда-то давно, пока гиттер еще активно развивался, <a href="https://blog.gitter.im/2016/09/30/introducing-gitter-topics/">в него хотели ввести темы</a>, но этого не случилось.<br>
+Про Zulip говорят что там <a href="https://zulipchat.com/why-zulip/">там хорошая система тем</a>. Лично я толком этим не успел попользоваться, но от прочитанного есть ощущение что получается эрзац-форум и лучше уж пользоваться настоящим.</p>
+<p>Для форумов же асинхронное общение является нормой и они заточены под него, а без легкого создания тем форум представить вообще сложно. Даже если ты неделю не заходил на форум, пролистать список тем и отфильтровать пяток с важными для тебя названиями - совершенно не сложно.</p>
+<h2><a name="p-965-h-3" class="anchor" href="#p-965-h-3" aria-label="Heading link"></a>Чатопроблема вторая: обнаружение и поиск</h2>
+<p>Думаю, тут особо пояснять не нужно - гугл никогда не выдаст на твой вопрос ничего из чата. Даже если ты рассказываешь что-то очень интересное и нужное, вероятность что это увидит кто-то, кроме присутствующих в этот момент или заглянувших в течение пары часов - почти нулевая. Т.е. эффективность чата как канала обмена информации 1-к-N очень маленькая, куча знаний просто пропадает почти бесследно.</p>
+<p>Даже свои собственные высказывания, допустим, годовалой давности найти становится невероятно трудно.</p>
+<p>Если рассматривать не только гиттер, а, например, IRC-архивы, то да, их иногда выдает таки в поиске, но почти всегда они все равно бесполезны, потому что тебя кидает в какой-то дикий поток сообщений без конца и начала и разобраться откуда вообще начинать вникать - постороннему человеку почти нереально.</p>
+<p>Форум в этом плане решение старперское и надежное: кроме внутреннего поискового движка, индексируется гуглом и остальными поисковиками со всей мощью их искалок.</p>
+<p>И как бонус, на форум могут вываливаться из гугла ищущие что-то про раст люди, потому что сейчас если на что такое и нарвешься, так только на хабростатью.</p>
+<h1><a name="p-965-h-4" class="anchor" href="#p-965-h-4" aria-label="Heading link"></a>Вопросы с форумом</h1>
+<p>Тут я попытался ответить на запомнившееся мне возражения насчет инициативы с форумом, большей частью из offtopic канала гиттера.</p>
+<h2><a name="p-965-h-5" class="anchor" href="#p-965-h-5" aria-label="Heading link"></a>Меньшая интерактивность и неповоротливость</h2>
+<p>Форум правда несколько менее интерактивный/оперативный. Если вопрос дико срочный, то для них остается чат.</p>
+<p><a class="mention" href="/u/pzixel/index.html">@Pzixel</a> <a href="https://gitter.im/ruRust/offtopic?at=5b48ac1b66c1e833a9e4f460">июль 13 16:41</a></p>
+<blockquote>
+<p>вопрос в том, что ты ( <a class="mention" href="/u/webdesus/index.html">@webdesus</a> ) предлагаешь вместо того,<br>
+чтоб самому разбираться, кто что написал, каждому пользователю<br>
+самому квалифицировать своё сообщение,<br>
+с помощью метки/темы на форуме/еще как-то.</p>
+<p>только вот я не стал бы таким заниматься</p>
+</blockquote>
+<p>Да, собственно в этом предложение и есть: один человек тратит на нцать секунд своего времени дополнительно, зато остальные потенциально заинтересованные коллективно экономят намного больше, за счет лучшей структурированности информации. Я нахожу это вопросом уважительного отношения друг к другу.</p>
+<p>И в целом, наверное я слишком привык к форумам в юности, но не вижу особой сложности в том что нажать на кнопку “новая тема” и придумать ей заголовок, вроде дело максимум на пол минуты.</p>
+<p>Если для части членов сообщества это все-таки критические временные затраты, то чаты никто не выключает. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<h2><a name="p-965-discourse-6" class="anchor" href="#p-965-discourse-6" aria-label="Heading link"></a>Переутяжеленность <a href="https://www.discourse.org/">discourse</a> движка</h2>
+<p><a class="mention" href="/u/chabapok/index.html">@chabapok</a>:</p>
+<blockquote>
+<p>Считается, что ничего страшного, если форум переутяжелен.<br>
+Но я не согласен в такой идеей.<br>
+С легким форумом который не тормозит, работать приятней.<br>
+И вообще, на самом деле, чат тоже переутяжелен.</p>
+</blockquote>
+<p>В целом оно немного “вебдванольное” слишком, но я бы не сказал что прям жесткий перегиб с этим. По современным меркам он дажегде-то в середине диапазона “тяжеловестности”. С точки зрения производительности ни на ноуте, ни с телефона у меня проблем не возникает.</p>
+<p>По функционалу и интерфейсу - я бы скорее назвал его непривычным просто. Т.е. меня раньше довольно сильно раздражало перехватывание поиска по странице и прокрутки, но привык после чтения пары десятков тем на <a href="https://users.rust-lang.org/">URLO</a>/<a href="https://internals.rust-lang.org/">IRLO</a>.</p>
+<p>Зато движок <a href="https://github.com/discourse/discourse">открытый</a> и <a href="https://meta.discourse.org/">более чем живой</a>. Для него есть <a href="https://meta.discourse.org/c/plugin">довольно много всяких расширений</a>, которые вполне можно будет при необходимости вкрутить поверх базового функционала.</p>
+<h2><a name="p-965-h-7" class="anchor" href="#p-965-h-7" aria-label="Heading link"></a>Уведомления</h2>
+<p>Родные для discourse уведомления - слать письма на почту. Приходят с задержкой в пару минут. Я и так активно пользуюсь почтой ежедневно, так что для лично меня работает отлично.</p>
+<p>Для современных людей, не желающих морочиться с почтовым анахронизмом, вполне можно наладить какие угодно уведомляшки через расширения. Гугл говорит что их дофига, например <a href="https://meta.discourse.org/t/telegram-notifications-plugin-discourse-telegram-notifications/60483">вот телеграмовское</a>.</p>
+<p>В том числе, думаю, должно быть вполне реально настроить кидание ботом сообщения в “genеral” гиттер чат о создании новой темы на форуме.</p>
+<h2><a name="p-965-h-8" class="anchor" href="#p-965-h-8" aria-label="Heading link"></a>Плотность информации</h2>
+<p><a href="https://forum.rustycrate.ru/t/zulip-i-drugie-alternativy-v-kachestve-osnovnoj-chat-ploshhadki/404/14">Ссылка на сообщение @pzixel из соседней темы</a></p>
+<p>Насчет большей плотности информации в чате. Вот сегодняшний пример типичного, как мне кажется, разговора в гиттере:</p>
+<pre><code class="lang-plaintext">Dmitriy @dpogretskiy 12:37
+да, именно потому что alloc::String
+можешь намутить свой тип, с буфером который Sized
+
+zhukovskiy @Pzixel 12:38
+не могу
+мне нужно именно для строк
+и векторов
+
+Dmitriy @dpogretskiy 12:38
+в котором какой нибудь убогий null terminated стринг :)
+
+zhukovskiy @Pzixel 12:38
+вообще я посмотрел
+взрослый serde_json если в no_std перевести всего 4 ошибки компиляции выдает
+
+Dmitriy @dpogretskiy 12:39
+ну и с вектором тоже самое, фигач в массив, и ломай все если не лезет
+</code></pre>
+<p>Обмен сообщениями по несколько слов на форуме, конечно, выглядит несколько нелепо, надеюсь что никому не придет в голову этим массово заниматься. После адаптации этих же сообщений под “форумный формат”, выглядеть должно примерно так:</p>
+<pre><code class="lang-plaintext">dpogretskiy                                                               12:38
+
+да, именно потому что alloc::String. можешь намутить свой тип,
+с буфером который Sized в котором какой нибудь убогий null terminated стринг :)
+ну и с вектором тоже самое, фигач в массив, и ломай все если не лезет.
+
+                                                 [лайк] [поделиться] [ответить]
+
+
+Pzixel                                                                    12:39
+
+не могу. мне нужно именно для строк и векторов. вообще, я посмотрел,
+взрослый serde_json если в no_std перевести всего 4 ошибки компиляции выдает.
+
+                                                 [лайк] [поделиться] [ответить]
+
+</code></pre>
+<p>Да, вокруг самих сообщений больше “воздуха”, но с учетом изменения структуры самого общения это наоборот логично и упрощает чтение.</p>
+<p>Коэффициент пустого пространства становится тем меньше, чем длиннее сообщение. По идее, это как раз таки должно приводить к улучшению качества обсуждения и т.п.</p>
+<h2><a name="p-965-h-9" class="anchor" href="#p-965-h-9" aria-label="Heading link"></a>Форум уже давно есть. Был бы нужен - им бы и пользовались уже</h2>
+<blockquote>
+<p><a href="https://gitter.im/ruRust/offtopic?at=5b48b17d66c1e833a9e50f96">@sobaka_v_kepke: Форум есть. Если бы люди хотели там быть - они бы там были.</a></p>
+</blockquote>
+<p>Мое возражение на это, собственно, простое: нужна минимальная критическая масса активных форумчан. По ощущениям - ну людей пять хотя бы. Их у форума никогда и не было. Собственно, я своей простыней надеюсь их получить <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<blockquote>
+<p>Я о том же. Лучше с флудом, но как-то помогать и просить помощи,<br>
+чем оставлять проблемы гнить на форуме.</p>
+</blockquote>
+<p>Прямо сейчас на форуме, насколько я понимаю, неотвеченных тем нет. Если “форумные энтузиасты” не могут ответить на что-то, то ссылка на вопрос выкидывается в чат и заинтересованные подтягиваются. Это работало раньше, не вижу почему не будет работать и с увеличением активности на форуме.</p>
+<h2><a name="p-965-h-10" class="anchor" href="#p-965-h-10" aria-label="Heading link"></a>Роль чатов и что писать на форум</h2>
+<p>Эксперимент с форумом, как я его вижу, ортогонален всем экспериментам с мостами в телеграм, zulip’ом и т.п. Чат в любом случае будет лучше форума справляться с ответами на совсем уж тривиальные вопросы или что-то срочное.</p>
+<p>При сосуществовании живого форума и живого чата возникает довольно естественный вопрос “что писать на форум, а что в чат?”.</p>
+<p>В идеале я вижу себе так: если информация может быть кому-то полезна, то лучше ее постить на форуме, если обсудить что-то срочное или точно никому особо не интересное - чат. Т.е. хотелось бы что бы чат жил себе дальше, но не было нужды постоянно его мониторить - просто заходить время от времени, когда захочется поболтать.</p>
+<p>Сейчас в гиттере есть несколько практически пустующих комнат. Если в дальнейшем эксперимент с форумом окажется удачным (хз какие тут точные критерии назвать), то, возможно, стоит в чате оставить только “general”, “offtopic” и переводческую комнаты.</p>
+<h2><a name="p-965-h-11" class="anchor" href="#p-965-h-11" aria-label="Heading link"></a>Модерация</h2>
+<blockquote>
+<p><a href="https://gitter.im/ruRust/offtopic?at=5b48bba7c2d95c60f4d73e66">@Pzixel: чувствую в новом оплоте счастья диктатура будет еще та)</a></p>
+</blockquote>
+<p>Разница только в том, что общение будет структурировано темами, а это никак не может работать без выноса всяких значительных оффтопиковых обсуждений в отдельные темы.</p>
+<h2><a name="p-965-h-12" class="anchor" href="#p-965-h-12" aria-label="Heading link"></a>Формат форума</h2>
+<blockquote>
+<p><a class="mention" href="/u/pzixel/index.html">@Pzixel</a>: предлагается на каждый вопрос “объясните future::ok” или<br>
+“что такое ref mut” по теме создавать? Тогда количество тем станет<br>
+просто бесконечным. …</p>
+</blockquote>
+<p>Тут, конечно, всплывает интересный вопрос с двумя видами тем на форумах, назовем их “одноразовые” и “мета-темы”.</p>
+<p>По умолчанию, стоит заводить простые темы вида “изначальная постановка вопроса и ответы на него”.</p>
+<p>Но если ожидается, что отдельных тем, объединенных общей метатемой, будет прям много и каждая из них будет не больше нескольких сообщений - стоит завести “метатему”.</p>
+<p>Хорошие примеры мета-тем из англоязычного сообщества:</p>
+<p><a href="https://www.reddit.com/r/rust/comments/8z5zlz/hey_rustaceans_got_an_easy_question_ask_here/">https://www.reddit.com/r/rust/comments/8z5zlz/hey_rustaceans_got_an_easy_question_ask_here/</a><br>
+<a href="https://www.reddit.com/r/rust/comments/8z61m6/whats_everyone_working_on_this_week_292018/">https://www.reddit.com/r/rust/comments/8z61m6/whats_everyone_working_on_this_week_292018/</a><br>
+<a href="https://users.rust-lang.org/t/twir-quote-of-the-week/328">https://users.rust-lang.org/t/twir-quote-of-the-week/328</a></p>
+<p>Если же на одну метатему ожидается мнооого больших тем, то, наверное, надо просто заводить новый раздел на форуме.</p>
+<blockquote>
+<p><a class="mention" href="/u/pzixel/index.html">@Pzixel</a>: … Если же начать фильтровать, требовать MRE и прочее,<br>
+получится такой костыльный SO <span class="hashtag-raw">#2</span></p>
+</blockquote>
+<p>Я сам подписан на ржавую метку в SO - <a href="https://ru.stackoverflow.com/questions/tagged/rust">https://ru.stackoverflow.com/questions/tagged/rust</a> - и пользоваться им никто не запрещает, конечно.<br>
+Собственно, я всеми руками за него и никого не отговариваю задавать там вопросы.<br>
+Но формат общения на SO очень жесткий и специфический. Четкий вопрос - четкий ответ. И все, остальное не одобряется. Форум в этом плане сильно более гибкая штука, которая вполне может быть ядром сообщества при правильной организации.</p>
+<h1><a name="p-965-h-13" class="anchor" href="#p-965-h-13" aria-label="Heading link"></a>Что предлагаю делать</h1>
+<ul>
+<li>
+<p>Всем не сочувствующим инициативе - отписаться тут почему именно, если я чего-то важное в анализе выше упустил, и продолжать пользоваться чатом.</p>
+</li>
+<li>
+<p>Всем сочувствующим - собственно, <strong>пользоваться форумом</strong> <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"><br>
+Если у вас есть не совсем уж тривиальный вопрос, то создать под него тему на форуме и кинуться ссылкой в чат. Если есть клевые ссылки - закидывать в раздел ссылок.</p>
+</li>
+<li>
+<p>Закрыть /r/rustycrate в пользу <a href="https://forum.rustycrate.ru/c/ssylki">раздела “ссылки”</a>. Постоянно бывает что хорошие ссылки раза по четыре постят за день в оффтопике и general комнатах параллельно.</p>
+</li>
+<li>
+<p>Завести на форуме разделы:</p>
+<ul>
+<li>
+<p>offtopic - просто флудильня для обсуждения всего</p>
+</li>
+<li>
+<p>prog_offtopic - оффтопик, но про программирование на других языка</p>
+</li>
+<li>
+<p>showcase (?) - раздел для показа-обсуждения своих проектов участниками?</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Настроить ботов или расширения:</p>
+<ul>
+<li>
+<p>сообщать в гиттер что создана новая тема в качестве напоминания что форум есть и там чего-то происходит.</p>
+</li>
+<li>
+<p>телеграм-бота, который бы в отдельную комнату слал бы уведомления об активности на форуме - для тех кто мало обычной почтой пользуется и недоволен почтовыми уведомлениями.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Написать небольшое руководство, отвечающее на вопрос “когда стоит создавать тему, а когда лучше сразу пойти в чатик”.</p>
+</li>
+</ul>
+<p>Рисков у этого эксперимента не особо много: если форум не взлетит, просто все откатываемся в чатики, как и было. Для людей, которым идея форума прям сильно не нравится, вообще мало что меняется - можно точно так же продолжать сидеть в чатах в обычном режиме.</p>
+<p>Спасибо всем дочитавшим простыню <img src="https://forum.rustycrate.ru/images/emoji/twitter/heart.png?v=15" title=":heart:" class="emoji" alt=":heart:" loading="lazy" width="20" height="20"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="15 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          15
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/BORN2LOSE" class="user-link">Norman Ritchie</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jul 18, 2018 5:28 PM">
+            <time itemprop="datePublished" datetime="2018-07-18 17:28:12 +0000">Jul 18, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Годно, 10/10 <img src="https://forum.rustycrate.ru/images/emoji/twitter/nerd_face.png?v=5" title=":nerd_face:" class="emoji" alt=":nerd_face:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">P</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Pzixel" class="user-link">Psilon</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jul 18, 2018 6:30 PM">
+            <time itemprop="datePublished" datetime="2018-07-18 18:30:19 +0000">Jul 18, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хорошо написано.</p>
+<p>Согласен по второму пункту, да и собственно в целом, форум - вещь хорошая. Проблема в том, что как по мне, его ниша слишком узкая. Ведь уже есть форумы URLO/IRLO/SO/SORU которые как по мне покрывают 99% потребностей в форумах. Хочешь - на русском, хочешь - на английском. Непокрытой остается только часть вопросов-пятиминуток “ребят, ругается на cannot borrow as mutable and as immutable”. И тут уже решает скорость. Какой бы ни была настройка уведомлений, раньше чем через 5 минут после создания темы на неё не ответят, а скорее всего, ответ будет только в первые полчаса. После этого нужно написать ответ и дождаться, когда человек опять зайдет на форум и прочитает его. По сравнению с типичным временем ответа в гиттере &lt; 1 минуты разница огромная.</p>
+<p>Типичный диалог:</p>
+<blockquote>
+<p>Dmitriy июль 17 17:27<br>
+господа знатоки, есть ли какие нибудь тулы, чтобы посмотреть alignment структуры?<br>
+наклевалась макоспецифичная проблема с libc структурой, у одного моего друга :trollface:<br>
+Denis Lisov июль 17 17:28<br>
+Кроме println!?<br>
+Dmitriy  июль 17 17:32<br>
+хм, я чего-то не знаю о println!?<br>
+Andrey Lesnikov июль 17 17:32<br>
+хз, я всегда просто адреса печатал<br>
+Denis Lisov июль 17 17:33<br>
+Скорее про std::mem::align_of<br>
+“тулой” я бы его не назвал, но API есть, да <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"><br>
+Dmitriy июль 17 17:34<br>
+на структе висит repr(C) и поля не в порядке, такой же структуры из мана к fnctl<br>
+едва ли repr(C) их переставляет местами по имени <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"><br>
+Andrey Lesnikov июль 17 17:34<br>
+смутно припоминается что gdb умеет всякие паддинги как-то показывать, но гугл не колется как это сделать<br>
+Dmitriy июль 17 17:34<br>
+адреса конечно можно паспечатать<br>
+ладно, адреса сойдут, ниче особенного, спасибо уважаемые знатоки <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+</blockquote>
+<p>за 7 минут вопрос решен (так или иначе), с 3 вовлеченными людьми. Причем некоторые ответы причинно-следственно завязаны на предыдущие, и просто сгруппировать все ответы вместе как в примере про <code>alloc::String</code> не выйдет.</p>
+<p>Собственно да, форум выигрывает во всем, кроме интерактивности, <em>но это и есть киллер-фича и ниша, которая остается незакрытой</em>. Это самое важное, что перекрывает все остальные минусы и в поиске, и в багах на мобильных клиентах (которых я лично к слову так и не встретил), и многие другие. Именно интерактивность - то, что мне кажется нужно. Для обстоятельных подробных рассуждений есть SO и URLO. Кто не знает английского - SORU.</p>
+<p>К слову, драконовские меры SO появились не на ровном месте, а потому что отвечать в 100500 раз на вопрос "а почему я не могу написать <code>let s: String = "Hello"</code> люди не любят, и начинают резко и некрасиво отвечать. Пример cyberforum если кто знает о чем речь показателен.</p>
+<p>Собственно, в этом и заключается всё моё возражение. То, что форум страдает “лишь” от недостатка интерактивности в условиях существования более удобных площадок (где есть больше ответов/специалистов, где ответ можно получить быстрее, и часто от кого-нибудь из команды ядра) делает его не самым удобным вариантом для общения.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jul 18, 2018 10:29 PM">
+            <time itemprop="datePublished" datetime="2018-07-18 22:29:25 +0000">Jul 18, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В целом, возражение вполне резонное.</p>
+<aside class="quote no-group quote-modified" data-username="Pzixel" data-post="3" data-topic="412">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/pzixel/48/177_2.png" class="avatar"> Pzixel:</div>
+<blockquote>
+<p>По сравнению с типичным временем ответа в гиттере &lt; 1 минуты …</p>
+</blockquote>
+</aside>
+<p>Вот с этим куском я бы немного поспорил: по субъективным ощущениям я бы сказал что где-то для трети нетривиальных вопросов оно и в чате дольше - иногда тупо несколько часов нет в онлайне нужного человека со знанием темы, причем он вполне может появиться так поздно, что вопрос уплывает сильно в историю и остается вообще без ответа.</p>
+<p>Но это не принципиально для обсуждения, тем более что для нормального ответа надо слишком сильно заморачиваться со сбором статистики. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<aside class="quote no-group quote-modified" data-username="Pzixel" data-post="3" data-topic="412">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/pzixel/48/177_2.png" class="avatar"> Pzixel:</div>
+<blockquote>
+<p>К слову, драконовские меры SO появились не на ровном месте, а потому что отвечать в 100500 раз на вопрос "а почему я не могу написать <code>String s = "Hello"</code> люди не любят, и начинают резко и некрасиво отвечать.</p>
+</blockquote>
+</aside>
+<p>Я скорее о том что на SO/SORU нельзя обсудить что-то просто связанное с самим сообществом -например, поделки показать-обсудить, что-то про русскоязычные сходки или еще какую-то локальную фигню, не идеально укладывающуюся в формат “вопрос-ответ”, но и слишком обстоятельную для чата.</p>
+<aside class="quote no-group" data-username="Pzixel" data-post="3" data-topic="412">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/pzixel/48/177_2.png" class="avatar"> Pzixel:</div>
+<blockquote>
+<p>Для обстоятельных подробных рассуждений есть SO и URLO. Кто не знает английского - SORU.</p>
+</blockquote>
+</aside>
+<p>Но вот да, аналога <a href="https://users.rust-lang.org/">URLO</a>-то у нас нет.</p>
+<p>Насколько оно нужно сообществу и узка ниша я, конечно, сильно не уверен. Посмотрим. Если и в этот раз форум не взлетит - видимо необходимости в нем вообще нет и можно с чистой совестью забить.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jul 20, 2018 1:41 PM">
+            <time itemprop="datePublished" datetime="2018-07-20 13:41:13 +0000">Jul 20, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Выдал права Администратора форума для реализации предложений.</p>
+<p>Просьба <strong>не обновлять</strong> Discourse из интерфейса. Иногда это ломается, и тогда чинить надо через SSH. Я буду делать это периодически.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Jul 20, 2018 1:42 PM">
+            <time itemprop="datePublished" datetime="2018-07-20 13:42:01 +0000">Jul 20, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>/r/rustycrate хотите прямо сейчас закрыть?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Jul 20, 2018 7:55 PM">
+            <time itemprop="datePublished" datetime="2018-07-20 19:55:07 +0000">Jul 20, 2018</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Погуглил - закрывать подреддиты нельзя. Можно просто написать там в описании что он “закрыт” и прикрепить тему в духе “пользуйтесь разделом форума, вот ссылка”.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/alghazanth" class="user-link">Alghazanth</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Jul 22, 2018 9:17 AM">
+            <time itemprop="datePublished" datetime="2018-07-22 09:17:45 +0000">Jul 22, 2018</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Что насчёт надёжности форума? Со всякими там гиттерами и телегами всё более менее понятно — их доступность и отказоустойчивость обеспечивается вполне конкретными компаниями с конкретными бюджетами. Не уйдёт ли форум на дно по причине утраты интереса, просроченного хостинга, имени etc.? Заметьте, я не имею в виду кратковременные перебои, хотя это тоже может быть малоприятно, если форумом начнёт пользоваться большое количество народу.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/BORN2LOSE" class="user-link">Norman Ritchie</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Jul 22, 2018 10:58 AM">
+            <time itemprop="datePublished" datetime="2018-07-22 10:58:49 +0000">Jul 22, 2018</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a class="mention" href="/u/alghazanth/index.html">@alghazanth</a> насчёт отказоустойчивости гиттера и телеграма я бы поспорил, вспомнив сбои и блокировку телеграма и aws серверов.</p>
+<aside class="quote no-group" data-username="alghazanth" data-post="8" data-topic="412">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/alghazanth/48/192_2.png" class="avatar"> alghazanth:</div>
+<blockquote>
+<p>если форумом начнёт пользоваться большое количество народу.</p>
+</blockquote>
+</aside>
+<p>Большое кол-во пользователей != кратковременные сбои.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/shmutalov" class="user-link">Sherzod Mutalov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Jul 22, 2018 11:21 AM">
+            <time itemprop="datePublished" datetime="2018-07-22 11:21:28 +0000">Jul 22, 2018</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Думаю, на этот вопрос должен ответить <a class="mention" href="/u/mkpankov/index.html">@mkpankov</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/alghazanth" class="user-link">Alghazanth</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Jul 22, 2018 12:36 PM">
+            <time itemprop="datePublished" datetime="2018-07-22 12:36:16 +0000">Jul 22, 2018</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="BORN2LOSE" data-post="9" data-topic="412">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/born2lose/48/139_2.png" class="avatar"> BORN2LOSE:</div>
+<blockquote>
+<p>Большое кол-во пользователей != кратковременные сбои.</p>
+</blockquote>
+</aside>
+<p>Не думаю, что такая корреляция вообще есть, вы меня немного неправильно поняли. Под неприятностями я имел в виду отток активных пользователей в случае мелких перебоев — отваливаются пуши, долго рефрешатся страницы и пр. Обычно пользователи голосуют ногами, по моему опыту.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/shmutalov" class="user-link">Sherzod Mutalov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Jul 22, 2018 1:36 PM">
+            <time itemprop="datePublished" datetime="2018-07-22 13:36:47 +0000">Jul 22, 2018</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_11">Replying to #11</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Насчет “отапливаются пуши”, они у меня не работают <img src="https://forum.rustycrate.ru/images/emoji/twitter/frowning.png?v=5" title=":frowning:" class="emoji" alt=":frowning:"> Возможно проблема во мне, но ни на моем андроиде, ни на пкшном броузере не работают уведомления</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_13"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_13" title="Jul 22, 2018 1:41 PM">
+            <time itemprop="datePublished" datetime="2018-07-22 13:41:57 +0000">Jul 22, 2018</time>
+          </a>
+          <span class="post-number">#13</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_12">Replying to #12</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Форум на нашем VDS, при необходимости купим VDS потолще.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_14"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_14" title="Jul 22, 2018 2:28 PM">
+            <time itemprop="datePublished" datetime="2018-07-22 14:28:41 +0000">Jul 22, 2018</time>
+          </a>
+          <span class="post-number">#14</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Сабреддит закрыт, буду удалять ссылки на него из шапки сайта .</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_15"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_15" title="Jul 23, 2018 3:29 PM">
+            <time itemprop="datePublished" datetime="2018-07-23 15:29:22 +0000">Jul 23, 2018</time>
+          </a>
+          <span class="post-number">#15</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Сборка сайта отвалилась, надо будет починить.</p>
+<p>Всё остальное что зависело от меня сделал, <a class="mention" href="/u/ozkriff/index.html">@ozkriff</a> осталось сделать разделы и написать руководство.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_16"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/suhr" class="user-link">Сухарик</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_16" title="Jul 24, 2018 10:43 AM">
+            <time itemprop="datePublished" datetime="2018-07-24 10:43:22 +0000">Jul 24, 2018</time>
+          </a>
+          <span class="post-number">#16</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Простой способ поддерживать форум живым — создавать ветки для собственных проектов.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_17"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #6571E0; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/shmutalov" class="user-link">Sherzod Mutalov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_17" title="Jul 24, 2018 10:44 AM">
+            <time itemprop="datePublished" datetime="2018-07-24 10:44:28 +0000">Jul 24, 2018</time>
+          </a>
+          <span class="post-number">#17</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_16">Replying to #16</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Насколько я знаю, над этим идёт работа, да <a class="mention" href="/u/ozkriff/index.html">@ozkriff</a> ?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_18"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_18" title="Jul 24, 2018 10:47 AM">
+            <time itemprop="datePublished" datetime="2018-07-24 10:47:39 +0000">Jul 24, 2018</time>
+          </a>
+          <span class="post-number">#18</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Ага. Хочу вечером завести два раздела под оффтопики + раздел для проектов, в который закинуть тему про Земерот (кто бы сомневался про что я могу тему завести, ха).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_19"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_19" title="Jul 24, 2018 4:31 PM">
+            <time itemprop="datePublished" datetime="2018-07-24 16:31:01 +0000">Jul 24, 2018</time>
+          </a>
+          <span class="post-number">#19</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Подумал и завел пока два раздела:</p>
+<ul>
+<li><a href="https://forum.rustycrate.ru/c/offtopic">https://forum.rustycrate.ru/c/offtopic</a></li>
+<li><a href="https://forum.rustycrate.ru/c/projects">https://forum.rustycrate.ru/c/projects</a></li>
+</ul>
+<p>Делить оффтопик на технический и обычный пока, наверное, смысла не имеет. Если нетехнических тем станет прям много - тогда и поделим, перенести-то не долго.</p>
+<p>/c/lounge (стандартный раздел для пользователей с уровнем доверия &gt;= 3) - пока тоже решил не трогать, потому что он никому не мешает и я слабо понимаю зачем он. Мало ли нужен таки потом окажется.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_20"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/webdesus" class="user-link">Denis Kurilenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_20" title="Jul 24, 2018 4:33 PM">
+            <time itemprop="datePublished" datetime="2018-07-24 16:33:23 +0000">Jul 24, 2018</time>
+          </a>
+          <span class="post-number">#20</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_19">Replying to #19</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>по поводу lounge</p>
+<p>так и должно быть?</p>
+<pre><code>У вас нет прав для просмотра запрашиваемого ресурса</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+  <nav class="pagination" role="navigation" aria-label="Post pages">
+    
+
+    <span class="pagination-info">Page 1 of 3</span>
+
+    
+    <a href="/t/predlagayu-ozhivit-forum/412/2.html" class="pagination-next" rel="next">Next</a>
+    
+  </nav>
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

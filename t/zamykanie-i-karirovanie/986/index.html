@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Замыкание и карирование - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Замыкание и карирование</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Замыкание и карирование</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Aug 23, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Aug 23, 2019 6:37 AM">
+            <time itemprop="datePublished" datetime="2019-08-23 06:37:51 +0000">Aug 23, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>День добрый!<br>
+Читаю <a href="https://bodil.lol/parser-combinators/" rel="nofollow noopener">пример написания парсер-комбинаторов в rust</a> где активно используются замыкания и возник вопрос:<br>
+Правильно понимаю что:<br>
+когда вызываем функцию возвращающую замыкание, при каждом её вызове создаётся и возвращается новый экземпляр замыкания ?<br>
+И коим образом, тогда, решить вопрос с желанием написать общую функцию возвращающую замыкание и карировать её(частично применить) получив с десяток частных функций но так чтобы не строились новые экземпляры функций каждый раз при их вызове?<br>
+Пробовал описать константы:<br>
+pub const space1: BoxedParser&lt;&amp;str&gt; = sequence1(&amp;|c:char| c.is_ascii_whitespace());<br>
+Компилятор говорить что константные функции не могут возвращать замыкания.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/red75prime" class="user-link">red75prime</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Aug 23, 2019 8:58 AM">
+            <time itemprop="datePublished" datetime="2019-08-23 08:58:46 +0000">Aug 23, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Возврат замыкания не создаёт новую функцию: замыкание содержит только значения (или ссылки на значения) захваченных переменных. Функция, которая вызывается при вызове замыкания, одна и та же.</p>
+<p>Так что создание константных замыканий особого смысла не имеет, и пока невозможно, так как в константных функциях нельзя использовать выделение памяти в куче (для <code>Box&lt;dyn Fn()&gt;</code>) и нельзя использовать <code>impl Fn()</code> как тип константы (пока не реализовано).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Aug 23, 2019 9:41 AM">
+            <time itemprop="datePublished" datetime="2019-08-23 09:41:01 +0000">Aug 23, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вы хотите сказать что функции <code>f1()</code> и <code>f2()</code> идентичны и в <code>f2()</code> не будет сто раз создаваться анонимная функция а будет вызываться одна и та же ?</p>
+<pre><code class="lang-rust">
+pub fn f() -&gt; Box&lt;Fn(i32, i32) -&gt; i32&gt; { 
+    Box::new(move |a:i32, b: i32| a + b)
+}
+
+pub fn f1() -&gt; i32 {
+    let a = f();
+    let mut result: i32 = 0;
+    for i in 1..100 {
+        result += a(4, i);
+    }
+    result
+}
+
+pub fn f2() -&gt; i32 {
+    let mut result: i32 = 0;
+    for i in 1..100 {
+        result += f()(4, i);
+    }
+    result
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Aug 23, 2019 9:44 AM">
+            <time itemprop="datePublished" datetime="2019-08-23 09:44:35 +0000">Aug 23, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a class="mention" href="/u/cergo/index.html">@Cergo</a>, <s>по-моему вы получите тоже самое если просто напишете функцию:</s></p>
+<pre><code class="lang-auto">fn space1(inp: &amp;str) -&gt; &amp;str {
+     sequence1(&amp;|c:char| c.is_ascii_whitespace())(inp)
+}
+</code></pre>
+<p><s>Не знаю точно какие тут должны быть типы аргументов и возвращаемого значения. Это нужно смотреть по сигнатуре <code>BoxedParser</code>.</s></p>
+<p>Посмотрел, что такое <code>BoxedParser</code>. Так не получится.</p>
+<hr>
+<p>Вообще, в ночном Rust в принципе можно сделать константное замыкание, только без <code>Box</code>:</p>
+<pre><code class="lang-auto">#![feature(impl_trait_in_bindings)]
+#![feature(const_fn)]
+
+const fn apply(fun: impl Fn(usize, usize) -&gt; usize, x: usize) -&gt; impl Fn(usize) -&gt; usize {
+    move |y| {  fun(x, y) }     
+}
+
+const mul_2:impl Fn(usize)-&gt;usize = apply(|x, y| x * y, 2);
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2018&amp;gist=366987807f8732ff2c2dd2ef6255efcc" rel="nofollow noopener">playground</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Aug 26, 2019 7:16 AM">
+            <time itemprop="datePublished" datetime="2019-08-26 07:16:02 +0000">Aug 26, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Нашел способ создать статическое замыкание завернутое в <code>Box</code> с помощью <code>thread_local!</code>:</p>
+<pre><code class="lang-auto">fn apply(fun: impl Fn(usize, usize) -&gt; usize + 'static, x: usize) -&gt; Box&lt;dyn Fn(usize) -&gt; usize&gt; {
+    Box::new(move |y| {  fun(x, y) })     
+}
+
+thread_local!{ static mul_2: Box&lt;dyn Fn(usize) -&gt; usize&gt; = apply(|x, y| x * y, 2); }
+
+println!("mul_2(10) = {}", mul_2.with(|f| f(10)));
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=release&amp;edition=2018&amp;gist=1ec66e6dfead020cc6d1b6599361b36e" rel="nofollow noopener">playground</a></p>
+<p>Изначально была идея использовать <code>lazy_static!</code>, но Rust ругается что <code>Box</code> не является <code>Sync</code>. В принципе замыкание можно и в <code>Arc</code> завернуть…</p>
+<p>На практике такой способ наверно будет малополезен т.к. получившееся статическое замыкание просто так уже не вызовешь, только через <code>.with()</code>.</p>
+<p>Кстати, насчет практики. Rust довольно неплохо оптимизирует код и в примере который привел <a class="mention" href="/u/cergo/index.html">@Cergo</a> обе функции компилируются в константу.<br>
+Вот еще пример, все три функции <code>fn_mul_***</code> после компиляции дают одинаковый код:</p>
+<pre><code class="lang-auto">fn apply_impl(fun: impl Fn(usize, usize) -&gt; usize, x: usize) -&gt; impl Fn(usize) -&gt; usize {
+    move |y| {  fun(x, y) }     
+}
+
+fn apply_box(fun: impl Fn(usize, usize) -&gt; usize + 'static, x: usize) -&gt; Box&lt;dyn Fn(usize) -&gt; usize&gt; {
+    Box::new(move |y| {  fun(x, y) })     
+}
+
+pub fn fn_mul_simple(z:usize) -&gt; usize {
+    2 * z
+}
+
+pub fn fn_mul_impl(z:usize) -&gt; usize {
+    apply_impl(|x, y| x * y, 2)(z)
+}
+
+pub fn fn_mul_box(z:usize) -&gt; usize {
+    apply_box(|x, y| x * y, 2)(z)
+}
+</code></pre>
+<p><a href="https://rust.godbolt.org/z/RHAp8k" rel="nofollow noopener">Goldbolt</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Aug 26, 2019 8:46 AM">
+            <time itemprop="datePublished" datetime="2019-08-26 08:46:52 +0000">Aug 26, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>С чего решил что пример с <code>f1()</code> и <code>f2()</code> компилируется в один код?<br>
+Бенчмарк с твоими выводами не согласен.</p>
+<pre><code class="lang-rust">#[bench]
+fn bench_f1(b: &amp;mut Bencher) {
+    b.iter(|| {
+        let n = test::black_box(1000);
+        f1();
+        (0..n).fold(0, |a, b| a ^ b)
+    });
+
+}
+
+#[bench]
+fn bench_f2(b: &amp;mut Bencher) {
+    b.iter(|| {
+        let n = test::black_box(1000);
+        f2();
+        (0..n).fold(0, |a, b| a ^ b)
+    });
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Aug 26, 2019 10:22 AM">
+            <time itemprop="datePublished" datetime="2019-08-26 10:22:46 +0000">Aug 26, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Смотрел ассемблер в <a href="https://rust.godbolt.org/z/E7BzF4" rel="nofollow noopener">goldbolt</a>. Поменял константу во второй функции иначе вообще одна функция генерится.</p>
+<p>Да и бенчи у меня одно и тоже дают:</p>
+<pre><code class="lang-auto">running 2 tests
+test bench_f1 ... bench:         124 ns/iter (+/- 9)
+test bench_f2 ... bench:         124 ns/iter (+/- 9)
+</code></pre>
+<p>Странные какие-то тесты. Зачем там замыкание в цикле гоняется? Разве не так должно быть:</p>
+<pre><code class="lang-auto">#[bench]
+fn bench_f1(b: &amp;mut Bencher) {
+    b.iter(|| {
+        for _ in 0..1000{
+            test::black_box(f1());
+        }
+    });
+}
+
+#[bench]
+fn bench_f2(b: &amp;mut Bencher) {
+    b.iter(|| {
+        for _ in 0..1000{
+            test::black_box(f2());
+        }
+    });
+}
+</code></pre>
+<p>Так тоже разница в пределах погрешности.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Aug 26, 2019 12:23 PM">
+            <time itemprop="datePublished" datetime="2019-08-26 12:23:17 +0000">Aug 26, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В <a href="https://doc.rust-lang.org/1.2.0/book/benchmark-tests.html" rel="nofollow noopener">докак советуют так</a> проводить бенчмарки, о… я  поправил их<br>
+всё одно разница в 25% на такой маленькой ананимной функции, думаю если она будет сложнее и разница увеличится.</p>
+<pre><code class="lang-auto">test tests::bench_f1 ... bench:         549 ns/iter (+/- 29)
+test tests::bench_f2 ... bench:         722 ns/iter (+/- 39)
+</code></pre>
+<pre><code class="lang-rust">#[bench]
+fn bench_f1(b: &amp;mut Bencher) {
+    b.iter(|| {
+        let n = test::black_box(f1());
+        (0..n).fold(0, |a, b| a ^ b)
+    });
+
+}
+
+#[bench]
+fn bench_f2(b: &amp;mut Bencher) {
+    b.iter(|| {
+        let n = test::black_box(f2());      
+        (0..n).fold(0, |a, b| a ^ b)
+    });
+}</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Aug 26, 2019 1:16 PM">
+            <time itemprop="datePublished" datetime="2019-08-26 13:16:30 +0000">Aug 26, 2019</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хм, у меня все равно одинаковый результат:</p>
+<pre><code class="lang-auto">running 2 tests
+test bench_f1 ... bench:         656 ns/iter (+/- 23)
+test bench_f2 ... bench:         660 ns/iter (+/- 41)
+</code></pre>
+<p>Попробуй <code>f1</code> и <code>f2</code> поменять местами. Вот так:</p>
+<pre><code class="lang-auto">#[bench]
+fn bench_f1(b: &amp;mut Bencher) {
+    b.iter(|| {
+        let n = test::black_box(f2());
+        (0..n).fold(0, |a, b| a ^ b)
+    });
+
+}
+
+#[bench]
+fn bench_f2(b: &amp;mut Bencher) {
+    b.iter(|| {
+        let n = test::black_box(f1());      
+        (0..n).fold(0, |a, b| a ^ b)
+    });
+}
+</code></pre>
+<p>Теперь у тебя <code>bench_f1</code> теперь должен быть медленнее.<br>
+Просто по-моему врут эти бенчмарки иногда очень сильно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Aug 26, 2019 1:38 PM">
+            <time itemprop="datePublished" datetime="2019-08-26 13:38:30 +0000">Aug 26, 2019</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Пробовал, проверял, всё верно, результат меняется<br>
+ноут dell e7470 rustc 1.39.0-nightly</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Aug 26, 2019 2:43 PM">
+            <time itemprop="datePublished" datetime="2019-08-26 14:43:36 +0000">Aug 26, 2019</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вообще так нельзя тестировать. Здесь цикл с этим замыканием крутится столько раз сколько возвращает <code>f1()</code> или <code>f2()</code>. Если они будут возвращать разные значения, то совсем ерунда будет получаться. В книге это замыкание приведено просто для примера. Этот цикл нужно или совсем убрать или крутить в нем тестируемую функцию.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

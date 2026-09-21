@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Паттерны проектирования - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Паттерны проектирования</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Паттерны проектирования</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jan 19, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Majestio" class="user-link">Олег</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jan 19, 2019 4:26 AM">
+            <time itemprop="datePublished" datetime="2019-01-19 04:26:47 +0000">Jan 19, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Буэнос диас, амигос!</p>
+<p>Понемногу изучая Rust, я столкнулся с тем, что привычные приемы проектирования “не работают”. Конечно же я об ООП и его паттернах проектирования. Некоторые “коллеги по цеху” <a href="https://habr.com/ru/post/309968/" data-bbcode="true" rel="nofollow noopener">уже разочаровались</a> по стопицот раз, переписывая С++ код на Rust.</p>
+<p>В представленной выше ссылке, как по мне, интересна не сама статья <span class="bbcode-s">как натянуть сову на глобус</span>, а последующие обсуждения. Там промелькнуло хорошее высказывание “<em>Нет ООП-задач. Есть один из подходов - это используя ООП. Как будто он один единственный</em>” (не дословно).</p>
+<p><span class="bbcode-b">Собственно вопросы к обсуждению</span></p>
+<p>Приступая к проектированию проекта, большинство разработчиков, которые худо-бедно владеют ЯП с полной поддержкой ООП, этот подход и выбирают. Я не имею ввиду 100-строчные “хелоу ворлд” утилиты. А нормальные, более-менее сложные проекты.</p>
+<ol>
+<li>А как быть если полной поддержки ООП в ЯП нет?</li>
+<li>Есть ли приемы/методики проектирования не менее удобные чем объектно-ориентированные?</li>
+<li>А есть ли для них свои “паттерны проектирования”, которые есть для ООП?</li>
+</ol>
+<p><img src="https://forum.rustycrate.ru/images/emoji/twitter/face_with_raised_eyebrow.png?v=6" title=":face_with_raised_eyebrow:" class="emoji" alt=":face_with_raised_eyebrow:"></p>
+<p>ЗЫ: Аббревиатуру “ООП” читаем как “Объектно-ориентированное программирование” или “Объектно-ориентированное проектирование” по контексту.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Revertron" class="user-link">Revertron</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jan 19, 2019 8:55 AM">
+            <time itemprop="datePublished" datetime="2019-01-19 08:55:05 +0000">Jan 19, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я так понимаю, что автору той статьи просто не хватило упорства поработать с третьим пунктом, то есть с типами вида Vec&lt;Rc&lt;RefCell&gt;&gt;. А парента делать с помощью WeakRef.</p>
+<p>А конкретно по вопросам:</p>
+<blockquote>
+<ol>
+<li>А как быть если полной поддержки ООП в ЯП нет?</li>
+</ol>
+</blockquote>
+<p>Ну как, пользоваться тем, что есть. Для чего больше всего используется ООП? Для возможности единообразно работать с объектами разных типов (утрирую, конечно). А для этой задачи есть интерфейсы, то есть типажи.</p>
+<blockquote>
+<ol start="2">
+<li>Есть ли приемы/методики проектирования не менее удобные чем объектно-ориентированные?</li>
+</ol>
+</blockquote>
+<p>Проблема в том, как я обычно говорю, что как бы ты не программировал на ООП языке, ты всегда вляпаешься в какой-нибудь паттерн, даже не зная его. Специальных Растовых методик, заменяющих всю историю ООП, я не встречал.</p>
+<blockquote>
+<ol start="3">
+<li>А есть ли для них свои “паттерны проектирования”, которые есть для ООП?</li>
+</ol>
+</blockquote>
+<p>Мне кажется, сюда можно отнести разные конструкции типа let-match, работа с итераторами (всякие filter, collect и т.п.) и правильный выбор умных указателей, о чём как раз говорилось в статье.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jan 20, 2019 4:46 PM">
+            <time itemprop="datePublished" datetime="2019-01-20 16:46:46 +0000">Jan 20, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Есть вот такая репа:</p>
+<aside class="onebox whitelistedgeneric">
+  <header class="source">
+      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" width="32" height="32">
+      <a href="https://github.com/rust-unofficial/patterns" target="_blank">GitHub</a>
+  </header>
+  <article class="onebox-body">
+    <img src="https://forum.rustycrate.ru/uploads/default/original/1X/a8617410bc51370f7901104237deb3b0d481ec04.png" class="thumbnail onebox-avatar" width="400" height="400">
+
+<h3><a href="https://github.com/rust-unofficial/patterns" target="_blank">rust-unofficial/patterns</a></h3>
+
+<p>A catalogue of Rust design patterns. Contribute to rust-unofficial/patterns development by creating an account on GitHub.</p>
+
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>Но там много какие пункты это TODO.</p>
+<p>Еще в Книге есть 17я глава <a href="https://doc.rust-lang.org/book/ch17-00-oop.html">“Object Oriented Programming Features of Rust”</a>, там есть некоторые вводные мысли про ооп в расте.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">W</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/webdesus" class="user-link">Denis Kurilenko</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jan 20, 2019 8:16 PM">
+            <time itemprop="datePublished" datetime="2019-01-20 20:16:05 +0000">Jan 20, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Раст это гибридный язык взявший что то от мира ООП что то от функциональщины. Но из за этого не все функциональные подходы ложатся в язык и не все ООП. Это совершенно новый путь в разработке и тут будут совсем другие паттерны проектирования. Конечно некоторые методики уже хорошо ложатся в раст, некоторые выглядят сложно и не красиво на расте, некоторые вообще не возможно сделать.  Язык относительно молодой и еще не все подходы были открыты. Так же у людей кто его использует в работе просто нет времени поделится мыслями  о новых способов программирования на расте. По этому многие рекомендуют читать исходники когда речь заходит “А подскажите паттерны или бест практикс”.</p>
+<p>Советую посмотреть <a href="https://www.youtube.com/watch?v=4YTfxresvS8" rel="nofollow noopener">данный не плохой доклад</a>. Частично затрагивается наша обсуждаемая тема с упором на паттерн Entity Component System.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jan 23, 2019 9:27 AM">
+            <time itemprop="datePublished" datetime="2019-01-23 09:27:59 +0000">Jan 23, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Если говорить о паттернах и ООП, то нельзя не упомянуть одно из последних нововведений - <em>процедурные макросы</em>. Они позволяют существенно облегчить боль от отсутствия механизма наследования в Rust.<br>
+<a href="https://doc.rust-lang.org/book/ch19-06-macros.html#how-to-write-a-custom-derive-macro" rel="nofollow noopener">В книге есть пример как сделать свой типаж “наследуемым”</a>, т.е. просто добавив в определение структуры атрибут <code>#[derive(HelloMacro)]</code> мы получаем автоматическую реализацию типажа <code>HelloMacro</code>.<br>
+Можно ввести дополнительные атрибуты, которые позволят указывать какие поля структуры используются в реализации.</p>
+<p>Например, пусть функция <code>hello_macro()</code> нашего типажа выводит поле <code>name</code>:</p>
+<pre><code class="lang-auto">#[derive(HelloMacro)]
+struct Pancakes{
+    name:String,//field 'name' is displayed by default using HelloMacro
+    address:u64
+}
+</code></pre>
+<p>Для структуры <code>Pancakes</code> автоматически сгенерируется такой код:</p>
+<pre><code class="lang-auto">impl HelloMacro for Pancakes {
+    fn hello_macro(&amp;self) {
+        println!("Hello, {}!", self.name);
+    }
+}
+</code></pre>
+<p>Чтобы реализовать <code>HelloMacro</code> для структуры в которой нет поля <code>name</code>, добавим собственный атрибут <code>#[name]</code>, который скажет нашему макросу какое поле использовать в реализации типажа:</p>
+<pre><code class="lang-auto">#[derive(HelloMacro)]
+struct Cookies{
+    #[name]
+    xxx:&amp;'static str,
+    yyy:u8
+}
+</code></pre>
+<p>Автоматически сгенерированный код:</p>
+<pre><code class="lang-auto">impl HelloMacro for Cookies{
+    fn hello_macro(&amp;self) {
+        println!("Hello, {}!", self.xxx);
+    }
+}
+</code></pre>
+<p>Все можно сделать очень красиво и с выводом своих ошибок в случае неправильного использования атрибутов. Код процедурных макросов должен быть расположен в отдельном крейте. Его нужно указать в разделе <code>[dependencies]</code> в файле <code>Cargo.toml</code>.</p>
+<p>Сложность в том, что все граничные случаи и возможности применения кастомных атрибутов приходится прописывать самому. Заниматься этим имеет смысл если вы хотите сделать максимально простой в использовании API для своей библиотеки.</p>
+<details>
+<summary>
+Вот немного допиленный код примера из книги:</summary>
+<p><strong>Крейт <code>pancakes</code></strong>:<br>
+<code>pancakes\src\main.rs</code></p>
+<pre><code class="lang-auto">use hello_macro_derive::HelloMacro;
+
+trait HelloMacro {
+    fn hello_macro(&amp;self);
+}
+
+#[derive(HelloMacro)]
+struct Pancakes{
+    name:String,//field 'name' is displayed by default using HelloMacro
+    address:u64
+}
+
+//#[derive(HelloMacro)]//no field `name` on type `&amp;Dumplings`
+struct Dumplings{
+    xxx:usize
+}
+
+#[derive(HelloMacro)]
+struct Cookies{
+    #[name]
+    xxx:&amp;'static str,
+    //#[name]//Attribute #[name] applied to multiple fields
+    yyy:u8
+}
+
+//#[derive(HelloMacro)]
+struct  Ravioli(
+    //#[name]//Attribute #[name] applied to unnamed field
+    usize
+);
+
+//#[derive(HelloMacro)]//Attribute #[derive(HelloMacro)] applied to something that is not a struct
+enum Rabbit{}
+
+fn main() {
+    Pancakes{ name:"World".to_owned(), address:0x80000001 }.hello_macro();
+    Cookies{ xxx:"Maria", yyy:1 }.hello_macro();
+}
+</code></pre>
+<p><code>pancakes\Cargo.toml</code></p>
+<pre><code class="lang-auto">[package]
+name = "pancakes"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+hello_macro_derive = { path = "../hello_macro_derive" }
+</code></pre>
+<p><strong>Крейт <code>hello_macro_derive</code>:</strong></p>
+<p><code>hello_macro_derive\src\lib.rs</code></p>
+<pre><code class="lang-auto">extern crate proc_macro;
+extern crate proc_macro2;
+
+use proc_macro::TokenStream;
+use quote::quote;
+use proc_macro2::{Ident, Span};
+
+#[proc_macro_derive(HelloMacro, attributes(name))]
+pub fn hello_macro_derive(input: TokenStream) -&gt; TokenStream {
+    let ast = syn::parse(input).unwrap();
+    impl_hello_macro(&amp;ast)
+}
+
+fn impl_hello_macro(ast: &amp;syn::DeriveInput) -&gt; TokenStream {
+    let defid = Ident::new("name", Span::call_site());
+    let name = &amp;ast.ident;
+    let mut fieldid = None;
+
+    if let syn::Data::Struct(ref strct) = ast.data{
+        for field in strct.fields.iter(){
+            for attr in field.attrs.iter(){
+                if attr.path.is_ident("name"){
+                    if fieldid.is_some() { panic!("Attribute #[name] applied to multiple fields"); }
+                    fieldid = Some(field.ident.as_ref().expect("Attribute #[name] applied to unnamed field"));                    
+                }
+            }
+        }
+    }else{
+        panic!("Attribute #[derive(HelloMacro)] applied to something that is not a struct");
+    }
+    
+    let fieldid = fieldid.unwrap_or(&amp;defid);
+
+    let gen = quote! {
+        impl HelloMacro for #name {
+            fn hello_macro(&amp;self) {
+                println!("Hello, {}!", self.#fieldid);
+            }
+        }
+    };
+    gen.into()
+}
+</code></pre>
+<p><code>hello_macro_derive\Cargo.toml</code></p>
+<pre><code class="lang-auto">[package]
+name = "hello_macro_derive"
+version = "0.1.0"
+edition = "2018"
+
+[lib]
+proc-macro=true
+
+[dependencies]
+syn = "*"
+quote = "*"
+proc-macro2 = "*"
+</code></pre>
+</details>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

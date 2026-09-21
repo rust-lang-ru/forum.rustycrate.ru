@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lifetime для указателей - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Lifetime для указателей</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Lifetime для указателей</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Sep 11, 2020</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Ray" class="user-link">Ray</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Sep 11, 2020 4:20 PM">
+            <time itemprop="datePublished" datetime="2020-09-11 16:20:35 +0000">Sep 11, 2020</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Всем привет,</p>
+<p>С удивлением узнал что у указателей бывает что-то вроде лафтаймов. Раньше я думал что стоит только только попросить у бокса указатель, например через <code>Box::into_raw(boxed)</code> как дальше можно делать с этим указателем что угодно, хоть отправить на луну и оттуда считать его лазером, главное чтобы когда ты решил этот указатель разыменовать или превратить обратно в коробочку через <code>Box::from_raw(ptr)</code> тебе надо поставить ключевое слово <code>unsafe</code> и далее все на твоей совести.</p>
+<p>Здесь я правда имею в виду trait objects. Вот мой код который не компилируется:</p>
+<pre><code class="lang-auto">trait Foo {}
+struct Bar&lt;'a&gt; { name: &amp;'a str }
+impl&lt;'a&gt; Foo for Bar&lt;'a&gt; {}
+
+fn get_ptr&lt;'a&gt;(name: &amp;'a str) -&gt; *mut dyn Foo { // &lt;-- указатель захотел?
+    let boxed = Box::new ( Bar { name } );
+    Box::leak(boxed) // &lt;-- а вот и нет
+}
+
+
+fn main() {
+    let owned = "John".to_string();
+    let ptr = get_ptr(&amp;owned);
+
+    println!("Hello {:?}", ptr);
+}
+</code></pre>
+<p>Вот что я получаю:</p>
+<pre><code class="lang-auto">error[E0759]: cannot infer an appropriate lifetime
+ --&gt; src/main.rs:8:28
+  |
+7 | fn get_ptr&lt;'a&gt;(name: &amp;'a str) -&gt; *mut dyn Foo {
+  |                      ------- this data with lifetime `'a`...
+8 |     let boxed = Box::new ( Bar { name } );
+  |                            ^^^   ---- ...is captured here...
+9 |     Box::leak(boxed)
+  |     ---------------- ...and is required to live as long as `'static` here
+  |
+help: to declare that the trait object captures data from argument `name`, you can add an explicit `'a` lifetime bound
+  |
+7 | fn get_ptr&lt;'a&gt;(name: &amp;'a str) -&gt; *mut dyn Foo + 'a {
+  |                                               ^^^^
+
+error: aborting due to previous error
+</code></pre>
+<p>Чтобы этот код скомпилировался мне нужно указать лайтайм того что скрывается за указателем:</p>
+<pre><code class="lang-auto">fn get_ptr&lt;'a&gt;(name: &amp;'a str) -&gt; *mut (dyn Foo + 'a) {
+</code></pre>
+<p>Такой подставы я не ожидал. Получается мне нужно как-то синтаксически доказывать компилятору что мой указатель не переживет тех ссылок которые есть у объекта на который он ссылается, что в моем случае затруднительно (если бы я мог, я бы не стал париться с указателями).</p>
+<p>Может кто-то знает где можно про почитать про такое?</p>
+<p>Как быть если нужен старый добрый указатель без borrowchk? Что-то вроде transmute <code>*mut (dyn Foo + 'a)</code> в <code>*mut (dyn Foo + 'static)</code>?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Sep 12, 2020 9:17 PM">
+            <time itemprop="datePublished" datetime="2020-09-12 21:17:26 +0000">Sep 12, 2020</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Этот лайфтайм прилагается не к указателю, а к <code>dyn Trait</code>.</p>
+<p>Когда-то давным-давно его нужно было всегда указывать явно, то есть нельзя было написать, например, <code>Box&lt;Trait&gt;</code>, только <code>Box&lt;Trait + 'static&gt;</code> (это было ещё до введения синтаксиса <code>dyn Trait</code>).<br>
+Затем с принятием <a href="https://rust-lang.github.io/rfcs/0599-default-object-bound.html" rel="nofollow noopener">RFC 599</a> по умолчанию в его качестве стало использоваться или <code>'static</code> (в случае владения), или лайфтайм ближайшей ссылки (в случае заимствования).<br>
+Затем, начиная с версии Rust 1.2 / 1.3, эти правила слегка скорректированы в <a href="https://rust-lang.github.io/rfcs/1156-adjust-default-object-bounds.html" rel="nofollow noopener">RFC 1156</a>: по умолчанию лайфтайм берётся с непосредственного контейнера, даже если выше были ссылки (то есть, например, <code>&amp;'a Box&lt;Trait&gt;</code> - это <code>&amp;'a Box&lt;Trait + 'static&gt;</code>, хотя раньше это было бы <code>&amp;'a Box&lt;Trait + 'a&gt;</code>. Поподробнее можно почитать <a href="https://doc.rust-lang.org/reference/lifetime-elision.html#default-trait-object-lifetimes" rel="nofollow noopener">в главе Lifetime elision</a> референса или по ссылкам на RFC выше.</p>
+<p>А в чём заключается затруднение? Возможно, компилятор не зря предлагает повнимательнее посмотреть на это? Особенно если память “утекает” с помощью <code>Box::leak</code>… возможно, правильнее было бы просто потребовать <code>name: &amp;'static str</code>?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">R</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Ray" class="user-link">Ray</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Sep 14, 2020 2:30 PM">
+            <time itemprop="datePublished" datetime="2020-09-14 14:30:16 +0000">Sep 14, 2020</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Прикольная инфа, спасибо! Еще и с исторической перспективой.</p>
+<p>Компилятор конечно все правильно говорит, но я пока не знаю как выразить все чтобы ему нравилось. Мой код где я столкнулся с проблемой немного другой. Это высоко экспериментальный экзекьютор выглядит как-то так:</p>
+<pre><code class="lang-auto">async fn async_main&lt;'runtime&gt;(rt: &amp;'runtime Runtime) {
+    //...
+    rt.spawn(another_async_fn(rt));
+    //...
+}
+
+fn main() {
+    start_with_runtime(async_main);
+}
+</code></pre>
+<p>Я делаю реализацию <code>Runtime.spawn(&amp;'runtime self, future :Future + 'runtime)</code></p>
+<p>Короче все фьючи которые создаются - все создаются с лайтаймом 'runtime и в общем случае их надо хранить где-нибудь в box (поскольку spawn может вызваться в цикле, например). <code>spawn</code> проверяет что lifetime у футуры 'runtime, но когда начинает заводить всякие Waker - становится сложно <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=9" title=":slight_smile:" class="emoji" alt=":slight_smile:"> Насколько я понимаю какой-нибудь токио просто просит чтобы все фучи были <code>'static</code>, однако мне не нужно ничего такого, они все гарантированно освободятся когда <code>start_with_runtime()</code> завершиться.</p>
+<p>transmute кстати хорошо помогает пока <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=9" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

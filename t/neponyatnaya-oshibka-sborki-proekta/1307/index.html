@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Непонятная ошибка сборки проекта - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Непонятная ошибка сборки проекта</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Непонятная ошибка сборки проекта</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+        <div class="topic-tags">
+          
+            <a href="/tag/cargo" class="tag-badge">cargo</a>
+          
+        </div>
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">May 10, 2022</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Majestio" class="user-link">Олег</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="May 10, 2022 5:56 PM">
+            <time itemprop="datePublished" datetime="2022-05-10 17:56:42 +0000">May 10, 2022</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Решил поэкспериментировать со сборкой проекта на Rust. Сделал все по мануалу - собралось. Но меня заинтересовал release-билд, с использованием другого тулчейна. Получил ошибку. Прошу разъяснить что это за ошибка, и что в таких случаях делают. Вот полный листинг того, что было сделано:</p>
+<pre><code class="lang-auto">$ git clone https://github.com/bevyengine/bevy.git                                                                                              
+Cloning into 'bevy'...                                                                                                                          
+remote: Enumerating objects: 60906, done.                                                                                                       
+remote: Counting objects: 100% (245/245), done.                                                                                                 
+remote: Compressing objects: 100% (109/109), done.                                                                                              
+remote: Total 60906 (delta 179), reused 165 (delta 136), pack-reused 60661R                                                                     
+Resolving deltas: 100% (42551/42551), done.7 MiB | 13.57 MiB/s, done.                                                                           
+                                                                                                                                                
+Majestio@DESKTOP-85EDHA2 C:\Temp\4                                                                                                              
+$ cd bevy                                                                                                                                       
+                                                                                                                                                
+Majestio@DESKTOP-85EDHA2 C:\Temp\4\bevy                                                                                                         
+$ cargo run --release --target x86_64-pc-windows-gnu --example breakout                                                                         
+    Updating crates.io index                                                                                                                    
+   Compiling proc-macro2 v1.0.38
+
+   ... тут много строк по компиляции крэйтов ...                                                                                                                
+
+   Compiling bevy_ui v0.8.0-dev (C:\Temp\4\bevy\crates\bevy_ui)                                                                                 
+error: could not compile `bevy_gltf`                                                                                                            
+                                                                                                                                                
+Caused by:                                                                                                                                      
+  process didn't exit successfully: `rustc --crate-name bevy_gltf --edition=2021 crates\bevy_gltf\src\lib.rs --error-format=json --json=diagnost
+ic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no --cfg "feature=\"be
+vy_animation\"" -C metadata=fe53a9ae59f07ffb -C extra-filename=-fe53a9ae59f07ffb --out-dir C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\d
+eps --target x86_64-pc-windows-gnu -L dependency=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps -L dependency=C:\Temp\4\bevy\target\re
+lease\deps --extern anyhow=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\libanyhow-bebb1227043d8214.rmeta --extern base64=C:\Temp\4\b
+evy\target\x86_64-pc-windows-gnu\release\deps\libbase64-1814debdae75f93c.rmeta --extern bevy_animation=C:\Temp\4\bevy\target\x86_64-pc-windows-g
+nu\release\deps\libbevy_animation-0ca8f7748161f920.rmeta --extern bevy_app=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\libbevy_app-
+2376c8024fb852cb.rmeta --extern bevy_asset=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\libbevy_asset-684d675d4aad41db.rmeta --exter
+n bevy_core=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\libbevy_core-c4b093c140612565.rmeta --extern bevy_ecs=C:\Temp\4\bevy\target
+\x86_64-pc-windows-gnu\release\deps\libbevy_ecs-a8774b76b506ed21.rmeta --extern bevy_hierarchy=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\relea
+se\deps\libbevy_hierarchy-09c8939fa5691957.rmeta --extern bevy_log=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\libbevy_log-452f795b
+1226b4bf.rmeta --extern bevy_math=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\libbevy_math-1332937015418e6b.rmeta --extern bevy_pbr
+=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\libbevy_pbr-69cd85ba57a2eac8.rmeta --extern bevy_reflect=C:\Temp\4\bevy\target\x86_64-
+pc-windows-gnu\release\deps\libbevy_reflect-21c21eb9268f36e6.rmeta --extern bevy_render=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps
+\libbevy_render-d59a79a3457cc304.rmeta --extern bevy_scene=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\libbevy_scene-d8913939a52616
+3a.rmeta --extern bevy_transform=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\libbevy_transform-8c38a9dc7b94051c.rmeta --extern bevy
+_utils=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\libbevy_utils-f76fd5d45810a6f6.rmeta --extern gltf=C:\Temp\4\bevy\target\x86_64-
+pc-windows-gnu\release\deps\libgltf-1c084936e91fddf9.rmeta --extern percent_encoding=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\li
+bpercent_encoding-c55ce90908066930.rmeta --extern thiserror=C:\Temp\4\bevy\target\x86_64-pc-windows-gnu\release\deps\libthiserror-fca53e2f077514
+2a.rmeta -L native=X:\Tools\Rust\cargo\registry\src\github.com-1ecc6299db9ec823\winapi-x86_64-pc-windows-gnu-0.4.0\lib` (exit code: 0xc0000005, 
+STATUS_ACCESS_VIOLATION)                                                                                                                        
+warning: build failed, waiting for other jobs to finish...                                                                                      
+error: build failed  
+</code></pre>
+<p>Да, собиралось в <code>ConEmu</code> поэтому такие “нестандартные” приглашения Windows.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="May 13, 2022 5:38 AM">
+            <time itemprop="datePublished" datetime="2022-05-13 05:38:07 +0000">May 13, 2022</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>выглядит загадочно. чувствую, больше шансов получить ответ в репе самого bevy</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Majestio" class="user-link">Олег</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="May 22, 2022 2:07 PM">
+            <time itemprop="datePublished" datetime="2022-05-22 14:07:14 +0000">May 22, 2022</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Мне почему-то кажется, что это ошибка самого компилятора. Компилятор слетел.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Конфликт времен жизни - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Конфликт времен жизни</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Конфликт времен жизни</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Feb 27, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Feb 27, 2019 9:30 AM">
+            <time itemprop="datePublished" datetime="2019-02-27 09:30:45 +0000">Feb 27, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>С реализацией итератора имутабельных значений проблем нет:</p>
+<pre><code class="lang-auto">impl&lt;'a, V: 'a&gt; Iterator for UnitIter&lt;'a, Joint, V&gt; {
+    type Item = (Joint, &amp;'a V);
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        self.index += 1;
+        match self.index {
+            1 =&gt; Some((Joint::J0, &amp;self.unit.0[0])),
+            2 =&gt; Some((Joint::J1, &amp;self.unit.0[1])),
+            3 =&gt; Some((Joint::J2, &amp;self.unit.0[2])),
+            4 =&gt; Some((Joint::J3, &amp;self.unit.0[3])),
+            5 =&gt; Some((Joint::J4, &amp;self.unit.0[4])),
+            6 =&gt; Some((Joint::J5, &amp;self.unit.0[5])),
+            7 =&gt; Some((Joint::J6, &amp;self.unit.0[6])),
+            8 =&gt; Some((Joint::J7, &amp;self.unit.0[7])),
+            _ =&gt; None,
+        }
+    }
+}
+</code></pre>
+<p>а при реализации итератора мутабельных значение возникает конфликт времен жизни:</p>
+<pre><code class="lang-auto">impl&lt;'a, V: 'a&gt; Iterator for UnitIterMut&lt;'a, Joint, V&gt; {
+    type Item = (Joint, &amp;'a mut V);
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        self.index += 1;
+        match self.index {
+            1 =&gt; Some((Joint::J0, &amp;mut self.unit.0[0])),
+            2 =&gt; Some((Joint::J1, &amp;mut self.unit.0[1])),
+            3 =&gt; Some((Joint::J2, &amp;mut self.unit.0[2])),
+            4 =&gt; Some((Joint::J3, &amp;mut self.unit.0[3])),
+            5 =&gt; Some((Joint::J4, &amp;mut self.unit.0[4])),
+            6 =&gt; Some((Joint::J5, &amp;mut self.unit.0[5])),
+            7 =&gt; Some((Joint::J6, &amp;mut self.unit.0[6])),
+            8 =&gt; Some((Joint::J7, &amp;mut self.unit.0[7])),
+            _ =&gt; None,
+        }
+    }
+}
+</code></pre>
+<p>Почему так?<br>
+<a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=1ae6433d39a4ee0c9ec7c41d648aef3e" rel="nofollow noopener">Playground</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Feb 27, 2019 10:35 AM">
+            <time itemprop="datePublished" datetime="2019-02-27 10:35:52 +0000">Feb 27, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Потому что компилятор не может гарантировать, что ты не ошибешься в индексах и не напишешь кашу вроде:</p>
+<pre><code class="lang-auto">1 =&gt; Some((Joint::J0, &amp;mut self.unit.0[0])),
+2 =&gt; Some((Joint::J1, &amp;mut self.unit.0[1])),
+3 =&gt; Some((Joint::J2, &amp;mut self.unit.0[1])), // copypaste typo
+4 =&gt; Some((Joint::J3, &amp;mut self.unit.0[3])),
+</code></pre>
+<p>Если ты ошибешься, то будет две мутабельные ссылки на один регион, что является UB.</p>
+<p>Твою задачу можно решить через unsafe, посмотри в теме <a href="https://users.rust-lang.org/t/implementing-an-iterator-of-mutable-references/8671" rel="nofollow noopener">https://users.rust-lang.org/t/implementing-an-iterator-of-mutable-references/8671</a> , по той же самой причине не может быть iter_mut для оконного итерирования: <a href="https://users.rust-lang.org/t/iterator-over-mutable-windows-of-slice/17110/2" rel="nofollow noopener">https://users.rust-lang.org/t/iterator-over-mutable-windows-of-slice/17110/2</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Feb 27, 2019 11:34 AM">
+            <time itemprop="datePublished" datetime="2019-02-27 11:34:55 +0000">Feb 27, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Не думаю что тут дело в индексах.<br>
+Пока не реализуют <a href="https://github.com/rust-lang/rfcs/blob/master/text/1598-generic_associated_types.md" rel="nofollow noopener">GATs</a> такое сделать невозможно (и скорее всего GATs тоже не помогут <a href="https://forum.rustycrate.ru/t/konflikt-vremen-zhizni/821/5?u=ibuzpe9">см. ниже</a>). Я раньше кидал ссылку на статью со способами решения этой проблемы ( <a href="https://lukaskalbertodt.github.io/2018/08/03/solving-the-generalized-streaming-iterator-problem-without-gats.html" rel="nofollow noopener">Solving the Generalized Streaming Iterator Problem without GATs</a> ), но на практике они все малополезны.<br>
+Через <code>unsafe</code> тоже очень не советую это делать. Тут все завязано на особенности мутабельных ссылок - эксклюзивность и инвариантность относительно типа.</p>
+<p>Если отбросить лишнее (типаж <code>Iterator</code>) и явно указать вж, функцию <code>next()</code> можно записать так:</p>
+<pre><code class="lang-auto">fn next&lt;'b, 'a, V&gt;(self: &amp;'b mut UnitIterMut&lt;'a, Joint, V&gt;) -&gt; Option&lt;(Joint, &amp;'a mut V)&gt; {
+    Some((Joint::J0, &amp;mut self.unit.0[0]))
+}
+</code></pre>
+<p>Если пойти еще дальше все можно свести к такой функции:</p>
+<pre><code class="lang-auto">fn next&lt;'b, 'a, V&gt;(slf: &amp;'b mut &amp;'a mut V) -&gt; &amp;'a mut V {
+    &amp;mut **slf
+}
+</code></pre>
+<p>Такая функция в принципе не реализуема, кроме случая когда <code>'b:'a</code> (вж <code>'b</code> не меньше чем <code>'a</code>, в данном случе равно). Я об этом раньше писал в теме:  <a href="https://forum.rustycrate.ru/t/strannoe-povedenie-vlozhennyh-mutabelnyh-ssylok/462">Странное поведение вложенных мутабельных ссылок</a>.<br>
+А типаж <code>Iterator</code> без GATs не дает возможности описать связь между вж ассоциированного типа и <code>Self</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Feb 27, 2019 11:57 AM">
+            <time itemprop="datePublished" datetime="2019-02-27 11:57:18 +0000">Feb 27, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Посмотрел как сделан <code>IterMut</code> из стандартной библиотеки и сделал так-же через unsafe:</p>
+<pre><code class="lang-auto">pub struct IterMut&lt;'a, P, V&gt; {
+    unit: *mut Unit&lt;P, V&gt;,
+    index: Range&lt;usize&gt;,
+    marker: PhantomData&lt;&amp;'a mut Unit&lt;P, V&gt;&gt;,
+}
+
+impl&lt;'a, V: 'a&gt; Iterator for IterMut&lt;'a, Joint, V&gt; {
+    type Item = (Joint, &amp;'a mut V);
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        self.index.next().map(|n| {
+            (Joint::try_from(n).unwrap(), unsafe {
+                &amp;mut (*self.unit).0[n]
+            })
+        })
+    }
+}
+
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/IBUzPE9" class="user-link">Alex</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Feb 27, 2019 3:42 PM">
+            <time itemprop="datePublished" datetime="2019-02-27 15:42:14 +0000">Feb 27, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Похоже я слишком раскатал губу насчет GATs. Они предназначены для случаев когда структура владеет данными, а не ссылается на них.</p>
+<p>Даже если GATs позволят связывать вж, как  я писал раньше, то такой итератор будет совершенно бесполезен. После первого  вызова метода <code>next()</code> произойдет “вечное” заимствование структуры итератора и второй раз его вызвать будет нельзя, никакие ограничения области видимости не помогут. Все из-за одной интересной особенности при вычислении длительности заимствования данных компилятором:  <a href="https://forum.rustycrate.ru/t/pochemu-peremennaya-data-zaimstvuetsya-posle-vyzova-funkczii/476">Почему переменная data заимствуется после вызова функции?</a></p>
+<p>Так что кроме <code>unsafe</code> вариантов нет.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Mar 1, 2019 12:25 PM">
+            <time itemprop="datePublished" datetime="2019-03-01 12:25:32 +0000">Mar 1, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="chessnokov" data-post="4" data-topic="821">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chessnokov/48/164_2.png" class="avatar"> chessnokov:</div>
+<blockquote>
+<p>Посмотрел как сделан <code>IterMut</code> из стандартной библиотеки и сделал так-же через unsafe:</p>
+</blockquote>
+</aside>
+<p>Я не уверен, что ты все сделал правильно.</p>
+<p><strong>Пожалуйста, не делайте так, вообще старайтесь не использовать unsafe, это крайне опасно.</strong></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Mar 1, 2019 2:17 PM">
+            <time itemprop="datePublished" datetime="2019-03-01 14:17:31 +0000">Mar 1, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А где я ошибся?</p>
+<p>Не думаю что использование сырых указателей,<br>
+опаснее чем использование указателей в C/C++,<br>
+которыми я тоже пользуюсь.<br>
+И почему ребята которые пишут стандартную библиотеку не должны боятся, а я должен?<br>
+Вообщем странный совет.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Mar 2, 2019 8:47 AM">
+            <time itemprop="datePublished" datetime="2019-03-02 08:47:13 +0000">Mar 2, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Они боятся. И перепроверяют. И потом находят баги: <a href="https://github.com/rust-lang/miri#bugs-found-by-miri" rel="nofollow noopener">https://github.com/rust-lang/miri#bugs-found-by-miri</a></p>
+<p>Поэтому то, что ты тут раскидываешься кодом с unsafe может больно ударить по будущим читателям. У меня нет желания перепроверять его корректность, поэтому:</p>
+<p><strong>Пожалуйста, не делайте так, вообще старайтесь не использовать unsafe, это крайне опасно.</strong></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Mar 9, 2019 8:34 AM">
+            <time itemprop="datePublished" datetime="2019-03-09 08:34:20 +0000">Mar 9, 2019</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Как-то это чрезмерно. Некоторые вещи правильно делать только через unsafe.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Mar 29, 2019 11:32 PM">
+            <time itemprop="datePublished" datetime="2019-03-29 23:32:23 +0000">Mar 29, 2019</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a class="mention" href="/u/mkpankov/index.html">@mkpankov</a>, считаю правильным не согласиться с последним утверждением.</p>
+<p>Очень многое Rust позволяет сделать безопасно, если это делать не совсем так, как это делается в других языках. Здесь правильный подход делать это безопасно и этому мы учим тех, кто знакомится с Rust. Жить не по принципу C(++) “нет, компилятор, брешешь, <code>unsafe</code> даю, безопасно”, а писать безопасный код, даже если он чуть длиннее. С этим, я надеюсь, согласны все.</p>
+<p>Иногда встречаются задачи, которые, очевидно, можно выполнить безопасно, но компилятор не даёт этого сделать, потому что он чего-то не знает. Наглядный пример мы видим перед собой: компилятор не знает, что все вызовы <code>next()</code> с гарантией вернут непересекающиеся ссылки. В этот момент возникает сильный соблазн найти пример, как такое где-нибудь обошли, скопировать его вместе с <code>unsafe</code>, не задумываясь особо, и объявить задачу выполненной. И именно в этот момент игнорируется другое радикальное преимущество Rust - возможность построения безопасных абстракций. Если это уже сделали, то это можно скопировать… стоп, а нельзя этим воспользоваться?</p>
+<p>Вернёмся к нашему примеру. Проблема в том, что компилятор не в курсе того, что все ссылки берутся на разные элементы. Эта задача уже решена в стандартной библиотеке для случая <code>[T]</code>, так зачем писать свой <code>unsafe</code>, когда он уже написан? Давайте попробуем просто им воспользоваться. Итак, у нас было (и не работало) следующее</p>
+<pre><code class="lang-rust">pub struct UnitIterMut&lt;'a, P, V&gt; {
+    unit: &amp;'a mut Unit&lt;P, V&gt;,
+    index: usize,
+}
+
+impl&lt;'a, V: 'a&gt; Iterator for UnitIterMut&lt;'a, Joint, V&gt; {
+    type Item = (Joint, &amp;'a mut V);
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        self.index += 1;
+        match self.index {
+            1 =&gt; Some((Joint::J0, &amp;mut self.unit.0[0])),
+            2 =&gt; Some((Joint::J1, &amp;mut self.unit.0[1])),
+            3 =&gt; Some((Joint::J2, &amp;mut self.unit.0[2])),
+            4 =&gt; Some((Joint::J3, &amp;mut self.unit.0[3])),
+            5 =&gt; Some((Joint::J4, &amp;mut self.unit.0[4])),
+            6 =&gt; Some((Joint::J5, &amp;mut self.unit.0[5])),
+            7 =&gt; Some((Joint::J6, &amp;mut self.unit.0[6])),
+            8 =&gt; Some((Joint::J7, &amp;mut self.unit.0[7])),
+            _ =&gt; None,
+        }
+    }
+}
+</code></pre>
+<p>А стало после переписывания (полная версия на <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=974c20acb5bad6bd6f7664346f3df303" rel="nofollow noopener">playground</a>)</p>
+<pre><code class="lang-rust">pub struct UnitIterMut&lt;'a, V&gt; {
+    iter: iter::Enumerate&lt;slice::IterMut&lt;'a, V&gt;&gt;,
+}
+
+impl&lt;'a, V: 'a&gt; Iterator for UnitIterMut&lt;'a, V&gt; {
+    type Item = (Joint, &amp;'a mut V);
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        let (index, reference) = self.iter.next()?;
+        let joint = Joint::from_usize(index)?;
+        Some((joint, reference))
+    }
+}
+</code></pre>
+<p>Здесь метод <code>Joint::from_usize</code> просто переводит из индекса в константу (и вообще сгенерирован при помощи <code>#[derive(FromPrimitive)]</code> из <code>num-derive</code>). Из кода ушло повторение однотипных строк и он теперь работает без <code>unsafe</code> - просто потому, что мы используем многократно протестированный кусочек <code>unsafe</code>-кода, живущий прямо в стандартной библиотеке.</p>
+<p>Правило “не пиши <code>unsafe</code> нигде, кроме FFI” для новичков возникает не только потому, что они плохо знают, что именно делать можно, а что нельзя ни в коем случае. Другая немаловажная причина заключается в том, что, если посмотреть вокруг внимательно, зачастую можно найти код, который сделает всё небезопасное за тебя. Мы учимся как сообщество не писать свой unsafe, а искать и использовать существующие примитивы. Так меньше кода, который нужно пристально анализировать на возможность падений или чинить в том случае, если он всё-таки оказывается опасным.</p>
+<p>Да, есть ещё и третья важная причина. Бывает порой такое, что ты пытаешься применить какую-то похожую библиотечную абстракцию, а она не встаёт. Не сходится что-то. Смотришь внимательнее и понимаешь, что в твоих условиях так сделать нельзя, потому что упустил какое-то важное условие, и в твоих условиях такой подход был бы чреват падением. При копировании unsafe-кода к себе и доработке напильником пропустить такое куда проще, а искать ошибку с ментальным блоком “это скопировано из надёжного места и, стало быть, тоже надёжно” куда как весело…</p>
+<p>Потому я за то, чтобы отвечать спрашивающим в духе “не пиши <code>unsafe</code> нигде, кроме FFI, а лучше и в FFI тоже не пиши, если возможно”. Потому что умение находить и применять подходящие безопасные абстракции тоже очень важно, и чтобы ему учиться, их нужно искать и применять, а не копипастить. Потому что пусть лучше не убивают лайфтайм с помощью <code>transmute</code>, когда знают, что это доживёт до конца программы, а честно пишут <code>Box::leak</code>. Потому что Rust - это язык про то, как собирать безопасные и эффективные абстракции и пользоваться ими.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="7 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          7
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Mar 30, 2019 8:09 AM">
+            <time itemprop="datePublished" datetime="2019-03-30 08:09:22 +0000">Mar 30, 2019</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Это всё хорошо, но главное чтобы такой подход не приводил к тому, что ценой отсутствия <code>unsafe</code> делают свой односвязный список вот такой</p>
+<pre><code class="lang-rust">pub enum List {
+    Empty,
+    Elem(i32, Box&lt;List&gt;),
+}
+</code></pre>
+<p>В системной разработке на Rust без <code>unsafe</code> никуда, и им надо уметь пользоваться, а не бежать сломя голову и пытаться спрятать тот же <code>unsafe</code> в стандартную библиотеку. Возможно, вы и разрабатываете стандартную библиотеку.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Mar 30, 2019 9:54 AM">
+            <time itemprop="datePublished" datetime="2019-03-30 09:54:28 +0000">Mar 30, 2019</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_11">Replying to #11</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>… ценой отсутствия <code>unsafe</code> делают свой односвязный список вот такой…</p>
+</blockquote>
+<p>Я как-то не в курсе, а чем именно он так плох? Ну кроме того, что я бы работал в терминах</p>
+<pre data-code-wrap="rust"><code class="lang-rust">struct Node&lt;T&gt; {
+    item: T,
+    next: Option&lt;Box&lt;Node&lt;T&gt;&gt;&gt;,
+}
+</code></pre>
+<p>но вроде бы для односвязного списка, не пытающегося быть thread-safe, это вполне адекватное представление.</p>
+<p>Но это был оффтоп. Возвращаясь к серьёзным утверждениям: если передо мной при разработке на Rust встанет необходимость написать односвязный список, я очень серьёзно задумаюсь правильная ли это структура данных и чем меня не устраивают существующие решения. И если есть ответ, почему такой примитив необходим для моего случая и безопасен - я его напишу. По возможности инкапсулировав в отдельный модуль. И записав те требования, от соблюдения которых зависит его безопасность.</p>
+<p>Да, есть вещи, которые приходится делать через unsafe. Нет, это не должны быть мелкие кусочки unsafe, раскиданные по тем точкам кода, где возникли проблемы. Иначе со временем обязательно окажется, что парочка фрагментов изначально не гарантирует безопасности (безопасны при “запланированном” использовании, но допускают и сегфолты в safe-коде, если сделать что-то, о чём автор не подумал), а ещё штуки три были безопасны изначально с учётом допущений, которые потом были нарушены при рефакторинге безопасного кода, теперь же небезопасны.</p>
+<p>Чуть-чуть перефразируя: unsafe - это разрешение на опасные операции, используемые в примитивах с безопасным интерфейсом, а не “я начальник - ты дурак, мне виднее, компилируй так”.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

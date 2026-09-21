@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reqwest: как отправить запрос в другой кодировке? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Reqwest: как отправить запрос в другой кодировке?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Reqwest: как отправить запрос в другой кодировке?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jul 18, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vessd" class="user-link">Сергей Веселков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jul 18, 2018 8:25 PM">
+            <time itemprop="datePublished" datetime="2018-07-18 20:25:20 +0000">Jul 18, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Хочу <code>POST</code> запросом оставлять сообщения на форуме. Столкнулся с тем, что нужно отправлять сообщения в кодировке <code>windows-1251</code>.</p>
+<p>Встроенных методов для указания нужной кодировки я не нашёл. Попробовал воспользоваться <a href="https://crates.io/crates/encoding_rs" rel="nofollow noopener">encoding_rs</a>, но <a href="https://docs.rs/reqwest/0.8.6/reqwest/struct.RequestBuilder.html#method.form" rel="nofollow noopener">RequestBuilder::form</a> отказывается принимать <code>Vec&lt;u8&gt;</code>: UrlEncoded(Custom(“unsupported value”)).</p>
+<p>Есть ещё какие-то варианты?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jul 18, 2018 9:19 PM">
+            <time itemprop="datePublished" datetime="2018-07-18 21:19:23 +0000">Jul 18, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>из гиттера:</p>
+<blockquote>
+<p><a href="https://gitter.im/ruRust/general?at=5b4fae4b55a7e23c014f5dc8">Denis Lisov @tanriol 00:16</a><br>
+Похоже, что вручную - сериализовать форму, перевести в нужную кодировку, задать Content-Type и Body</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Albibek" class="user-link">Albibek</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jul 19, 2018 4:45 AM">
+            <time itemprop="datePublished" datetime="2018-07-19 04:45:32 +0000">Jul 19, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>ContentEncoding пробовал указывать? <a href="https://docs.rs/reqwest/0.8.6/reqwest/header/struct.ContentEncoding.html" rel="nofollow noopener">https://docs.rs/reqwest/0.8.6/reqwest/header/struct.ContentEncoding.html</a></p>
+<p>Само собой, тело нужно перекодировать самостоятельно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vessd" class="user-link">Сергей Веселков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jul 19, 2018 5:19 AM">
+            <time itemprop="datePublished" datetime="2018-07-19 05:19:50 +0000">Jul 19, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я пока не разобрался как это должно работать, но похоже это не поможет.<br>
+сделал</p>
+<pre><code class="lang-auto">let mime = "application/x-www-form-urlencoded; charset=utf-8"
+            .parse::&lt;mime::Mime&gt;()
+            .unwrap();
+let content_type = ContentType(mime);
+request.header(content_type);
+</code></pre>
+<pre><code class="lang-auto">RequestBuilder {
+    method: Post,
+    url: "https://rutracker.cr/forum/posting.php?mode=editpost&amp;p=75679265",
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+    }
+}
+</code></pre>
+<p>результат</p>
+<pre><code class="lang-auto">С‚РµСЃС‚
+</code></pre>
+<p>вечером попробую вручную с другой кодировкой</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vessd" class="user-link">Сергей Веселков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jul 19, 2018 7:29 PM">
+            <time itemprop="datePublished" datetime="2018-07-19 19:29:55 +0000">Jul 19, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Не получилось, <a href="https://docs.rs/serde_urlencoded/0.5.2/serde_urlencoded/fn.from_bytes.html" rel="nofollow noopener">serde_urlencoded::to_string</a> не принимает у меня <code>Vec&lt;u8&gt;</code>, а других методов для сериализации там нет. Видимо нужно кодировать чем-то ещё.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vessd" class="user-link">Сергей Веселков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Jul 20, 2018 6:05 AM">
+            <time itemprop="datePublished" datetime="2018-07-20 06:05:27 +0000">Jul 20, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Проблему удалось решить с помощью <a href="https://docs.rs/url/1.7.1/url/form_urlencoded/fn.byte_serialize.html" rel="nofollow noopener">url::form_urlencoded::byte_serialize</a>, итоговое решение выглядит примерно так:</p>
+<pre><code class="lang-rust">fn encode(vec: &amp;[(&amp;str, &amp;str)]) -&gt; String {
+    let enc = |s| byte_serialize(&amp;WINDOWS_1251.encode(s).0).collect::&lt;String&gt;();
+    vec.iter()
+        .map(|(k, v)| format!("{}={}", enc(k), enc(v)))
+        .collect::&lt;Vec&lt;_&gt;&gt;()
+        .join("&amp;")
+}
+
+client
+    .post(url.as_str())
+    .body(encode(&amp;[("message", "тест")])
+    .header(ContentType::form_url_encoded())
+    .send()?;
+</code></pre>
+<p>Количество аллокаций <code>String</code> оставляет желать лучшего, но ничего другого пока не придумал.</p>
+<p>upd: После повторного изучения документации нашёлся хороший вариант</p>
+<pre><code class="lang-rust">fn encode(vec: &amp;[(&amp;str, &amp;str)]) -&gt; String {
+    form_urlencoded::Serializer::new(String::new())
+        .custom_encoding_override(|s| WINDOWS_1251.encode(s).0)
+        .extend_pairs(vec)
+        .finish()
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="4 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          4
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

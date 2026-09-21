@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Можно ли составить путь из кусков в декларативном макросе? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Можно ли составить путь из кусков в декларативном макросе?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Можно ли составить путь из кусков в декларативном макросе?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Feb 24, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Feb 24, 2019 6:24 AM">
+            <time itemprop="datePublished" datetime="2019-02-24 06:24:53 +0000">Feb 24, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Затупил тут с макросами.</p>
+<pre><code class="lang-rust">#[derive(Debug)]
+struct LongNameA;
+
+#[derive(Debug)]
+struct LongNameB(u8);
+
+#[derive(Debug)]
+enum LongNameE {
+    LongNameA(LongNameA),
+    LongNameB(LongNameB),
+}
+
+// I want to get rid of `$variant_name:path` argument somehow
+macro_rules! gen_struct_enum_conversion {
+    ($enum_name:path, $struct_name:path, $variant_name:path) =&gt; {
+        impl From&lt;$struct_name&gt; for $enum_name {
+            fn from(e: $struct_name) -&gt; Self {
+                $variant_name(e)
+                // $enum_name::$struct_name(e) // doesn't work
+            }
+        }
+    };
+}
+
+gen_struct_enum_conversion! { LongNameE, LongNameA, LongNameE::LongNameA }
+gen_struct_enum_conversion! { LongNameE, LongNameB, LongNameE::LongNameB }
+
+// Desired "DRY" macro call:
+// gen_struct_enum_conversion! { LongNameE, LongNameB }
+
+fn x(e: &amp;LongNameE) {
+    println!("{:?}", e);
+}
+
+fn main() {
+    x(&amp;LongNameE::LongNameA(LongNameA));
+    x(&amp;LongNameE::LongNameB(LongNameB(0)));
+    
+    x(&amp;LongNameA.into());
+    x(&amp;LongNameB(0).into());
+}
+</code></pre>
+<p><a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=d8a8e8c9e600ee97fb57d1d596f8d562" rel="nofollow noopener"><em>Playground</em></a></p>
+<p>Вопрос, собственно, в том, как (и можно ли вообще) добиться возможности вызывать <code>gen_struct_enum_conversion! { LongNameE, LongNameB }</code>?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Feb 24, 2019 6:54 AM">
+            <time itemprop="datePublished" datetime="2019-02-24 06:54:04 +0000">Feb 24, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>О, откопал таки на SO ответ, причем 1 в 1 что мне надо было:</p>
+<aside class="onebox stackexchange" data-onebox-src="https://stackoverflow.com/questions/47606209/whats-wrong-with-this-rust-macro">
+  <header class="source">
+
+      <a href="https://stackoverflow.com/questions/47606209/whats-wrong-with-this-rust-macro" target="_blank" rel="noopener">stackoverflow.com</a>
+  </header>
+
+  <article class="onebox-body">
+      <a href="https://stackoverflow.com/users/1825860/alphamodder" target="_blank" rel="noopener">
+    <img alt="AlphaModder" src="https://www.gravatar.com/avatar/b9e1d70a0cbe81683a016e700d3239bf?s=256&amp;d=identicon&amp;r=PG" class="thumbnail onebox-avatar" width="256" height="256">
+  </a>
+
+<h4>
+  <a href="https://stackoverflow.com/questions/47606209/whats-wrong-with-this-rust-macro" target="_blank" rel="noopener">What's wrong with this Rust macro?</a>
+</h4>
+
+<div class="tags">
+  <strong>macros, rust</strong>
+</div>
+
+<div class="date">
+  asked by
+  
+  <a href="https://stackoverflow.com/users/1825860/alphamodder" target="_blank" rel="noopener">
+    AlphaModder
+  </a>
+  on <a href="https://stackoverflow.com/questions/47606209/whats-wrong-with-this-rust-macro" target="_blank" rel="noopener">09:00AM - 02 Dec 17 UTC</a>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>TLDR: конкретно в моем случае (и структура, и перечисление в текущем пространстве имен) мне нужны были <code>ident</code>ы, а не <code>path</code>ы:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">macro_rules! gen_struct_enum_conversion {
+    ($enum_name:ident, $struct_name:ident) =&gt; {
+        impl From&lt;$struct_name&gt; for $enum_name {
+            fn from(e: $struct_name) -&gt; Self {
+                $enum_name::$struct_name(e)
+            }
+        }
+    };
+}
+</code></pre>
+<hr>
+<p>UPD: <a href="https://gitter.im/ruRust/general?at=5c725987c82c68509e295da7">Дополнение из гиттера:</a></p>
+<blockquote>
+<p><span class="mention">@chtotut</span>: вообще, на мой взгляд, для твоего случая вроде как подходит <a href="https://jeltef.github.io/derive_more/derive_more/from.html#enums">derive_more</a>, глянь, вдруг поможет <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"><br>
+<a class="mention" href="/u/ozkriff/index.html">@ozkriff</a>: Хм. Да, спасибо, пожалуй <code>derive_more::From</code> тут очень даже в тему будет, тем более что зависимостей новых в <s>мою свалку</s> проект не тянет. Заодно код ошибок упрощу.</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

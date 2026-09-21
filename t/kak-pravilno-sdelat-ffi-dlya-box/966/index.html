@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Как правильно сделать FFI для Box? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Как правильно сделать FFI для Box?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Как правильно сделать FFI для Box?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Aug 4, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/anton-okolelov" class="user-link">Anton Okolelov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Aug 4, 2019 2:38 PM">
+            <time itemprop="datePublished" datetime="2019-08-04 14:38:29 +0000">Aug 4, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Привет</p>
+<p>Я сделал простой парсер арифметических выражений <a href="https://github.com/anton-okolelov/simple-rust-ariphmetic-parser" rel="nofollow noopener">https://github.com/anton-okolelov/simple-rust-ariphmetic-parser</a></p>
+<p>Во-первых, большая просьба посмотреть код на предмет того, насколько он идеоматично написан с точки зрения Раста. Если не затруднит.</p>
+<p>И вопрос еще есть.</p>
+<p>для тренировки я бы хотел сделать функцию “parse” С-совместимой, чтобы использовать ее в скриптовых языках.</p>
+<p>Функция возвращает результат типа Expression</p>
+<pre><code>pub enum Expression {
+    Add(Box&lt;Expression&gt;, Box&lt;Expression&gt;),
+    Subtract(Box&lt;Expression&gt;, Box&lt;Expression&gt;),
+    Multiply(Box&lt;Expression&gt;, Box&lt;Expression&gt;),
+    Divide(Box&lt;Expression&gt;, Box&lt;Expression&gt;),
+    UnaryMinus(Box&lt;Expression&gt;),
+    Value(i64),
+}
+</code></pre>
+<p>Поигрался с  cbindgen, енумы он подхватывает автоматом,  но не знаю, как действовать в случае с Box.  Надо копировать этот результат функции в сишную структуру с голыми указателями?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/antage" class="user-link">Anton Ageev</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Aug 4, 2019 2:58 PM">
+            <time itemprop="datePublished" datetime="2019-08-04 14:58:03 +0000">Aug 4, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Си понимает только указатели, так что надо преобразовывать их через Box::into_raw(boxed_value).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/anton-okolelov" class="user-link">Anton Okolelov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Aug 8, 2019 6:00 AM">
+            <time itemprop="datePublished" datetime="2019-08-08 06:00:42 +0000">Aug 8, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Сделал конвертацию в сишные структуры. Посмотрите плиз кто-нибудь</p>
+<aside class="onebox githubblob">
+  <header class="source">
+      <a href="https://github.com/anton-okolelov/simple-rust-ariphmetic-parser/blob/master/src/ffi.rs" target="_blank" rel="nofollow noopener">github.com</a>
+  </header>
+  <article class="onebox-body">
+    <h4><a href="https://github.com/anton-okolelov/simple-rust-ariphmetic-parser/blob/master/src/ffi.rs" target="_blank" rel="nofollow noopener">anton-okolelov/simple-rust-ariphmetic-parser/blob/master/src/ffi.rs</a></h4>
+<pre><code class="lang-rs">extern crate libc;
+
+use crate::expression::Expression;
+use crate::expression::Expression::*;
+use crate::parser::*;
+use std::ffi::CStr;
+use std::os::raw::c_char;
+
+#[no_mangle]
+pub extern "C" fn parse_arithmetic(s: *const c_char) -&gt; *mut ExpressionFfi {
+    unsafe {
+        // todo: error handling
+        let rust_string = CStr::from_ptr(s).to_str().unwrap();
+        parse(rust_string).unwrap().convert_to_c()
+    }
+}
+
+impl Expression {
+    fn convert_to_c(&amp;self) -&gt; *mut ExpressionFfi {
+        let expression_data = match self {
+</code></pre>
+
+  This file has been truncated. <a href="https://github.com/anton-okolelov/simple-rust-ariphmetic-parser/blob/master/src/ffi.rs" target="_blank" rel="nofollow noopener">show original</a>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>И еще вопрос, кто должен очищать эту память и как? )) . После вызова функции</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">T</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/tanriol" class="user-link">Denis Lisov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Aug 12, 2019 4:40 PM">
+            <time itemprop="datePublished" datetime="2019-08-12 16:40:22 +0000">Aug 12, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Для очистки памяти код на C должен вызывать обёртку на Rust, которая будет восстанавливать из указателей и освобождать все ExpressionFfi (и которую нужно написать).</p>
+<p>В зависимости от того, для чего это выражение передаётся обратно в Си, такое дерево узлов может быть более или менее удобной структурой. Например, если код на Си должен уметь только вычислять значение выражения, то структура самого выражения может быть вообще чёрным ящиком (и содержать, например, стековый байт-код).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/anton-okolelov" class="user-link">Anton Okolelov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Aug 13, 2019 7:02 AM">
+            <time itemprop="datePublished" datetime="2019-08-13 07:02:40 +0000">Aug 13, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо за разъяснение! Примерно так?</p>
+<aside class="onebox githubcommit">
+  <header class="source">
+      <a href="https://github.com/anton-okolelov/simple-rust-ariphmetic-parser/commit/9f572c5efd827d8cabcdbfa00fe18660ac36101d" target="_blank" rel="nofollow noopener">github.com/anton-okolelov/simple-rust-ariphmetic-parser</a>
+  </header>
+  <article class="onebox-body">
+    
+<h4>
+  <a href="https://github.com/anton-okolelov/simple-rust-ariphmetic-parser/commit/9f572c5efd827d8cabcdbfa00fe18660ac36101d" target="_blank" rel="nofollow noopener">destroy function</a>
+</h4>
+
+
+<div class="date">
+  by <a href=""></a>
+  on <a href="https://github.com/anton-okolelov/simple-rust-ariphmetic-parser/commit/9f572c5efd827d8cabcdbfa00fe18660ac36101d" target="_blank" rel="nofollow noopener">06:59AM - 13 Aug 19 UTC</a>
+</div>
+
+<div class="github-commit-stats">
+  changed <strong>2 files</strong>
+  with <strong>26 additions</strong>
+  and <strong>5 deletions</strong>.
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/andreevlex" class="user-link">Alexander Andreev</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Aug 19, 2019 7:24 AM">
+            <time itemprop="datePublished" datetime="2019-08-19 07:24:20 +0000">Aug 19, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В этом видео есть вариант, как <code>Box</code> в Rust превращают в <code>std::unique_ptr</code> в C++<br>
+</p><div class="lazyYT" data-youtube-id="Ct7jveV7j8g" data-youtube-title="RustFest Paris 2018 -  A Rust Crate that also quacks like a modern C++ Library..." data-width="480" data-height="270" data-parameters="feature=oembed&amp;wmode=opaque"></div>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">A</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/anton-okolelov" class="user-link">Anton Okolelov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Sep 1, 2019 2:05 PM">
+            <time itemprop="datePublished" datetime="2019-09-01 14:05:30 +0000">Sep 1, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="onebox whitelistedgeneric">
+  <header class="source">
+      <img src="https://forum.rustycrate.ru/uploads/default/original/1X/d25c790f5b5d8391025d066b35664e815ac20edd.png" class="site-icon" width="32" height="32">
+      <a href="https://habr.com/ru/post/455614/" target="_blank" rel="nofollow noopener">habr.com</a>
+  </header>
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/362;"><img src="https://forum.rustycrate.ru/uploads/default/original/1X/59dd9a330e39bbfcc4fb398424d95eb329b68f3c.png" class="thumbnail"></div>
+
+<h3><a href="https://habr.com/ru/post/455614/" target="_blank" rel="nofollow noopener">FFI: пишем на Rust в PHP-программе</a></h3>
+
+<p>В PHP 7.4 появится FFI, т.е. можно подключать библиотеки на языке C (или, например, Rust) напрямую, без необходимости писать целый extension и разбираться в его...</p>
+
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>Накидал статью</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

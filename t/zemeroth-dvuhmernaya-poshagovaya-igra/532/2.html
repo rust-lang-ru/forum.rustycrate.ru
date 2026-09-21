@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zemeroth - двухмерная пошаговая игра - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/projects/11/index.html">Проекты</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Zemeroth - двухмерная пошаговая игра</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Zemeroth - двухмерная пошаговая игра</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/projects/11" class="category-badge" style="--cat-color: #F7941D"><span class="category-bullet" aria-hidden="true"></span>Проекты</a>
+      
+
+      
+        <div class="topic-tags">
+          
+            <a href="/tag/gamedev" class="tag-badge">gamedev</a>
+          
+            <a href="/tag/mobile" class="tag-badge">mobile</a>
+          
+        </div>
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Sep 8, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_23"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_23" title="Oct 14, 2018 2:59 PM">
+            <time itemprop="datePublished" datetime="2018-10-14 14:59:27 +0000">Oct 14, 2018</time>
+          </a>
+          <span class="post-number">#23</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <h1>Шанс попасть, зоны расстановки и упрощение конфигов</h1>
+<p>Итак, вот запоздалое обновление за последние две недели.</p>
+<ul>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/370" rel="nofollow noopener">Наконец-то <strong>реализован рассчет шансов попадания</strong></a> (взамен вечного 50% как было до этого).</p>
+<p>Пока остановился на таком подходе, вроде он не сильно сложный и довольно гибкий:</p>
+<ul>
+<li>у бойцов появляются параметры “точность атаки”, “сила атаки”, “уклонение”;</li>
+<li>эффективность_атаки = точность + сила - уклонение;</li>
+<li>кидается куб с 10 гранями;</li>
+<li>из эффективность_атаки вычитаем результат броска;</li>
+<li>если получается &lt;= 0 - значит это полный промах;</li>
+<li>если получилось больше “силы атаки”, то срезаем до нее;</li>
+<li>если посередине - значит такой урон и уходит на вражескую броню (типа, удар пришелся по касательной, но таки был ощутим);</li>
+<li>значение брони просто вычитается из этого урона для подсчета итогового урона цели.</li>
+</ul>
+<p>В эту формулу интуитивно вставляются всякие коэффициенты, типа “если атакующий ранен, то вычесть силу его ран из эффективности атаки” (тоже реализовано).</p>
+<p>Пока я два недостатка описанной выше схемы знаю:</p>
+<ol>
+<li>Сходу в ней не показать оружие, у которого нет градации урона. Хз что это именно за оружие должно быть и нужно ли оно мне (вряд ли), но штуки вида “или попал и нанес 4 урона, или не попал совсем” непредставимы без дополнительных костылей.</li>
+<li>Отравляющий демон наносит 0 урона при атках - т.е. его шанс попасть ниже остальных демонов. Тут вбил костыль в виде повышения его точности атаки.</li>
+</ol>
+<p>Вживую выглядит так сейчас:</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/7ed3d9004ffdda246f081f4da165500d43a5677b.gif" data-download-href="https://forum.rustycrate.ru/uploads/default/7ed3d9004ffdda246f081f4da165500d43a5677b" title="XyKRoa8.gif"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/7ed3d9004ffdda246f081f4da165500d43a5677b_2_588x500.gif" alt width="588" height="500" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/7ed3d9004ffdda246f081f4da165500d43a5677b_2_588x500.gif, https://forum.rustycrate.ru/uploads/default/original/1X/7ed3d9004ffdda246f081f4da165500d43a5677b.gif 1.5x, https://forum.rustycrate.ru/uploads/default/original/1X/7ed3d9004ffdda246f081f4da165500d43a5677b.gif 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/7ed3d9004ffdda246f081f4da165500d43a5677b_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">XyKRoa8.gif</span><span class="informations">728×618 2.52 MB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p>Из визуала:</p>
+<ul>
+<li>При выделении готового к атаке бойца поверх врагов показываются шансы попасть по ним;</li>
+<li>Во время атаки под атакующим ненадолго появляется вероятность успеха атаки. Нужно, в первую очередь, что бы было понятнее насколько враги опасны.</li>
+</ul>
+<p>Какие изменния случились с балансом:</p>
+<ul>
+<li>Теперь первоочередная цель это ранить врага, добивать уже может быть меньшим приоритетом - иногда удобно, что бы практически неспособный попасть по твоим бойцам враг занимал клетку и не давал его более здоровым друзьям подойти;</li>
+<li>Важность способности лечения у алхимика возросла, потому что толку от своих раненных бойцов становится сильно меньше.</li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/369" rel="nofollow noopener"><strong>Добавлены зоны начального построения</strong> (lines)</a> и  <a href="https://github.com/ozkriff/zemeroth/pull/360" rel="nofollow noopener"><strong>генератор больше не создает агентов в упор к врагам</strong></a>.</p>
+<p>С последним все просто - если рядом с клеткой стоит враг, то она считается непригодной для начальной позиции. Это помогает избежать дурацких ситуаций на первом ходу, например когда важный дальнобойный боец оказывается по случайности связан рукопашныи боем - теперь всегда есть возможность его отвести куда-то и перегруппироваться.</p>
+<p>А насчет зон, добавлено перечисление <code>pub enum Line { Any, Front, Middle, Back }</code>, позволяющее указывать в сценарии где мы какие виды агентов хотим видить. Теперь демоны-вызываетли всегда сощдаются в дальнем конце карты за жвым щитом, т.е. застрахованы от быстрой расправы на первом ходу.</p>
+<p>Снимок тестовой карты, в которую специально нагнана прям куча демонов что бы четко были видны зоны и отступы:</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/02b5898639a9b36d9f6b59b5b25eb755f5f18f2e.jpeg" data-download-href="https://forum.rustycrate.ru/uploads/default/02b5898639a9b36d9f6b59b5b25eb755f5f18f2e" title="2v20dua.jpg"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/02b5898639a9b36d9f6b59b5b25eb755f5f18f2e_2_690x388.jpeg" alt="демо зон построения" width="690" height="388" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/02b5898639a9b36d9f6b59b5b25eb755f5f18f2e_2_690x388.jpeg, https://forum.rustycrate.ru/uploads/default/optimized/1X/02b5898639a9b36d9f6b59b5b25eb755f5f18f2e_2_1035x582.jpeg 1.5x, https://forum.rustycrate.ru/uploads/default/optimized/1X/02b5898639a9b36d9f6b59b5b25eb755f5f18f2e_2_1380x776.jpeg 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/02b5898639a9b36d9f6b59b5b25eb755f5f18f2e_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">2v20dua.jpg</span><span class="informations">1920×1080 423 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p>(Вот еще до кучи <a href="https://i.imgur.com/6Rb9F9b.png" rel="nofollow noopener">пример начальной расстановки на огромной карте</a>).</p>
+</li>
+<li>
+<p>Кстати об огромных картах, я тут из интереса провел небольшой стресс-тест с реальным боем на огромной карте:</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/a56fc426d36c9bc4090f1867acb1466cc6bd447c.jpeg" data-download-href="https://forum.rustycrate.ru/uploads/default/a56fc426d36c9bc4090f1867acb1466cc6bd447c" title="7wGDn7X.jpg"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/a56fc426d36c9bc4090f1867acb1466cc6bd447c_2_690x388.jpeg" alt="Снимок стресс-теста" width="690" height="388" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/a56fc426d36c9bc4090f1867acb1466cc6bd447c_2_690x388.jpeg, https://forum.rustycrate.ru/uploads/default/optimized/1X/a56fc426d36c9bc4090f1867acb1466cc6bd447c_2_1035x582.jpeg 1.5x, https://forum.rustycrate.ru/uploads/default/optimized/1X/a56fc426d36c9bc4090f1867acb1466cc6bd447c_2_1380x776.jpeg 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/a56fc426d36c9bc4090f1867acb1466cc6bd447c_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">7wGDn7X.jpg</span><span class="informations">1920×1080 482 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p>ИИ думает секунд по 10, а анимации его хода минуты две занимают. Играть в это, конечно, не реально, но хорошо что игра хоть как-то функционирует.</p>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/365" rel="nofollow noopener"><strong>Убрал дублирование информации из конфигов</strong></a>.</p>
+<pre><code class="lang-diff">  Strength((
+-     base_strength: 4,
+      strength: 4,
+  )),
+</code></pre>
+<p>Поскольку начальное значение силы, очков здоровья/атаки, т.п. всегда равно их полному значению, нет никакого смысла в конфигах указывать и то, и то. Вставил всякой <code>serde</code> магии и функций-оберток, вроде стало почище.</p>
+</li>
+</ul>
+<p>Сейчас <a href="https://forum.rustycrate.ru/t/the-travis-ci-blog-windows-is-available/580/4">играюсь с настройкой винды в тревисе</a> и пытаюсь закончить с <a href="https://github.com/ozkriff/zemeroth/issues/333" rel="nofollow noopener">базовым режимом компании</a>.</p>
+<p>(<em>Извиняюсь, многовато получилось текста. Надо почаще писать.</em>)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="4 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          4
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_24"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_24" title="Nov 2, 2018 8:46 AM">
+            <time itemprop="datePublished" datetime="2018-11-02 08:46:28 +0000">Nov 2, 2018</time>
+          </a>
+          <span class="post-number">#24</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Выложили отчет о недавнем инди-стендапе в <a href="https://vk.com/indie_space">индиспейсе</a>, куда я решлся заглянуть:</p>
+<ul>
+<li><a href="https://vk.com/wall-171949217_19" class="inline-onebox">В преддверии 9-го Indie Stand Up мы публикуем.. | Игровая хроника Петербурга | VK</a></li>
+<li>сам отчет: <a href="https://vk.com/@igrochron-indie-stand-up-8" class="inline-onebox">Проекты Indie STAND UP! #8 | VK</a></li>
+</ul>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/486de611163395280568660f5f01246fcf31d54b.jpeg" data-download-href="https://forum.rustycrate.ru/uploads/default/486de611163395280568660f5f01246fcf31d54b" title="image"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/486de611163395280568660f5f01246fcf31d54b_2_690x459.jpeg" alt="image" data-base62-sha1="akJPKLFrAn1WzPQIPWL2B3XMRib" width="690" height="459" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/486de611163395280568660f5f01246fcf31d54b_2_690x459.jpeg, https://forum.rustycrate.ru/uploads/default/optimized/1X/486de611163395280568660f5f01246fcf31d54b_2_1035x688.jpeg 1.5x, https://forum.rustycrate.ru/uploads/default/optimized/1X/486de611163395280568660f5f01246fcf31d54b_2_1380x918.jpeg 2x" data-dominant-color="756E6C"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename">image</span><span class="informations">2560×1706 1.46 MB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div></p>
+<p>UPD: Просили описание проекта родить (не техническое), смог вот такое:</p>
+<blockquote>
+<p>Описание: минималистичная фэнтезийная пошаговая тактика, механика которой вдохновлена Into the Breach, Banner Saga, Hoplite и Auro.</p>
+<p>Процесс разработки разделен на два этапа:</p>
+<p>В первом этапе будут реализованы: тактическое ядро, дерево улучшений бойцов, уникальные действия классов, короткая кампания на пару часов в виде линейной серии боев с вечной смертью (permadeath) и финальный босс - демон Земерот. Разные виды врагов будут иметь простые, но отличающиеся шаблоны поведения, которые дополняют друг друга и создают сложные тактические задачи.</p>
+<p>Во втором этапе будет добавлен простой стратегический слой, рассказывающий предысторию придворного мага, который в тайне заключил демоническую сделку и постепенно стал Земеротом. Важной механикой стратегического режима будет сокрытие своих демонических умений и прислужников до момента открытого предательства.</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="5 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          5
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_25"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">F</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/freecoder" class="user-link">Alexander</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_25" title="Nov 2, 2018 1:30 PM">
+            <time itemprop="datePublished" datetime="2018-11-02 13:30:53 +0000">Nov 2, 2018</time>
+          </a>
+          <span class="post-number">#25</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a class="mention" href="/u/ozkriff/index.html">@ozkriff</a> Молодец! <img src="https://forum.rustycrate.ru/images/emoji/twitter/+1.png?v=6" title=":+1:" class="emoji" alt=":+1:"><br>
+А может быть нам еще чисто игровые растосходки наладить в Индиспейсе? Раз в месяц или хотя бы раз в два месяца.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_26"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_26" title="Nov 3, 2018 6:28 PM">
+            <time itemprop="datePublished" datetime="2018-11-03 18:28:45 +0000">Nov 3, 2018</time>
+          </a>
+          <span class="post-number">#26</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_25">Replying to #25</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Думаешь, имеет смысл? Ржавая игровая экосистема пока в таком состоянии, что только для готовых бороться с неудобствами годится. В целом, практичный игродельческий народ смеется даже когда говоришь на <a href="https://godotengine.org/">godot</a>’е проект писать, а до такого уровня <a href="https://www.amethyst.rs/">Аметисту</a> (он же у нас самый зрелый и серьезный из движков все еще?) еще просто куча человеколет предстоит. Да и прям проектов-то игровых в питере на расте не то что бы много. Я боюсь что мы (пока?) из своих <a href="https://www.meetup.com/Rust-%D0%B2-%D0%9F%D0%B8%D1%82%D0%B5%D1%80%D0%B5/">субботних сходок</a> не выросли особо, что бы сильно уж народ зазывать.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_27"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">G</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Gexon" class="user-link">Gexon</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_27" title="Nov 4, 2018 4:15 PM">
+            <time itemprop="datePublished" datetime="2018-11-04 16:15:13 +0000">Nov 4, 2018</time>
+          </a>
+          <span class="post-number">#27</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>раз в год самое то)))</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_28"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">F</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/freecoder" class="user-link">Alexander</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_28" title="Nov 6, 2018 11:36 AM">
+            <time itemprop="datePublished" datetime="2018-11-06 11:36:57 +0000">Nov 6, 2018</time>
+          </a>
+          <span class="post-number">#28</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Ладно, тогда сначала игрового опыта поднаберемся. Хотя мне бы хотелось как-то отдельно темы про игры обозначать, может быть и в рамках субботних сходок.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_29"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_29" title="Nov 28, 2018 10:02 PM">
+            <time itemprop="datePublished" datetime="2018-11-28 22:02:43 +0000">Nov 28, 2018</time>
+          </a>
+          <span class="post-number">#29</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <h2>Базовый режим кампании</h2>
+<p>Нашел в себе силы влить <a href="https://github.com/ozkriff/zemeroth/pull/383" rel="nofollow noopener">PR c базовой кампанией</a>.</p>
+<p>Представляет из себя просто цепочку боев с заранее заданными сценариями. Если проигрываешь в бою - все, кампания для тебя закончилась, начинай сначала. Если выигрываешь, то тебе показывается переходный экран со списком погибших, текущим составом группы и вариантами кого ты можешь “докупить” в награду.</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/fe3b1671532349360d08ef5f32fb4a219f04b980.png" data-download-href="https://forum.rustycrate.ru/uploads/default/fe3b1671532349360d08ef5f32fb4a219f04b980" title="nq232os.png"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/fe3b1671532349360d08ef5f32fb4a219f04b980_2_670x500.png" alt="переходных экран" width="670" height="500" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/fe3b1671532349360d08ef5f32fb4a219f04b980_2_670x500.png, https://forum.rustycrate.ru/uploads/default/original/1X/fe3b1671532349360d08ef5f32fb4a219f04b980.png 1.5x, https://forum.rustycrate.ru/uploads/default/original/1X/fe3b1671532349360d08ef5f32fb4a219f04b980.png 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/fe3b1671532349360d08ef5f32fb4a219f04b980_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">nq232os.png</span><span class="informations">792×591 80.8 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p><a href="https://github.com/ozkriff/zemeroth_assets/blob/cbedccdc3/campaign_01.ron" rel="nofollow noopener">Файл описания демо-кампании</a> выглядит примерно так:</p>
+<pre><code class="lang-json">initial_agents: ["swordsman", "alchemist"],
+nodes: [
+    (
+        scenario: (
+            map_radius: (4),
+            rocky_tiles_count: 8,
+            objects: [
+                (owner: Some((1)), typename: "imp", line: Front, count: 3),
+                (owner: Some((1)), typename: "imp_bomber", line: Middle, count: 2),
+            ],
+        ),
+        award: (
+            recruits: ["hammerman", "alchemist"],
+        ),
+    ),
+    (
+        scenario: (
+            rocky_tiles_count: 10,
+            objects: [
+                (owner: None, typename: "boulder", line: Any, count: 3),
+                (owner: None, typename: "spike_trap", line: Any, count: 3),
+                (owner: Some((1)), typename: "imp", line: Front, count: 4),
+                (owner: Some((1)), typename: "imp_toxic", line: Middle, count: 2),
+                (owner: Some((1)), typename: "imp_bomber", line: Back, count: 1),
+                (owner: Some((1)), typename: "imp_summoner", line: Back, count: 2),
+            ],
+        ),
+        award: (
+            recruits: ["swordsman", "spearman", "hammerman"],
+        ),
+    ),
+]
+</code></pre>
+<p>^ Вначале идет список бойцов, с которым мы начинаем самый первый бой, потом перечисляется список сценариев боев, где задаются свойства карты, списки объектов (врагов и просто булыжников всяких) и варианты награды за победу.</p>
+<p>Поскольку экран боя создается в экране главного меню или экране кампании, а затем складывается в виде типаж-объекта на стек экранов, возврат результата боя получилось организовать только через <a href="https://doc.rust-lang.org/std/sync/mpsc/fn.channel.html" rel="nofollow noopener">канал</a>. Немного костыльно, но сойдет.</p>
+<p>Тестов в коде игры пока крайне мало, но для разнообразия логическое ядро кампании я немного обмазал тестами в духе:</p>
+<pre><code class="lang-rust">#[test]
+fn short_happy_path() {
+    let mut state = State::from_plan(campaign_plan_short());
+    assert!(state.aviable_recruits().is_empty());
+    assert_eq!(state.mode(), Mode::ReadyForBattle);
+    let battle_result = BattleResult {
+        winner_id: PlayerId(0),
+        survivor_types: initial_agents(),
+    };
+    state.report_battle_results(&amp;battle_result).unwrap();
+    assert_eq!(state.mode(), Mode::Won);
+}
+</code></pre>
+<p>Сейчас есть косяк с тем что если бой пошел неудачно, то можно в любой момент выйти из него в меню кампании и начать бой заново. Уже завел <a href="https://github.com/ozkriff/zemeroth/issues/387" rel="nofollow noopener">задачу</a> на то что бы пресечь это безобразие - “вечная смерть” наше все.</p>
+<h2>Game Planet</h2>
+<p>Сходил на этих выходных на выставку <a href="https://gameplanet.info" rel="nofollow noopener">Game Planet</a>, никогда на такие штуки не ходил. И не зря, видимо - мероприятие в целом сильно не про меня оказалось. Куча школьников, фортнайта и странных косплееров. Убежал оттуда через пару часов, но хоть позалипал в секции с инди-стендами, посмотрел всякое про настолки и авторские комиксы. Сделал вывод: можно смело идти шоукейсить поделку - ничего дико страшного, в худшем случае просто все проигнорят. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=9" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+<h2>Твиторы</h2>
+<p>И да, если кому интересно, я тут психанул и завел две твитерных учетки дополнительных:</p>
+<ul>
+<li>
+<a href="http://twitter.com/ozkriff_ru" rel="nofollow noopener">@ozkriff_ru</a> - для всего, что будет интересно только русскоговорящим;</li>
+<li>
+<a href="http://twitter.com/rust_gamedev" rel="nofollow noopener">@rust_gamedev</a> - для ретвитов всего подряд про ржавый игрострой.</li>
+</ul>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_30"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_30" title="Nov 30, 2018 9:37 PM">
+            <time itemprop="datePublished" datetime="2018-11-30 21:37:11 +0000">Nov 30, 2018</time>
+          </a>
+          <span class="post-number">#30</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <h1>Пыль</h1>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/390" rel="nofollow noopener">Запилил простенькую пыль</a> при прыжках-бросках всяких:</p>
+<p><div class="large-image-placeholder"><a href="https://i.imgur.com/7p9HPa6.gif" target="_blank" rel="nofollow noopener"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="url">https://i.imgur.com/7p9HPa6.gif</span><span class="help">(image larger than 4096KB)</span></a></div></p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/3faa9cd55c48ab06697426a1c3e3579c03498051.gif" data-download-href="https://forum.rustycrate.ru/uploads/default/3faa9cd55c48ab06697426a1c3e3579c03498051" title="bxk5kTL.gif"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/3faa9cd55c48ab06697426a1c3e3579c03498051_2_676x500.gif" alt="demo2" width="676" height="500" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/3faa9cd55c48ab06697426a1c3e3579c03498051_2_676x500.gif, https://forum.rustycrate.ru/uploads/default/original/1X/3faa9cd55c48ab06697426a1c3e3579c03498051.gif 1.5x, https://forum.rustycrate.ru/uploads/default/original/1X/3faa9cd55c48ab06697426a1c3e3579c03498051.gif 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/3faa9cd55c48ab06697426a1c3e3579c03498051_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">bxk5kTL.gif</span><span class="informations">728×538 2.67 MB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p>Сам PR весь компактный - пыль создается одной не очень большой функцией, которая просто создает пачку спрайтов и навешивает на них цепочки простых действий перемещения и изменения цвета.</p>
+<p>Следующее на очереди: <a href="https://github.com/ozkriff/zemeroth/issues/86#issuecomment-393621578" rel="nofollow noopener">квадратные брызги крови при попаданиях</a>.</p>
+<hr>
+<p>UPD: еще внезапно решил <a href="https://www.reddit.com/r/gamedev/comments/a1zw7t/screenshot_saturday_409_crisp_images/eau8cin/" rel="nofollow noopener">заглянуть в /r/gamedev на субботний скриншотник</a>, давно там уже ничего не писал.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_31"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_31" title="Dec 30, 2018 4:16 PM">
+            <time itemprop="datePublished" datetime="2018-12-30 16:16:50 +0000">Dec 30, 2018</time>
+          </a>
+          <span class="post-number">#31</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <h2>Исчезающие брызги крови и улучшенные анимации атак</h2>
+<p>Продолжаю лениться выкладывать сюда частые обновления.</p>
+<ul>
+<li>
+<p>Добавил <a href="https://github.com/ozkriff/zemeroth/pull/401" rel="nofollow noopener">разлетающихся брызг крови и следов от оружия при атаках</a> для оживления визуального ряда.</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/4fddcb49fb33cdd5c98fc3e412d3174e38588980.gif" data-download-href="https://forum.rustycrate.ru/uploads/default/4fddcb49fb33cdd5c98fc3e412d3174e38588980" title="HqgHmOH.gif"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/4fddcb49fb33cdd5c98fc3e412d3174e38588980_2_629x500.gif" alt="демо новой крови и спрайтов атак" width="629" height="500" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/4fddcb49fb33cdd5c98fc3e412d3174e38588980_2_629x500.gif, https://forum.rustycrate.ru/uploads/default/original/1X/4fddcb49fb33cdd5c98fc3e412d3174e38588980.gif 1.5x, https://forum.rustycrate.ru/uploads/default/original/1X/4fddcb49fb33cdd5c98fc3e412d3174e38588980.gif 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/4fddcb49fb33cdd5c98fc3e412d3174e38588980_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">HqgHmOH.gif</span><span class="informations">728×578 2.56 MB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p>Количество капель крови пропорционально нанесенному урону.</p>
+<p>Добавил бойцам параметр <code>WeaponType</code>. Пока есть четыре вида: <code>smash</code>, <code>slash</code>, <code>pierce</code> и <code>claw</code> и они чисто визуальные - для выбора подходящей текстурки. Некоторые спрайты атаки под углами смотрятся странно (копейщик, я на тебя смотрю), надо будет потом дополнительные варианты добавить и зеркалировать все это хозяйство по ситуации.</p>
+</li>
+<li>
+<p>С таким количеством брызг крови, поле боя за десяток ходов стало превращаться в нечитаемое нечто, так что <a href="https://github.com/ozkriff/zemeroth/pull/406" rel="nofollow noopener">реализовал постепенное исчезновение кровищи</a>. Каждый ход пятно крови теряет одну шестую альфы, пока не сгинет совсем, тогда спрайт убирается из сцены.</p>
+<p>Может потом еще для чего-то декоративного этот же механизм использую.</p>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/394" rel="nofollow noopener">Первел все пакеты в репозитории на Rust 2018</a>:</p>
+<ul>
+<li>везде прописал <code>edition = "2018"</code>’</li>
+<li>обновил все импорты на новые пути (привет, вездесущий <code>crate::</code>);</li>
+<li>удалил все <code>extern crate</code>;</li>
+<li>заменил все <code>#[macro_use]</code> на <code>use</code> конкретных макросов;</li>
+<li>перешел на стабильный <code>rustfmt</code>;</li>
+<li>подчистил некоторые ставшие лишними явные ВЖ в паре мест;</li>
+<li>
+<a href="https://github.com/ozkriff/zemeroth/pull/395" rel="nofollow noopener">выкинул все <code>mod.rs</code></a>.</li>
+</ul>
+<p>О переходе не жалею, в целом все неплохо, но некоторые вспомогательные штуки (например, <code>cargo-outdated</code>) пока со скрипом на Rust 2018 смотрят еще.</p>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/402" rel="nofollow noopener">Выкинул прямую зависимость от <code>serde_derive</code></a>;</p>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/397" rel="nofollow noopener">Отключил кэш тревиса</a>, потому что <a href="https://levans.fr/rust_travis_cache.html" rel="nofollow noopener">Levans’ workshop: “Beware the rust cache on Travis”</a>. А то замерил, что кэш после сборки иногда минуты по три собирается, а толку от него и правда не так что бы прям много.</p>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/392" rel="nofollow noopener">Починил вертикальную позицию декоративной травы</a>;</p>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/412" rel="nofollow noopener">Обновил картинки в ридми</a>. Изначально задумка была в том, что в ридми показываются картинки только с последней выпущенной версии, а не из мастера. Но 0.5 я выпущу только после перехода на ggez 0.5, который все маячит на горизонте, но не появляется. А картинки от 0.4 совсем уж сильно устарели, больше полугода уже прошло таки.</p>
+</li>
+</ul>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_32"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_32" title="Feb 10, 2019 5:01 PM">
+            <time itemprop="datePublished" datetime="2019-02-10 17:01:32 +0000">Feb 10, 2019</time>
+          </a>
+          <span class="post-number">#32</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <h1>Затянувшийся переход на GGEZ 0.5, good-web-game/WASM и itch</h1>
+<p>Разработка за этот месяц продвинулась так себе.</p>
+<h2>Статус треклятого перехода на GGEZ 0.5</h2>
+<p>В начале года <a href="https://www.reddit.com/r/rust_gamedev/comments/acqdtb/ggez_050rc0_released/" rel="nofollow noopener">вышел ggez 0.5.0-rc.0</a>  - первый релиз-кандидат 0.5 версии, который без сишного SDL2 и вообще весь классный и долгожданный. Я решил, что время настало, пора начинать портировать Земерота, потому как API там сильно переколбасили и лучше на ранних стадиях, до выхода настоящего стабильного 0.5 поправить обо что я там споткнусь.</p>
+<p>Так и случилось, я неприятно споткнулся (пока что) о три момента:</p>
+<ul>
+<li>
+<p>Самое для меня неприятное: <a href="https://docs.rs/ggez/0.5.0-rc.0/ggez/graphics/struct.Text.html" rel="nofollow noopener">Text</a> больше не реализуется простой картинкой, которую раньше можно было через <a href="https://docs.rs/ggez/0.4.4/ggez/graphics/struct.Text.html#method.into_inner" rel="nofollow noopener">into_inner()</a> получить и не думать ни о чем.</p>
+<p>Какая абстракция мне нужна? Что бы был метод отрисовки этого дела + какой-то способ узнать размер примтива, как минимум что бы кнопки в UI расставить с правильными отступами.</p>
+<p>Первым пришедшим в голову решением было просто сделать перечисление с двумя вариантами (Text и Image) и прокинуть там эти две несчастных функции. Я это сделал и оно даже вполне работало. Но возникает проблема использования этого enum’а между разными пакетами. У меня же не только один пакет Zemeroth, у меня еще отдельные и независимые zgui и zscene пакеты, оба из которых так же должны уметь одинаково работать с текстом и картинками (zgui - показывать кнопки и с текстом, и с икноками, zscene - рисовать на сцене как всяких бойцов/объекты, так и двигать всплывающий текст). Так что пришлось бы делать из этого перечисления отдельный пакет, который потом везде подключать - уже сильно менее приятное решение, которое потом боком может выйти.</p>
+<hr>
+<p>Окей, какой тогда еще есть вариант? Взять родной ggez’овский типаж <code>Drawable</code> и научить его всему, что мне нужно. Перетер это дело с Ледолисом в дискорде, получил одобрение и пошел ковырять.</p>
+<p>Для начала убрал <code>Into&lt;DrawParams&gt;</code> из сигнатуры метода типажа, что бы его можно было использовать для динамического полиморфизма: <a href="https://github.com/ggez/ggez/issues/556" rel="nofollow noopener">#556: “The <code>Drawable</code> trait isn’t object safe”</a> -&gt; <a href="https://github.com/ggez/ggez/pull/559" rel="nofollow noopener">PR #559: “Remove the generic argument from Drawable::draw”</a>.</p>
+<p>А потом на несколько вечеров провалился в попытки родить API получше для dimensions метода: <a href="https://github.com/ggez/ggez/issues/557" rel="nofollow noopener">#557: “Add a ‘dimensions’ method to the ‘Drawable’ trait”</a>. Там пришлось докинуть Rect’у дополнительных методов для его вращения, вставить костылей для повершинного подсчета размеров Mesh’а и еще всякого наковырять. Плодом усилий стал среднего размера <a href="https://github.com/ggez/ggez/pull/567" rel="nofollow noopener">PR #567 “Drawable::dimensions()”</a>, который Ледолис начисто две недели игнорирует без какой-либо обратной связи. :’-( (<strong>UPD</strong>: уже влито)</p>
+<p>Кроме игнора, эту беду я в целом считаю решенной, думаю, Ледолис в итоге найдет время отсмотреть и принять PR.</p>
+</li>
+<li>
+<p>Другая беда с текстом - <a href="https://github.com/ggez/ggez/issues/569" rel="nofollow noopener">разная высота</a> - пока не решена, надо будет еще в коде покопаться. Там суть в том, что у строк без <a href="https://user-images.githubusercontent.com/662976/51889794-83da1c80-23ab-11e9-8f9d-21a2a9733b1c.png" rel="nofollow noopener">символов с “хвостами”</a> высота считается по базовой линии почему-то. Учитывая, что я все элементы UI масштабирую просто относительно высоты экрана, это приводик к неприятному эффекту (ggez v0.4 vs v0.5):</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/885304cb19b7f948c8fb0fa9f0de29ccd739b525.png" data-download-href="https://forum.rustycrate.ru/uploads/default/885304cb19b7f948c8fb0fa9f0de29ccd739b525" title="52166703-b2e0ed00-2721-11e9-9093-3bbbeb1ea54c.png"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/885304cb19b7f948c8fb0fa9f0de29ccd739b525_2_350x500.png" alt="демо шрифтов разных размеров" width="350" height="500" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/885304cb19b7f948c8fb0fa9f0de29ccd739b525_2_350x500.png, https://forum.rustycrate.ru/uploads/default/original/1X/885304cb19b7f948c8fb0fa9f0de29ccd739b525.png 1.5x, https://forum.rustycrate.ru/uploads/default/original/1X/885304cb19b7f948c8fb0fa9f0de29ccd739b525.png 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/885304cb19b7f948c8fb0fa9f0de29ccd739b525_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">52166703-b2e0ed00-2721-11e9-9093-3bbbeb1ea54c.png</span><span class="informations">470×670 91.8 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p>Строки с хвостами выглядят как раньше, а вот штуки типа “moves: 1/1” в полтора раза больше нужного.</p>
+</li>
+<li>
+<p>Ну и на десерт есть еще небольшая <a href="https://github.com/ggez/ggez/issues/570" rel="nofollow noopener">проблема с доступом к файловой системе без создания графического контекста</a>. Тут, видимо, надо будет кидать PR, делающий некоторые <code>pub(crate)</code> методы просто <code>pub</code>'ами.</p>
+</li>
+</ul>
+<p>Так что вот, пока переход на ggez 0.5 буксует. Код WIP порта живет в <a href="https://github.com/ozkriff/zemeroth/tree/wip_i409_ggez_0_5_alpha_0" rel="nofollow noopener">wip_i409_ggez_0_5_alpha_0</a> ветке.</p>
+<h2>good-web-game и веб версия Земерота</h2>
+<p>Через какое-то время, после публикации ggez v0.5.0-rc.0, Ледолис еще выложил огромный пост <a href="https://wiki.alopex.li/TheStateOfGGEZ2019" rel="nofollow noopener">“The State Of GGEZ 2019”</a>. Среди прочего, он там говорит:</p>
+<ul>
+<li>с веб версией много проблем и хз когда она будет;</li>
+<li>он скоро перестанет уделять ggez много времени, потому что задолбался и хочет позаниматься другими проектами;</li>
+<li>на последок он хочет выпустить ggez 0.6, в котором будет осуществлен переход на gfx-hal.</li>
+</ul>
+<p>Если ggez 0.5 выйдет, то от десктопной версии мне особо ничего и не надо, вроде, а вот веб версию я давно и сильно хотел. Потому что небольшую 2д игру от ноунейма без возможности запуска в браузере в 2019м ооочень мало кто не поленится скачивать.</p>
+<p>И тут, внезапно, <a href="https://twitter.com/notfl3" rel="nofollow noopener">Федя @not-fl3</a> замутил WASM/WebGL движок, частично апи-совместимый с GGEZ, так что у Земерота появилась полноценная веб версия!</p>
+<p><strong><a href="https://github.com/not-fl3/good-web-game" rel="nofollow noopener">https://github.com/not-fl3/good-web-game</a></strong></p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/845aac0dc8e5788bfdf3b52d41dbfca8229e7726.jpeg" data-download-href="https://forum.rustycrate.ru/uploads/default/845aac0dc8e5788bfdf3b52d41dbfca8229e7726" title="TjvCNwa.jpg"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/845aac0dc8e5788bfdf3b52d41dbfca8229e7726_2_690x364.jpeg" alt="веб версия земерота рядом с обычной версией" width="690" height="364" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/845aac0dc8e5788bfdf3b52d41dbfca8229e7726_2_690x364.jpeg, https://forum.rustycrate.ru/uploads/default/optimized/1X/845aac0dc8e5788bfdf3b52d41dbfca8229e7726_2_1035x546.jpeg 1.5x, https://forum.rustycrate.ru/uploads/default/optimized/1X/845aac0dc8e5788bfdf3b52d41dbfca8229e7726_2_1380x728.jpeg 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/845aac0dc8e5788bfdf3b52d41dbfca8229e7726_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">TjvCNwa.jpg</span><span class="informations">1801×952 233 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p>На самом деле он не прям из воздуха его замутил, конечно: он давно экспериментирует с 2д протипами в вебе:</p>
+<aside class="onebox twitterstatus">
+  <header class="source">
+      <a href="https://twitter.com/fedor_games/status/1079499336243965952" target="_blank" rel="nofollow noopener">twitter.com</a>
+  </header>
+  <article class="onebox-body">
+    <img src="https://forum.rustycrate.ru/uploads/default/original/1X/6a843e57d23ba77a2f38fec2dcb10e28b637fed5.jpeg" class="thumbnail onebox-avatar" width="657" height="499">
+<h4>
+  <a href="https://twitter.com/fedor_games/status/1079499336243965952" target="_blank" rel="nofollow noopener">
+    Fedor Made A Game! (fedor_games)
+  </a>
+</h4>
+
+<div class="tweet">Into 2019 with simple prototype. Going to be the year of 2d for me :) 
+
+#gamedev #indiedev https://t.co/Mo4ynrnleD</div>
+
+<div class="date">
+  <a href="https://twitter.com/fedor_games/status/1079499336243965952" target="_blank" rel="nofollow noopener">14:07 - 30 дек. 2018 г.</a>
+    <span class="like">
+      <svg viewbox="0 0 512 512" width="14px" height="16px" aria-hidden="true">
+        <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"></path>
+      </svg> 22
+    </span>
+    <span class="retweet">
+      <svg viewbox="0 0 640 512" width="14px" height="16px" aria-hidden="true">
+        <path d="M629.657 343.598L528.971 444.284c-9.373 9.372-24.568 9.372-33.941 0L394.343 343.598c-9.373-9.373-9.373-24.569 0-33.941l10.823-10.823c9.562-9.562 25.133-9.34 34.419.492L480 342.118V160H292.451a24.005 24.005 0 0 1-16.971-7.029l-16-16C244.361 121.851 255.069 96 276.451 96H520c13.255 0 24 10.745 24 24v222.118l40.416-42.792c9.285-9.831 24.856-10.054 34.419-.492l10.823 10.823c9.372 9.372 9.372 24.569-.001 33.941zm-265.138 15.431A23.999 23.999 0 0 0 347.548 352H160V169.881l40.416 42.792c9.286 9.831 24.856 10.054 34.419.491l10.822-10.822c9.373-9.373 9.373-24.569 0-33.941L144.971 67.716c-9.373-9.373-24.569-9.373-33.941 0L10.343 168.402c-9.373 9.373-9.373 24.569 0 33.941l10.822 10.822c9.562 9.562 25.133 9.34 34.419-.491L96 169.881V392c0 13.255 10.745 24 24 24h243.549c21.382 0 32.09-25.851 16.971-40.971l-16.001-16z"></path>
+      </svg> 7
+    </span>
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>…и “просто” поверх своего движка накрутил GGEZ слой.</p>
+<p>Работает это дело через замену обычного GGEZ’а в Cargo.toml проекта на good-web-game + там еще немного код инициализации надо поправить: <a href="https://github.com/not-fl3/good-web-game/tree/9b362da6d/examples/simple" rel="nofollow noopener">за подробностями можно посмотреть пример из репы</a>.</p>
+<p>Я это рассматриваю как очень хороший костыль, который дает возможность иметь легкую и везде (десктопные и мобильные браузеры) работающую веб версию Земерота уже сейчас. Если когда-нибудь у GGEZ появится родное решение - можно будет на него перейти.</p>
+<p>Кстати, в процессе синхронизации API Федя наткнулся на еще один косяк в черновике 0.5 GGEZ’а: <a href="https://github.com/ggez/ggez/issues/568" rel="nofollow noopener">#568: “There’re still some non-mint types in the API”</a>.</p>
+<p>Спасибо тебе, Федя, еще раз! <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=9" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+<h2>
+<a href="http://itch.io" rel="nofollow noopener">itch.io</a> и обратная связь</h2>
+<p>Выложил эту играбельную веб версию на <a href="http://itch.io" rel="nofollow noopener">itch.io</a>:</p>
+<aside class="onebox whitelistedgeneric">
+  <header class="source">
+      <img src="https://img.itch.zone/aW1nLzIxNDEyNTcuZ2lm/32x32%23m/vcEAjs.gif" class="site-icon" width="32" height="32">
+      <a href="https://ozkriff.itch.io/zemeroth" target="_blank" rel="nofollow noopener">itch.io</a>
+  </header>
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:350/250;"><img src="https://img.itch.zone/aW1nLzIxNDEyNTcuZ2lm/original/hsFSho.gif" class="thumbnail"></div>
+
+<h3><a href="https://ozkriff.itch.io/zemeroth" target="_blank" rel="nofollow noopener">Zemeroth by Andrey @ozkriff Lesnikov</a></h3>
+
+<p>An open-source turn-based tactical game</p>
+
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>и закинул клич в твитер с реддитом:</p>
+<aside class="onebox twitterstatus">
+  <header class="source">
+      <a href="https://twitter.com/ozkriff/status/1090615410242785280" target="_blank" rel="nofollow noopener">twitter.com</a>
+  </header>
+  <article class="onebox-body">
+    <img src="https://forum.rustycrate.ru/uploads/default/original/1X/c70399c2517cd70a845bc73f5acae72ef4c1d200.jpeg" class="thumbnail onebox-avatar" width="240" height="240">
+<h4>
+  <a href="https://twitter.com/ozkriff/status/1090615410242785280" target="_blank" rel="nofollow noopener">
+    Andrey @ozkriff Lesnikov (ozkriff)
+  </a>
+</h4>
+
+<div class="tweet">A #WebAssembly version of my tactical game #Zemeroth is now available on https://t.co/JZaagGWq3p!
+
+It uses a web port of GGEZ engine by @notfl3: https://t.co/xMl7fsy1Hf
+
+Try to beat the campaign mode online: https://t.co/HNYrO0omZY
+
+#rustlang #gamedev #indedev</div>
+
+<div class="date">
+  <a href="https://twitter.com/ozkriff/status/1090615410242785280" target="_blank" rel="nofollow noopener">06:19 - 30 янв. 2019 г.</a>
+    <span class="like">
+      <svg viewbox="0 0 512 512" width="14px" height="16px" aria-hidden="true">
+        <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"></path>
+      </svg> 128
+    </span>
+    <span class="retweet">
+      <svg viewbox="0 0 640 512" width="14px" height="16px" aria-hidden="true">
+        <path d="M629.657 343.598L528.971 444.284c-9.373 9.372-24.568 9.372-33.941 0L394.343 343.598c-9.373-9.373-9.373-24.569 0-33.941l10.823-10.823c9.562-9.562 25.133-9.34 34.419.492L480 342.118V160H292.451a24.005 24.005 0 0 1-16.971-7.029l-16-16C244.361 121.851 255.069 96 276.451 96H520c13.255 0 24 10.745 24 24v222.118l40.416-42.792c9.285-9.831 24.856-10.054 34.419-.492l10.823 10.823c9.372 9.372 9.372 24.569-.001 33.941zm-265.138 15.431A23.999 23.999 0 0 0 347.548 352H160V169.881l40.416 42.792c9.286 9.831 24.856 10.054 34.419.491l10.822-10.822c9.373-9.373 9.373-24.569 0-33.941L144.971 67.716c-9.373-9.373-24.569-9.373-33.941 0L10.343 168.402c-9.373 9.373-9.373 24.569 0 33.941l10.822 10.822c9.562 9.562 25.133 9.34 34.419-.491L96 169.881V392c0 13.255 10.745 24 24 24h243.549c21.382 0 32.09-25.851 16.971-40.971l-16.001-16z"></path>
+      </svg> 34
+    </span>
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>Твит <a href="https://www.reddit.com/r/rust/comments/ale980/a_wasm_version_of_my_tactical_game_zemeroth_is/" rel="nofollow noopener">и реддит пост</a> отлично зашли, прям куча людей, которые до этого скорее пассивно поглядывали за проектом, реально сели и поиграли.</p>
+<p>Обратной связи целый вагон, тут расписывать подробно поленюсь, но чаще всего повторялось, что нужен более человечный GUI, хоть какое-то руководство как в это играть и слишком сильный рандом - главное направление действий после окончания миграции на ggez 0.5 ясно. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=9" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+<p>Отдельно отмечу, что отхватил на итче <a href="https://itch.io/post/660275" rel="nofollow noopener">огромный отзыв</a>. Прям очень круто, что кто-то незнакомый продрался через супер-сырой интерфейс, позалипал в игру, разобрался в большей части механик, и не поленился написать развернутую и мотивирующую конструктивную критику.</p>
+<hr>
+<p>Была неудачная неудачная попытка реализовать <a href="https://github.com/ozkriff/zemeroth/issues/410" rel="nofollow noopener">навык атаки всех соседних агентов</a>, но тут я споткнулся о невозможность нужной композиции разных событий атаки в одно. Потребуется более масштабный рефакторинг того, как у меня события реализованы, или как-то изменить подход. Надо думать, в общем.</p>
+<p>Еще думал (<a href="https://twitter.com/ozkriff/status/1085488884799160320" rel="nofollow noopener">и мучал людей разговорами</a>) о том, как можно (и нужно ли) тестировать игровую логику и что можно делать со выходными случайностями в игре, но про это я уже попозже постараюсь написать.</p>
+<hr>
+<p><strong>UPD</strong>: Кстати, гитхаб репа за 400 звезд перевалила уже (420 в момент написания) <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=9" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+<p><img src="https://forum.rustycrate.ru/uploads/default/original/1X/d9789eac332a6b97cd8548a1cc8e875270995c31.png" alt="image" width="142" height="56"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="7 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          7
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_33"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_33" title="Feb 19, 2019 11:25 AM">
+            <time itemprop="datePublished" datetime="2019-02-19 11:25:43 +0000">Feb 19, 2019</time>
+          </a>
+          <span class="post-number">#33</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <h2><a name="p-2551-ggez-20190212-20190218-1" class="anchor" href="#p-2551-ggez-20190212-20190218-1" aria-label="Heading link"></a>Продолжение возни с GGEZ (2019.02.12 - 2019.02.18)</h2>
+<ul>
+<li>
+<p>Земерот попал в rustwasm рассылку: <a href="https://rustwasm.github.io/2019/02/13/this-week-in-rust-and-wasm-010.html">Feb 13, 2019 This Week in Rust and WebAssembly 10</a></p>
+</li>
+<li>
+<p><a href="https://github.com/ggez/ggez/pull/567">PR в GGEZ про добавление <code>Drawable::dimensions</code></a> принят.</p>
+</li>
+<li>
+<p>Покопался с Федей в <a href="https://github.com/ggez/ggez/issues/569">#569: “Text::dimensions height behavior changed”</a>.</p>
+<p>Меня немного загрузило, что может я не в ту сторону с текстом копаю, и не должен хотеть, что бы у него всегда одна высота была в dimensions, но поговорил с Icefoxen’ом в дискорде и он меня успокоил:</p>
+<blockquote>
+<p>icefox: ggez should handle this shit for you<br>
+icefox: all yo ushould have to do is say “give me text where each line is X pixels tall”<br>
+icefox: and so you can do for i in 0..lines.len() { draw(lines[i], Point2::new(0, i*x)); }<br>
+icefox: and it doesn’t look like ass<br>
+icefox: that’s the goal from ggez’s perspective</p>
+</blockquote>
+<p>В итоге в задаче висит патч от меня с Федей, который, вроде, чинит проблему, по крайней мере для моего кода. Жду реакции Ледолиса, готов по отмашке сделать PR.</p>
+</li>
+<li>
+<p>На вот такое дело еще нарвался: <a href="https://github.com/ggez/ggez/issues/583">#583: “(0.5 feedback) Text::dimensions should return Rect, not (u32, u32)”</a> - может и мелочь, но выглядит криво.</p>
+</li>
+<li>
+<p>В процессе всего выше копался еще и в <a href="https://docs.rs/glyph_brush">https://docs.rs/glyph_brush</a> - должен сказать, что хоть библиотека и толковая, но как же там много всяких типов и вспомогательных структур на каждый чих. Прям копаешься во всем этом и очень хочется на голый rusttype откатиться.</p>
+</li>
+<li>
+<p>Icefox выпиливает остатки nalgebra типов из API (заменя все на mint), приходится чинить код, обмызвая все пачкой <code>.into()</code>;</p>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/425">Добавил в zgui виджет “Spacer”</a>, потому что использование Label с пустым текстом (приводящее к созданию текстуры 0 на 0) это такое себе дело;</p>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/426">PR #426 “GGEZ: v0.4 → 0.5.0-rc.0”</a> - перетащил Земерот на git зависимость GGEZ’а (свой форк). И там еще пачка мелочевки осталась техдолга. Часть заблочена правками в самом GGEZ’е, а до штук вроде <a href="https://github.com/ozkriff/zemeroth/issues/427">“свой тип ошибок”</a> просто надо добраться отдельно.</p>
+<p>Так что вот, теперь мастер Земерота использует (временно) гитовый GGEZ.<br>
+На этой неделе надеюсь втащить веб версию в мастер и вернуться наконец-то к полезной деятельность по улучшению интерфейса и функционала игры.</p>
+</li>
+</ul>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_34"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_34" title="Feb 25, 2019 11:02 PM">
+            <time itemprop="datePublished" datetime="2019-02-25 23:02:17 +0000">Feb 25, 2019</time>
+          </a>
+          <span class="post-number">#34</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <h2>Ошибки и рефакторинги (2019.02.18 - 2019.02.24)</h2>
+<ul>
+<li>
+<p><a href="https://www.reddit.com/r/rust/comments/aui7p3/whats_everyone_working_on_this_week_92019/eh8iaod" rel="nofollow noopener">Пытаюсь на английском своевременно рожать “еженедельники”</a>, хотя тут скорее краткий отчет недели за две-три вышел.</p>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/431" rel="nofollow noopener">Обединил разные варианты костант размера текста относительно высоты экрана в проекте</a> в единую <code>utils::line_heights()</code> функцию:</p>
+<pre><code class="lang-rust">pub fn line_heights() -&gt; LineHeights {
+    LineHeights {
+        small: 1.0 / 20.0,
+        normal: 1.0 / 12.0,
+        big: 1.0 / 9.0,
+        large: 1.0 / 6.0,
+    }
+}
+</code></pre>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/432" rel="nofollow noopener">Заменил голые <code>String</code> для типов объектов (“swordsman”, “bomb”, т.п.) на <code>struct ObjType(pub String)</code></a>. RON представление осталось старое благодаря <a href="https://serde.rs/container-attrs.html#transparent" rel="nofollow noopener"><code>#[serde(transparent)]</code></a>.</p>
+</li>
+<li>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/433" rel="nofollow noopener">Реализовал свои честные типы ошибок в Земероте, ZGui и ZScene</a> вместо использования не по назначению <a href="https://docs.rs/ggez/0.4.4/ggez/error/enum.GameError.html#variant.UnknownError" rel="nofollow noopener"><code>GameError::UnknownError(String)</code></a> из GGEZ 0.4.</p>
+<p>Собирался использовать <a href="https://github.com/rust-lang-nursery/failure" rel="nofollow noopener">failure</a>, но <code>ggez::GameError</code> в v0.5.0-rc.0 (временно?) несовместим с ним (<a href="https://github.com/ggez/ggez/issues/566" rel="nofollow noopener">GameError в 0.5 не Sync</a> из-за косяка во вложенной winit’овской ошибке), так что решил обойтись enum’ом с кучей <code>From</code>ов из вложенных типов (что бы <code>?</code> работал как полагается).</p>
+<p><a href="https://forum.rustycrate.ru/t/mozhno-li-sostavit-put-iz-kuskov-v-deklarativnom-makrose/815/3">Сначала хотел накостылить небольшой макрос для генерации <code>From</code>'ов</a>:</p>
+<pre><code class="lang-rust">macro_rules! gen_struct_enum_conversion {
+    ($enum_name:ident, $struct_name:ident) =&gt; {
+        impl From&lt;$struct_name&gt; for $enum_name {
+            fn from(e: $struct_name) -&gt; Self {
+                $enum_name::$struct_name(e)
+            }
+        }
+    };
+}
+
+gen_struct_enum_conversion! { ZError, GameError } // пример вызова макроса
+</code></pre>
+<p>Но в гиттере подсказали попробовать <a href="https://jeltef.github.io/derive_more/derive_more/from.html#enums" rel="nofollow noopener">derive_more::From</a> и оно делает то же самое, только уже готовое.</p>
+</li>
+<li>
+<p>Вообще, я планировал дальше <a href="https://github.com/ozkriff/zemeroth/tree/web_port" rel="nofollow noopener">ветку с веб портом</a> довтаскивать в мастер, но этим не хотелось заниматься, пока последний из моих PRов в GGEZ не влит (что бы не тратить время на возню со своим форком GGEZ’а). Но делать же что-то надо, так что я решил заняться важным рефакторингом, который вообще никак не связан с визуализацией: <a href="https://github.com/ozkriff/zemeroth/issues/195" rel="nofollow noopener">запихать все  мутации состояния в единое место - модуль apply.rs</a>.</p>
+<p>По задумке, модуль <code>execute</code> должен получать на вход команды, а сам только генерировать <code>Event</code>ы, которые ужа сами изеняют игровое состояние при помощи вызова <code>apply()</code>. Но компоненты <code>schedule</code> и <code>effects</code> сейчас напрямую изменяются из модуля <code>execute</code> для установки длительных состояний и отложенных событий - отравления, взрывы бомб и т.п.</p>
+<p>Это все поправимо, но надо заводить дополнительные поля в структуре <code>Event</code> и очень легко между дело сломать логику всяких штук с большим количеством подвижных частей (например отравляющих бомб), так что я параллельно занялся прототипированием системы тестирования сценариев логики и немного погряз в этом деле.</p>
+</li>
+</ul>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_35"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_35" title="Feb 26, 2019 2:06 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 02:06:05 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#35</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я устанавливал какое-то время назад Земерот “на поиграть”, и понял, что это такой фановый чисто прогерский проект, потому что если почитать тебя, кажется, вау!, и каждому кодеру знакома эта эйфория от фанового проекта: какие-то идеи кипят, тут фичу новую добавил, там рефакторинг на ходу затеял — всё кипит, всё меняется, работа прёт, ты щастлив. Но со стороны юзера мне чего-то не хватило, хотя я вообще не геймер ни разу. Может лора, может дружелюбности: что делать?, куда бежать?, где враги? etc.<br>
+Игроку ведь не очень нужно, чтобы все мутации были засунуты в один модуль или надписи имели одинаковую высоту. Это мое мнение, не критика, просто здравый взгляд со стороны.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_36"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_36" title="Feb 26, 2019 5:19 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 05:19:08 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#36</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_35">Replying to #35</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я в целом согласен, что проект для пользователя еще очень сильно сырой и надо бы заняться “выплатитой пользовательского долга” проекта, а не в техдолге копошиться. Вон, пару недель назад писал о базовых выводах из собранной обратной связи по веб версии:</p>
+<aside class="quote no-group" data-username="ozkriff" data-post="32" data-topic="532">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p>Обратной связи целый вагон, тут расписывать подробно поленюсь, но чаще всего повторялось, что нужен более человечный GUI, хоть какое-то руководство как в это играть и слишком сильный рандом - главное направление действий после окончания миграции на ggez 0.5 ясно. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+</blockquote>
+</aside>
+<p>Только дело упирается в то, что работа у меня по ощущениям еле ползет (то ли времени мало, то ли прокрастинирую много, хз), а без выплаты минимального техдолга я рискую скоро оказаться посреди совсем жуткого неструктурированного кодомесива, с которым сделать уже ничего нельзя будет, кроме как выбросить.</p>
+<p><img src="https://forum.rustycrate.ru/uploads/default/original/1X/59fbd80b369ec7fb644a340a3dccce8839786337.jpeg" alt="image" data-base62-sha1="cQ24dk7pVSkjNGFUfbuBO3Y9jV5" width="275" height="267"></p>
+<p>Так что я пытаюсь приоритизировать задачи по критичности. Очень короткая версия краткосрочной дорожной карты проекта выглядит как-то так:</p>
+<ol>
+<li>выплатить минимальный техдолг (наладить тестирование логики, дорефакторить мутации состояния, влить веб версию в мастер);</li>
+<li>выплатить минимальный “пользовательский долг” (гуй, руководство, переработка механик случайностей);</li>
+<li>заняться реализацией прям нового пользовательского функционала;</li>
+</ol>
+<p>(<em>Надо бы, кстати, расширенную дорожную карту проекта в ридми затащить, что бы читающие сразу понимали мое видение степени готовности проекта.</em>)</p>
+<hr>
+<p>Насчет эйфории, блин, не сказал бы, что ее в процессе сейчас особо много. Мне скорее дико надоел проект уже давно и я заставляю себя садиться и хоть потихоньку пилить это месиво дальше, а так-то очень тянет забросить и какой-нибудь новый проектик с нуля начать. Идей-то в голове всегда круче и они всегда кажутся намного лучше текущей, хе, особенно над которой ты уже долго просидел и успел детально разглядеть ее недостатки.</p>
+<p>Но это все от отсутствия умения доводить дело до конца без внешних палок, которому я все пытаюсь научиться) Еще одну могилу в кладбище недоделок очень не хочется получить, так что ползу как могу, так и сяк пробую с ленью бороться. Вот вернулся сейчас к идее обязательных еженедельников по графику, например, что по задумке должно меня заставлять что-то пилить просто потому, что иначе в следующий понедельник будет стыдно.</p>
+<hr>
+<p>Ты так от слова “критика” открещиваешься, будто что-то плохое) Не, я люблю, когда конструктивно тыкают - значит есть какое-то дело до поделки. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_37"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_37" title="Feb 26, 2019 5:31 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 05:31:11 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#37</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_36">Replying to #36</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="ozkriff" data-post="36" data-topic="532">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p>Ты так от слова “критика” открещиваешься, будто что-то плохое)</p>
+</blockquote>
+</aside>
+<p>Потому что не считаю свои замечания критикой, критика это либо конкретика, либо заурядный хэйт. А я обращаю внимание на абстрактные, метафизические вопросы, на то, что в игру прежде всего должно быть приятно играть, если попросту говорить, это не тот тип ПО, где функционал решает всё.<br>
+Вот ты говоришь, что устал. Это нормально, когда упираешься в оверинжиниринг — беду всех прогеров и их пет-проектов. Потому что хочется добиться совершенства, а не получается, не получается. Потому что совершенство обычно конечный итог длительной эволюции, а кто способен вывезти долгую эволюцию проекта?)<br>
+Я бы сосредоточился на веб-версии, эта вещь может дать проекту жизнь. И обрезай фичи, не распыляйся, иначе не вывезешь. Простынешь там, выпадешь на время головой из проекта и не вернешься. Вполне реальный сценарий, сколько таких я реализовывал на своем веку.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_38"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #ED6498; width: 45px; height: 45px">I</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/irbis" class="user-link">Alexander Irbis</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_38" title="Feb 26, 2019 9:58 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 09:58:50 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#38</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_35">Replying to #35</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="Virtuos86" data-post="35" data-topic="532">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/virtuos86/48/221_2.png" class="avatar"> Virtuos86:</div>
+<blockquote>
+<p>или надписи имели одинаковую высоту</p>
+</blockquote>
+</aside>
+<p>Вот тут не соглашусь. Несмотря на то, что Земерот “сыроват”, таки очень много сил вложено в его визуальную составляющую и он смотрится мало сказать “приятно” - он офигенен. Единственное слабое место в визуальной составляющей - это отсутствие GUI для управления. Все эти менюшки действий и их статусов, которые достаточно тяжело парсить глазами с непривычки. И разнобой со шрифтами их окончательно добивал. В общем, забота о визуальной части - это важно.</p>
+<p>Ну а то, что видение разработчика не совпадает с видением игрока… Ну, блин, да - Земерот отличается тем, что разработчик пустил всех желающих “в мастерскую” и подробно всё объясняет по пути. В этом имеется своя прелесть и своя доля восторга, наблюдать как из практически “ничего” рождается и растёт что-то волшебное. Но это точно не про то, что “вжух и у нас готовый играбельный продукт, (заранее кладём на верстак, чтобы желающие посмотреть на разработку изнутри, сразу же и играли в готовое)” <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_39"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_39" title="Feb 26, 2019 10:30 AM">
+            <time itemprop="datePublished" datetime="2019-02-26 10:30:40 +0000">Feb 26, 2019</time>
+          </a>
+          <span class="post-number">#39</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_34">Replying to #34</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="ozkriff" data-post="34" data-topic="532">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p>Но в гиттере подсказали попробовать <a href="https://jeltef.github.io/derive_more/derive_more/from.html#enums">derive_more::From</a> и оно делает то же самое, только уже готовое.</p>
+</blockquote>
+</aside>
+<p>Я мимокрокодил, можешь ещё попробовать <code>quick_error</code>. Он даёт макросы для тривиальных реализаций <code>description</code>, <code>display</code>, <code>from</code>, <code>into</code>, с возможностью перегрузки. При этом это обычные <code>enum</code>, всё очень примитивно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_40"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_40" title="Mar 29, 2019 4:57 PM">
+            <time itemprop="datePublished" datetime="2019-03-29 16:57:47 +0000">Mar 29, 2019</time>
+          </a>
+          <span class="post-number">#40</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <h2><a name="p-2765-wasm-1" class="anchor" href="#p-2765-wasm-1" aria-label="Heading link"></a>Тесты, рефакторинг и влитие WASM</h2>
+<p>Темпом разработки по прежнему не могу похвастаться, но некоторые обновления за месяц все-таки случились.</p>
+<h3><a name="p-2765-h-2" class="anchor" href="#p-2765-h-2" aria-label="Heading link"></a>Тесты.</h3>
+<p>Как писал в прошлой заметке, проект дорос до размера, когда польза от тестов перевешивает геморрой их написания-поддержки.</p>
+<details>
+<summary>
+Немного цитат старых обсуждений про тесты из чатов для контекста</summary>
+<blockquote>
+<p><a class="mention" href="/u/ozkriff/index.html">@ozkriff</a>:<br>
+тем временем, я ломаю себе и другим голову вопросом “как писать тесты логики для пошаговой игры со случайностями?” - <a href="https://twitter.com/ozkriff/status/1085488884799160320">https://twitter.com/ozkriff/status/1085488884799160320</a> (и там ниже обсуждение небольшое)</p>
+<p>Пока выходит, что самый адекватный способ, если без наворачивания очень сложной инфраструктуры с отдельными мокаемыми правилами, это просто создать специальные тестовые объекты с нереалистичными характеристиками, так что бы они всегда какой-то определенный тест проходили (например, боец с 999 точностью, который абсолютно всегда попадает). Грязноватое решение, но альтернативы как-то еще хуже.</p>
+<p>Есть бесящее ощущение, что я что-то очевидное из вида упускаю, только вот без понятия что.</p>
+<p><a class="mention" href="/u/nick/index.html">@Nick</a> Linker<br>
+Чтобы сразу откинуть банальщину: у тебя все рандомы с явными сидами, и эти сиды ты записываешь в файл сохранения и они являются частью game state, правильно я понимаю?</p>
+<p>У меня (пока) вообще сохранений нет. Я человек простой, рандом сейчас из thread_rng() беру.</p>
+<p><a class="mention" href="/u/ozkriff/index.html">@ozkriff</a>:<br>
+Если ты о варианте “сохранять зерно” в тестах, то мне он не нравится тем, что вытсавляет наружу часть кишок логики и потом, например, насмерть затруднит добавление какого-то нового правила с рандомом, потому что все тесты разом сломает непредсказуемым образом из-за сдвига последовательности псевдослучайных чисел.<br>
+Или ты о чем-то другом?<br>
+Чел (и до этого другие) предлагает вероятностные тесты (если результат работы сценария хотя бы столько-то раз приведет к конечным состояниям. удовлетворяющим критериям, то все ок), но я такое могу стерпеть только в очень вспомогательных тестах, слишком уж грязное какое-то решения для основного покрытия логики.</p>
+<p><a class="mention" href="/u/nick/index.html">@Nick</a> Linker:<br>
+я о недетерминизме, который возникает из-за рандомов, мультипоточности и неявно при IO. Если тебе удалось эффективно и полностью избавиться от недетерминизма в юнит тестах, то ты делаешь всё правильно и беспокоиться не о чем.<br>
+Моя игруля конечно хелловорлд по сравнению с Zemeroth, но там тоже рандомы и чтобы сделать воспроизводимые юнит тесты нужно эти рандомы делать явными. Пример куда можно посмотреть, это скажем сюда:<br>
+<a href="https://github.com/nlinker/xcg/blob/master/tests/model.rs">https://github.com/nlinker/xcg/blob/master/tests/model.rs</a><br>
+Тебя может заинтересовать test_run_match_with_reordering</p>
+<blockquote>
+<p><span class="mention">@Alex</span> Zhukovsky: А что конкретно ты тестировать хочешь?</p>
+</blockquote>
+<p><a class="mention" href="/u/ozkriff/index.html">@ozkriff</a>: какие-нибудь сценарии, типа “стоит отравленный демон с единицей здоровья и броней, мы кидаем рядом с ним бомбу, которая взрывом его в огонь толкнет. ожидается, что яд перед смертью у него пройдет, а умрет он от огня в начале своего хода”<br>
+даже в таком не слишком сложном сценарии можно ненароком сломать какую-то логику во время рефакторингов (или добавления новых правил-механик) и без автотестов совсем не факт что во время быстрых плейтестов это заметишь</p>
+<blockquote>
+<p><span class="mention">@XX</span>: Почему же? По-моему это нормальное решение: вероятностная логика покрывается статистическими тестами )</p>
+</blockquote>
+<p><a class="mention" href="/u/nlinker/index.html">@Nlinker</a>: Это имело бы смысл, когда у тебя хардварный RNG, и всё, что ты можешь - это тягать из него значения. Но здесь ведь есть seed!</p>
+<p><a class="mention" href="/u/ozkriff/index.html">@ozkriff</a>: Ну, неряшливое какое-то решение, хочу что б все точно было несмотря на случайности.<br>
+Плюс, у меня глаз подергивается и флешбеки нехорошие начинаются, когда я представляю себе “а чего это тревис красный статус показывает? ааа, там тест тот проблемный грохнулся, где я коэффеициент не могу подобрать, надо просто перезапустить тесты.”</p>
+<p>Mike Lubinets:<br>
+А если замокать генератор случайных чисел, добавив сигнатуры сущностей в метод получения числа?<br>
+Можно будет его перегружать в тестах и описывать правилами какой именно output должен следовать из конкретной сигнатуры.<br>
+Типа вектор (signature, i32), соответствующий кодичеству запросов рандома их тех сущностей, рандом которых ты хочешь контролировать.<br>
+Если сигнатура следующего запроса не совпала с [0], пишем ворнинг и возвращаем обычный thread_rng().<br>
+Так можно будет и стейт в тестах контролировать и добавлять новые вызовы без заморочек с подбором сида после каждого коммита</p>
+<p><a class="mention" href="/u/nlinker/index.html">@nlinker</a>: тогда проще сделать n генераторов, каждый для отдельной сущности.</p>
+<p><span class="mention">@mike</span>:<br>
+Либо так, да, но будет жирно по генерикам, если генератор в каждую сущность пихать типом-параметром<br>
+Можно в принципе матчиться по get_random(self as &amp;Any) в качестве альтернативы, и иметь возможность зардкодить последовательность генерируемых чисел или сид, если такой вариант подходит, если не глобально, а для отдельных сущностей.<br>
+Кстати, а как можно узнать сид для заданной последовательности?)</p>
+<p><a class="mention" href="/u/nlinker/index.html">@nlinker</a>: Если это не криптостойкий rng, то брутфорсом каким-нибудь. Но это сложновато.</p>
+</blockquote>
+</details>
+<p>Главная беда с тестами Земерота - что делать со случайностью? Выше накидано немного мыслей, но в целом подходы сводятся к:</p>
+<ol>
+<li>запоминать глобальное зерно. просто, но тесты все время будут ломаться от малейшего рефакторинга;</li>
+<li>сильно переработать архитектуру, что бы можно было подменять реализации игровых правил на неслучайные. требует очень сильного усложнения архитектуры;</li>
+<li>хранить отдельные зерна для разных подсистем/типов/правил;</li>
+<li>использовать специальновые тестовые объекты;</li>
+</ol>
+<p>Третий вариант, возможно, не так и плох, но мне все еще немного натянуть его на реальный код. Зато последний вариант выглядит просто и, в целом, всем хорош: тестируется именно реальный код, изменений-дополнений минимум нужно, рефакторинги неплохо должен переживать.</p>
+<blockquote>
+<p>Пока выходит, что самый адекватный способ … это просто создать специальные тестовые объекты с нереалистичными характеристиками, так что бы они всегда какой-то определенный тест проходили (например, боец с 999 точностью, который абсолютно всегда попадает).</p>
+</blockquote>
+<p>Получившиеся тесты устроены просто:</p>
+<ul>
+<li>объявляем прототипы;</li>
+<li>объявляем сценарий при помощи этих прототипов;</li>
+<li>создаем отладочное игровое состояние;</li>
+<li>подаем на вход команды;</li>
+<li>на выходе сверяем с ожидаемыми события (+ мгновенные/длительные эффекты и отложенные вызовы способностей).</li>
+</ul>
+<p>Простейший тест выглядит как-то так:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">#[test]
+fn basic_move() {
+    let prototypes = prototypes(&amp;[
+        ("mover", [component_agent_move_basic()].to_vec()),
+        ("dull", [component_agent_dull()].to_vec()),
+    ]);
+    let scenario = scenario::default()
+        .object(P0, "mover", PosHex { q: 0, r: 0 })
+        .object(P1, "dull", PosHex { q: 0, r: 2 });
+    let mut state = debug_state(prototypes, scenario);
+    let path = Path::new(vec![PosHex { q: 0, r: 0 }, PosHex { q: 0, r: 1 }]);
+    exec_and_check(
+        &amp;mut state,
+        command::MoveTo {
+            id: ObjId(0),
+            path: path.clone(),
+        },
+        &amp;[Event {
+            active_event: event::MoveTo {
+                id: ObjId(0),
+                path,
+                cost: Moves(1),
+            }
+            .into(),
+            actor_ids: vec![ObjId(0)],
+            instant_effects: Vec::new(),
+            timed_effects: Vec::new(),
+            scheduled_abilities: Vec::new(),
+        }],
+    );
+}
+</code></pre>
+<p>Список прототипов и сценарий для каждого теста создаются заново. Это занимает немного больше места, чем переиспользование уже готовых прототипов и сценариев, зато так (по задумке) за раз тестируется минимальное количество движущихся частей, за счет чего тесты становятся более точечными (если тест падает, проще понять что пошло не так) и надежными (меньше вероятность, что левое изменение поломает тест).</p>
+<p>Вражеский “тупой” агент в этом сценарии нужен просто что бы игра тут же не завершилась.</p>
+<p>Методы для декларативного построения сценария из кода подцепляются через дубовый расширяющий типаж:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">trait ScenarioConstructor {
+    fn object(self, player_id: PlayerId, object_name: &amp;str, pos: PosHex) -&gt; Self;
+    fn object_without_owner(self, object_name: &amp;str, pos: PosHex) -&gt; Self;
+}
+</code></pre>
+<p>Саму структуру сценария пришлось переработать, потому что раньше сценарии были обязательно случайными (например, нельзя было точно указать позицию объекта, только примерную область), а в тестах как раз нужна определенность. Добавил полей и всяких проверок.</p>
+<p>Кстати, в первом PR’е накосячил с переработанными сценариями - <a href="https://github.com/ozkriff/zemeroth/pull/447">#447 scenario::check: Fix invalid Error::NoPlayerAgents</a> - тесты работали, а вот настоящий бой из интерфейса запустить не выходило, протупил. Лишнее напоминание, что полностью на тесты полагаться не стоит. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<p>Вызов <code>debug_state</code> прячет внутри взведение страховочного <code>set_deterministic_mode</code> флажка, задача которого проста: паниковать при попадании потока управления в неконтролируемый рандом, например когда шанс попадания не меньше нуля и не выше максимума:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">fn try_attack(state: &amp;State, attacker_id: ObjId, target_id: ObjId) -&gt; Option&lt;Effect&gt; {
+    ...
+    if state.deterministic_mode() {
+        // I want to be sure that I either will totally miss
+        // or that I'll surely hit the target at a full force.
+        let sure_miss = k_min &lt; 0;
+        let sure_hit = k_min &gt; 10;
+        assert!(
+            sure_miss || sure_hit,
+            "Hit isn't determined: {:?}",
+            (k_min, k_max)
+        );
+    }
+</code></pre>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/438">Пришлось заменить все <code>HashMap&lt;ObjId, Vec&lt;X&gt;&gt;</code> в событиях на <code>Vec&lt;(ObjId, Vec&lt;X&gt;)&gt;</code></a> ради сохранения порядка событий и эффектов, иначе тесты мгновенно взрывались.</p>
+<p>В процессе выбора формата описания тестов споткнулся <a href="https://github.com/rust-lang/rustfmt/issues/3157#issuecomment-472718887">о внезапные кривости/проблемы стандартного форматирования</a>. Отчасти из-за этого бага форматирования я не стал, например, использовать билдер для структур <code>Event</code> + тестам размазано много лишних полей с пустыми векторами (а Default’ом их не убрать, потому что там первое поле с <code>ActiveEvent</code> должно быть осмысленное).</p>
+<p>И да, реальные тесты можно посмотреть тут: <a href="https://github.com/ozkriff/zemeroth/blob/b3b77f824/src/core/battle/tests.rs">src/core/battle/tests.rs</a>.</p>
+<hr>
+<p><em>мысль на будущее</em>: В текущей реализации тестов мне не очень нравится, что я завязываюсь на конкретные захардкоженный ID объектов, потому что это добавляет тестам хрупкости - я ведь могу во вемя переработки кода взять и во время выполнения какого-то действия вставить код создания нового вспомогательного объекта и тогда вся последующая цепочка айдишников навернется. Думаю, надо относиться к конкретной цифре айдишника как к особенности реализации и получать ее динамически через метод в духе:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">fn get_id(state: &amp;GameState, pos: PosHex, metatype: &amp;ObjType) -&gt; ObjId { ... }
+</code></pre>
+<h3><a name="p-2765-h-3" class="anchor" href="#p-2765-h-3" aria-label="Heading link"></a>Рефакторинг</h3>
+<p>После написания вышеописанных базовых тестов я наконец решился на рефакторинг. В чем его суть?</p>
+<p>По задумке, игрок отправляет команды, которые проверяются на адекватность и “выполняются”, генерируя поток событий и вот уже события изменяют игровое состояние. Проблема была в том, что я из-за лени и невнимательности в нескольких местах обработки команд менял игровое состояние напрямую, в обход системы событий. Это приводило к невозможности выразить некоторые новые запланированные способности, так что рефакторинг был неизбежен.</p>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/439">Несанкционированные места прямого изменения состояния были найдены и переработаны</a>:</p>
+<ul>
+<li><a href="https://github.com/ozkriff/zemeroth/pull/439/files#diff-f190ad3060831d2d6aba3d09c10aeb87R27">В структуру <code>Event</code> было добавлено поле <code>scheduled_abilities</code> для передачи отложенных вызовов способностей</a> (например, что бомба должна взорваться через ход).</li>
+<li>Для “перезапуска” длительных эффектов и отложенных вызовов способностей теперь просто используется их добавление в событие: если такого, например, длительного эффекта на объекте не было, то он появится, а если бы - он перезапишется. Немного костыльный способ, но я не вижу нужды иметь несколько одинаковых эффектов на одном объекте, так что пойдет.</li>
+</ul>
+<p>В целом рефакторинг прошел вполне гладко, спасибо тестам. Правда, немного я все равно умудрился накосячить - <a href="https://github.com/ozkriff/zemeroth/issues/449">#449 “regression: bomb_push is broken”</a> - у меня не было теста на поведение мгновенно взрывающихся отталкивающих бомб, так что их надо будет сейчас починить.</p>
+<h3><a name="p-2765-webassembly-4" class="anchor" href="#p-2765-webassembly-4" aria-label="Heading link"></a>WebAssembly порт влит в мастер</h3>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/448">Веб версия игры наконец влита в мастер</a>! До эттого руки наконец-то тоже дошли. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<p>Не обошлось без нескольких #[cfg(wasm)] и крошечного шелл скрипта, прячущего запихивание ресурсов игры в static, но в остальном все довольно гладко.</p>
+<pre data-code-wrap="rust"><code class="lang-rust">#[cfg(not(target_arch = "wasm32"))]
+extern crate ggez;
+
+#[cfg(target_arch = "wasm32")]
+extern crate good_web_game as ggez;
+</code></pre>
+<p>main у wasm’а тоже отдельный:</p>
+<pre data-code-wrap="rust"><code class="lang-rust">#[cfg(target_arch = "wasm32")]
+fn main() -&gt; GameResult {
+    ggez::start(
+        conf::Conf {
+            cache: conf::Cache::Index,
+            loading: conf::Loading::Embedded,
+            ..Default::default()
+        },
+        |mut context| {
+            let state = MainState::new(&amp;mut context).unwrap();
+            event::run(context, state)
+        },
+    )
+}
+</code></pre>
+<p>Шелл скриптик для складывания ресурсов в static и генерации их списка выглядит вот так:</p>
+<pre><code class="lang-plaintext">$ cat utils/wasm/build.sh
+#!/bin/sh
+cp -r assets static
+cp utils/wasm/index.html static
+ls static &gt; static/index.txt
+cargo web build
+</code></pre>
+<p>И еще <a href="https://github.com/not-fl3/good-web-game/pull/9">пришлось обновить good-web-game под новым GGEZ</a>, но там просто надо было заменить cgmath типы на <a href="https://docs.rs/mint">mint</a>.</p>
+<h2><a name="p-2765-amit-5" class="anchor" href="#p-2765-amit-5" aria-label="Heading link"></a>Amit</h2>
+<p>Внезапно увидел, что Земерот попал к <a href="http://www-cs-students.stanford.edu/~amitp/">Амиту</a> на страничку с реализациями гексо-математики, миленько: <a href="https://www.redblobgames.com/grids/hexagons/implementation.html">https://www.redblobgames.com/grids/hexagons/implementation.html</a></p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/6862e05972dc289b69552a715e13637ccb1cde5d.png" data-download-href="https://forum.rustycrate.ru/uploads/default/6862e05972dc289b69552a715e13637ccb1cde5d" title=""><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/6862e05972dc289b69552a715e13637ccb1cde5d_2_690x232.png" alt="" role="presentation" width="690" height="232" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/6862e05972dc289b69552a715e13637ccb1cde5d_2_690x232.png, https://forum.rustycrate.ru/uploads/default/original/1X/6862e05972dc289b69552a715e13637ccb1cde5d.png 1.5x, https://forum.rustycrate.ru/uploads/default/original/1X/6862e05972dc289b69552a715e13637ccb1cde5d.png 2x" data-dominant-color="FAF9F9"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename"></span><span class="informations">781×263 20.4 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div></p>
+<h2><a name="p-2765-h-6" class="anchor" href="#p-2765-h-6" aria-label="Heading link"></a>Что дальше?</h2>
+<p>Дальнеший план действий: перевожу журнал на <a href="https://www.getzola.org">Zola</a>, срезаю 0.5 версию Земерота и пишу заметку в журнал об этом. Надо когда-то выпустить уже новую версию, а блокеров особых уже все равно не осталось. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<hr>
+<blockquote>
+<p>Я мимокрокодил, можешь ещё попробовать quick_error. Он даёт макросы для тривиальных реализаций description, display, from, into, с возможностью перегрузки. При этом это обычные enum, всё очень примитивно.</p>
+</blockquote>
+<p>Не, quick_error не хочу, у меня сложные отношения с макросами и для такого кода я сильно за процедурные атрибуты.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="4 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          4
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_41"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_41" title="May 14, 2019 4:25 PM">
+            <time itemprop="datePublished" datetime="2019-05-14 16:25:29 +0000">May 14, 2019</time>
+          </a>
+          <span class="post-number">#41</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <h1>Zemeroth v0.5</h1>
+<p>Таки срезал 0.5 версию:</p>
+<p><a href="https://github.com/ozkriff/zemeroth/releases/tag/v0.5.0" rel="nofollow noopener">https://github.com/ozkriff/zemeroth/releases/tag/v0.5.0</a></p>
+<p>И написал ооогромную новость об этом:</p>
+<p><a href="https://ozkriff.github.io/2019-05-13--devlog-zemeroth-v0-5" rel="nofollow noopener"><strong>"Zemeroth v0.5: ggez, WASM, itch.io, visuals, AI, campaign, tests"</strong></a> (<a href="https://www.reddit.com/r/rust/comments/bo5w0q/zemeroth_v05_ggez_wasm_itchio_visuals_ai_campaign/" rel="nofollow noopener">reddit</a>, <a href="https://twitter.com/ozkriff/status/1128321928102649856" rel="nofollow noopener">twitter</a>)</p>
+<hr>
+<p>Так же, в README были добавлены секции <a href="https://github.com/ozkriff/zemeroth/blob/master/README.md#roadmap" rel="nofollow noopener">Roadmap</a> и <a href="https://github.com/ozkriff/zemeroth/blob/master/README.md#inspiration" rel="nofollow noopener">Inspiration</a>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_42"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_42" title="Jun 5, 2019 8:45 PM">
+            <time itemprop="datePublished" datetime="2019-06-05 20:45:57 +0000">Jun 5, 2019</time>
+          </a>
+          <span class="post-number">#42</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <h1>Первое видео разработки, визуальные улучшения, ozkriff.games, социалки и патреон</h1>
+<p>Настало время англоязычному интеренету познакомиться с моим чудесным акцентом. Собрался таки и записал первое пробное видео о разработке. Надеюсь такие двух-трехминутные отчетные видяхи выкатывать раз в неделю-другую, а то чего у меня ютуб простаивает?</p>
+<div class="lazyYT" data-youtube-id="EDoxb7vbqgg" data-youtube-title="Zemeroth Dev Vlog #1: Visual Updates and Spreading the Word" data-width="480" data-height="270" data-parameters="feature=oembed&amp;wmode=opaque"></div>
+<p>Первый раз что-то пытался так говорить в камеру, тем более на английском, химичил в audacity/kdenlive, так что вышло не особо круто. Надеюсь, практика сделает свое дело и постепенно станет лучше получаться. <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=9" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+<p><em><a href="https://www.reddit.com/r/rust_gamedev/comments/bwquqy/zemeroth_dev_vlog_1/" rel="nofollow noopener">/r/rust_gamedev обсуждение</a></em></p>
+<h2>Визуальные улучшения</h2>
+<p>В основном, я успел поковырять всякие мелкие визуальные штуки со спрайтами.</p>
+<p><img src="https://forum.rustycrate.ru/uploads/default/original/1X/6ec0039ae79560ca665ddcd93bd9de4385e5d97b.gif" width="480" height="331"></p>
+<p>Для начала, небольшое интерфейсное обновление: <a href="https://github.com/ozkriff/zemeroth/pull/469" rel="nofollow noopener">добавил</a> подсветку клетки под курсором. Уже несколько людей просили. На тач устройствах подсветка отключена, а то она там после нажатия так и оставалась странно висеть на клетке до следующего тычка.</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/360e8ab6e2c632c8b41261f605700404d247225e.jpeg" data-download-href="https://forum.rustycrate.ru/uploads/default/360e8ab6e2c632c8b41261f605700404d247225e" title="JDeOhSK.jpg"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/360e8ab6e2c632c8b41261f605700404d247225e_2_634x500.jpeg" width="634" height="500" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/360e8ab6e2c632c8b41261f605700404d247225e_2_634x500.jpeg, https://forum.rustycrate.ru/uploads/default/optimized/1X/360e8ab6e2c632c8b41261f605700404d247225e_2_951x750.jpeg 1.5x, https://forum.rustycrate.ru/uploads/default/original/1X/360e8ab6e2c632c8b41261f605700404d247225e.jpeg 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/360e8ab6e2c632c8b41261f605700404d247225e_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">JDeOhSK.jpg</span><span class="informations">1142×900 206 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/476" rel="nofollow noopener">Добавил</a> горизонтальное отражение спрайтов при движении/действиях в обратном направлении. Теперь больше не должно быть странно выглядящих атак спиной вперед.</p>
+<p><img src="https://forum.rustycrate.ru/uploads/default/original/1X/9f9eb050233d5558d499fa1897a5ab3cb1ec425b.gif" width="400" height="345"></p>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/471" rel="nofollow noopener">Добавил</a> небольшие анимации уклонения при промахах.</p>
+<p><img src="https://forum.rustycrate.ru/uploads/default/original/1X/5629587d6e24164e0188f92739a699b4684dfb6f.gif" width="462" height="374"></p>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/472" rel="nofollow noopener">Добавил</a> всплывающее информационное сообщение о прерывании попытки движения вражеской реакционной атакой.</p>
+<p><div class="large-image-placeholder"><a href="https://i.imgur.com/LydFrfq.gif" target="_blank" rel="nofollow noopener"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="url">https://i.imgur.com/LydFrfq.gif</span><span class="help">(image larger than 4096KB)</span></a></div></p>
+<p><a href="https://github.com/ozkriff/zemeroth/pull/476" rel="nofollow noopener">Добавил</a> агентам переключаемые кадры при использовании некоторых способностей - компромисс между полноценной покадровой анимацией и полностью статическими спрайтами.</p>
+<p>Сначала хотел еще всем атакам специальные кадры сделать, но эксперименты показали, что во время атак и так достаточно всего происходит. Разве что копейщику надо будет сделать отдельные кадры атаки в разных направлениях - там еще в тему будет, потому что он через клетку часто тыкает врагов.</p>
+<h2>Лого</h2>
+<p>Небольшое обновление: Земерот обзавелся текстовым лого.</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/3554d7d44300c3ff563117ae621e6e2ef7035ee7.png" data-download-href="https://forum.rustycrate.ru/uploads/default/3554d7d44300c3ff563117ae621e6e2ef7035ee7" title="nKS1fNv.png"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/3554d7d44300c3ff563117ae621e6e2ef7035ee7_2_690x184.png" width="690" height="184" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/3554d7d44300c3ff563117ae621e6e2ef7035ee7_2_690x184.png, https://forum.rustycrate.ru/uploads/default/optimized/1X/3554d7d44300c3ff563117ae621e6e2ef7035ee7_2_1035x276.png 1.5x, https://forum.rustycrate.ru/uploads/default/optimized/1X/3554d7d44300c3ff563117ae621e6e2ef7035ee7_2_1380x368.png 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/3554d7d44300c3ff563117ae621e6e2ef7035ee7_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">nKS1fNv.png</span><span class="informations">1707×457 26.7 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<p>Чтобы немного стыковалось со стилем игровых спрайтов, сделана ручная “низкополигональная векторизация” (т.е. оно теперь угловато-рубленное, как и графика игры) в Inkscape текста, написанного Old London шрифтом. Хз, насколько оно подходит игре (много у кого такой шрифт в первую очередь внезапно с блэк металом ассоциируется, а не средневековьем), но пока сойдет.</p>
+<p>Так теперь выглядит <a href="http://itch.io" rel="nofollow noopener">itch.io</a> страничка игры:</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://forum.rustycrate.ru/uploads/default/original/1X/090197218dc60e41e011f06a0d3710ebf88d20e0.jpeg" data-download-href="https://forum.rustycrate.ru/uploads/default/090197218dc60e41e011f06a0d3710ebf88d20e0" title="sqPZUZQ.jpg"><img src="https://forum.rustycrate.ru/uploads/default/optimized/1X/090197218dc60e41e011f06a0d3710ebf88d20e0_2_582x499.jpeg" width="582" height="499" srcset="https://forum.rustycrate.ru/uploads/default/optimized/1X/090197218dc60e41e011f06a0d3710ebf88d20e0_2_582x499.jpeg, https://forum.rustycrate.ru/uploads/default/optimized/1X/090197218dc60e41e011f06a0d3710ebf88d20e0_2_873x748.jpeg 1.5x, https://forum.rustycrate.ru/uploads/default/original/1X/090197218dc60e41e011f06a0d3710ebf88d20e0.jpeg 2x" data-small-upload="https://forum.rustycrate.ru/uploads/default/optimized/1X/090197218dc60e41e011f06a0d3710ebf88d20e0_2_10x10.png"><div class="meta">
+<svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use xlink:href="#far-image"></use></svg><span class="filename">sqPZUZQ.jpg</span><span class="informations">1148×985 188 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use xlink:href="#discourse-expand"></use></svg>
+</div></a></div></p>
+<h2>Информирование населения</h2>
+<p>Прикупил домен <a href="http://ozkriff.games" rel="nofollow noopener">ozkriff.games</a> (только пока не запили в него отдельную страничку, так что пока он просто перенаправляет на журнал разработки).</p>
+<p>Оживил свой патреон:</p>
+<aside class="onebox whitelistedgeneric">
+  <header class="source">
+      <img src="https://forum.rustycrate.ru/uploads/default/original/1X/ccc92408ccb249b34178c0c8be0ba4819037f14a.png" class="site-icon" width="32" height="32">
+      <a href="https://www.patreon.com/ozkriff" target="_blank" rel="nofollow noopener">Patreon</a>
+  </header>
+  <article class="onebox-body">
+    <img src="https://c10.patreonusercontent.com/3/eyJ3Ijo5NjB9/patreon-media/p/campaign/756283/56ff74a4ff874d0b9908ae724abb04e0/1.jpe?token-time=1560038400&amp;amp;token-hash=8qtcufhHs-kb3kfc2FHp-NPQye0O107Bwwy5M00u09c%3D" class="thumbnail" width="" height="">
+
+<h3><a href="https://www.patreon.com/ozkriff" target="_blank" rel="nofollow noopener">Andrey Lesnikov is creating open-source games in Rust | Patreon</a></h3>
+
+<p>Become a patron of Andrey Lesnikov today:
+            Read 2 posts by Andrey Lesnikov and get access to exclusive
+            content and experiences on the world’s largest membership
+            platform for artists and creators.</p>
+
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>Распылил по интернету группы и темы о Земероте:</p>
+<ul>
+<li><a href="https://vk.com/ozkriff.games" rel="nofollow noopener">https://vk.com/ozkriff.games</a></li>
+<li><a href="https://fb.com/ozkriff.games" rel="nofollow noopener">https://fb.com/ozkriff.games</a></li>
+<li><a href="https://users.rust-lang.org/t/zemeroth-a-2d-turn-based-strategy-game/28311" rel="nofollow noopener">https://users.rust-lang.org/t/zemeroth-a-2d-turn-based-strategy-game/28311</a></li>
+<li><a href="https://indiedb.com/games/zemeroth" rel="nofollow noopener">https://indiedb.com/games/zemeroth</a></li>
+<li><a href="https://gamedev.ru/projects/forum/?id=244345" rel="nofollow noopener">https://gamedev.ru/projects/forum/?id=244345</a></li>
+<li><a href="https://forums.tigsource.com/index.php?topic=67464.0" rel="nofollow noopener">https://forums.tigsource.com/index.php?topic=67464.0</a></li>
+<li><a href="https://gamejolt.com/games/zemeroth/414937" rel="nofollow noopener">https://gamejolt.com/games/zemeroth/414937</a></li>
+<li><a href="https://ozkriff.itch.io/zemeroth/devlog" rel="nofollow noopener">https://ozkriff.itch.io/zemeroth/devlog</a></li>
+</ul>
+<p>Посмотрим, как у меня получится во всю эту армаду своевременно публиковать обновления)</p>
+<hr>
+<p>Тем временм, звезды на гитхабе перевалили за пять сотен, приятная мелочь.</p>
+<p><img src="https://forum.rustycrate.ru/uploads/default/original/1X/a37c9a8a0300a447295b9ae7a0e624a924581d36.png" width="683" height="305"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="5 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          5
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+  <nav class="pagination" role="navigation" aria-label="Post pages">
+    
+    <a href="/t/zemeroth-dvuhmernaya-poshagovaya-igra/532/index.html" class="pagination-prev" rel="prev">Previous</a>
+    
+
+    <span class="pagination-info">Page 2 of 3</span>
+
+    
+    <a href="/t/zemeroth-dvuhmernaya-poshagovaya-igra/532/3.html" class="pagination-next" rel="next">Next</a>
+    
+  </nav>
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

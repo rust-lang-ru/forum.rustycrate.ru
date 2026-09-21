@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Не собирается проект - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Не собирается проект</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Не собирается проект</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jan 24, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/blandger" class="user-link">blandger</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jan 24, 2019 8:38 PM">
+            <time itemprop="datePublished" datetime="2019-01-24 20:38:50 +0000">Jan 24, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Есть проект, который компилируется у них в CI из master-а и не хочет компилироваться у меня локально. Связывался с разрабом, не хватало либ, установил в процессе, они обновили <a href="http://read.me" rel="nofollow noopener">read.me</a><br>
+Проект - <a href="https://github.com/mit-pdos/noria" rel="nofollow noopener">https://github.com/mit-pdos/noria</a><br>
+Билд лог мастера - <a href="https://travis-ci.org/mit-pdos/noria/builds/483413705" rel="nofollow noopener">https://travis-ci.org/mit-pdos/noria/builds/483413705</a></p>
+<p>У меня лог ошибки такой<br>
+<aside class="onebox githubgist">
+  <header class="source">
+      <a href="https://gist.github.com/blandger/e4deaab4408c1fda8d0c8fc2bf002831" target="_blank" rel="nofollow noopener">gist.github.com</a>
+  </header>
+  <article class="onebox-body">
+    <h4><a href="https://gist.github.com/blandger/e4deaab4408c1fda8d0c8fc2bf002831" target="_blank" rel="nofollow noopener">https://gist.github.com/blandger/e4deaab4408c1fda8d0c8fc2bf002831</a></h4>
+<h5>build_log_error_noria</h5>
+<pre><code class="">noria$ cargo build
+   Compiling librocksdb-sys v5.14.2 (https://github.com/ekmartin/rust-rocksdb.git?branch=custom#20f8595a)
+error: failed to run custom build command for `librocksdb-sys v5.14.2 (https://github.com/ekmartin/rust-rocksdb.git?branch=custom#20f8595a)`
+process didn't exit successfully: `/media/ylarin/PHOTO/rust_projects/noria/target/debug/build/librocksdb-sys-90e12e8151d1d4b5/build-script-build` (exit code: 101)
+--- stdout
+cargo:rerun-if-changed=build.rs
+cargo:rerun-if-changed=rocksdb/
+cargo:rustc-link-lib=lz4
+cargo:rerun-if-changed=snappy/
+</code></pre>
+This file has been truncated. <a href="https://gist.github.com/blandger/e4deaab4408c1fda8d0c8fc2bf002831" target="_blank" rel="nofollow noopener">show original</a>
+
+<p>
+</p>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+</p>
+<p>Спрашивал у автора, он ничего посоветовать не смог.<br>
+Linux Mint 19, x64, собирал nightly недавним<br>
+По результатам моих “хождений по граблям”, они добавили readme так :<br>
+You may need to install some dependencies for the above to work:<br>
+libclang-dev<br>
+libssl-dev<br>
+liblz4-dev</p>
+<p>еще проверял build-essentials - все это давно установлено. Куда капнуть - не понятно, опыта не хватает…</p>
+<p>/noria$ cargo --version<br>
+cargo 1.33.0-nightly (2b4a5f1f0 2019-01-12)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jan 25, 2019 8:13 AM">
+            <time itemprop="datePublished" datetime="2019-01-25 08:13:11 +0000">Jan 25, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><code>stdarg.h</code>  это стандартный заголовочный файл из Си. Предлагаю посмотреть на команду, которую вызывает <code>build.rs</code> - очень странно чтобы этот файл не нашёлся. Наверное это возможно только если компилятор Си не установлен.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/blandger" class="user-link">blandger</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Jan 25, 2019 8:16 AM">
+            <time itemprop="datePublished" datetime="2019-01-25 08:16:38 +0000">Jan 25, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вряд ли нет С… build-essential насколько я знаю его включает. Строки гляну.</p>
+<blockquote>
+<p>sudo apt install gcc<br>
+Уже установлен пакет gcc самой новой версии (4:7.3.0-3ubuntu2.1).<br>
+Обновлено 0 пакетов, установлено 0 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.</p>
+</blockquote>
+<blockquote>
+<p>gcc --version<br>
+gcc (Ubuntu 7.3.0-27ubuntu1~18.04) 7.3.0</p>
+</blockquote>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/blandger" class="user-link">blandger</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Jan 25, 2019 7:10 PM">
+            <time itemprop="datePublished" datetime="2019-01-25 19:10:43 +0000">Jan 25, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="mkpankov" data-post="2" data-topic="770">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/mkpankov/48/18_2.png" class="avatar"> mkpankov:</div>
+<blockquote>
+<p>Предлагаю посмотреть на команду, которую вызывает <code>build.rs</code></p>
+</blockquote>
+</aside>
+<p>Проверил проект, в нем нет файла <code>build.rs</code>, увы…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Jan 25, 2019 8:18 PM">
+            <time itemprop="datePublished" datetime="2019-01-25 20:18:54 +0000">Jan 25, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group quote-modified" data-username="blandger" data-post="4" data-topic="770">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/b/8baadc/48.png" class="avatar"> blandger:</div>
+<blockquote>
+<blockquote>
+<p>``</p>
+</blockquote>
+<p>Проверил проект, в нем нет файла <code>build.rs</code> , увы…</p>
+</blockquote>
+</aside>
+<p>Если я правильно прошелся по зависимостям, то вот <a href="https://github.com/mit-pdos/noria/blob/19665d80e/noria-server/dataflow/Cargo.toml#L36">тут</a> подключается <a href="https://github.com/ekmartin/rust-rocksdb/tree/custom">вот этот rust-rocksdb репозиторий с custom веткой</a> и вот там есть <a href="https://github.com/ekmartin/rust-rocksdb/blob/custom/librocksdb-sys/build.rs">нужный build.rs</a></p>
+<p>Запусти <code>cargo build</code> с флагом <code>-vv</code> - там выполняемая команда должна напечататься.</p>
+<p>Ну и в целом это правда выглядит проблеммой именно сишного окружения - <a href="https://stackoverflow.com/questions/40431161/clang-tool-cannot-find-required-libraries-on-ubuntu-16-10/40432457#40432457" class="inline-onebox">c++ - Clang Tool Cannot Find Required Libraries on Ubuntu 16.10 - Stack Overflow</a> например</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/blandger" class="user-link">blandger</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Jan 26, 2019 7:56 PM">
+            <time itemprop="datePublished" datetime="2019-01-26 19:56:58 +0000">Jan 26, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="ozkriff" data-post="5" data-topic="770">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/ozkriff/48/629_2.png" class="avatar"> ozkriff:</div>
+<blockquote>
+<p>целом это правда выглядит проблеммой именно сишного окружения</p>
+</blockquote>
+</aside>
+<p>Спасибо, это навело на мысли, стал проверять кодманды дошел до clang, вот тут и стало понятно, что мало только библиотеку иметь.<br>
+<code>sudo apt-get install clang</code><br>
+все решил. После установки - начало компилиться, эту библиотеку прошел, но…<br>
+Не могу дособрать сервер.<br>
+на последних пакетах … 322/355<br>
+ПК мертво вешает Линукс… думаю поможет ли какое-то ограничение кол-ва ядер. Core i7 не новый, но ядер 8 штук.<br>
+Не могу из-за этого дособрать бинарник.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Jan 26, 2019 7:58 PM">
+            <time itemprop="datePublished" datetime="2019-01-26 19:58:37 +0000">Jan 26, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Попробуй <code>cargo build -j 1</code> какой-нибудь.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/blandger" class="user-link">blandger</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Jan 26, 2019 8:08 PM">
+            <time itemprop="datePublished" datetime="2019-01-26 20:08:56 +0000">Jan 26, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_7">Replying to #7</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Опять спасибо, “в точку”, помогло.<br>
+Пролистал корго-бук, всего одно “неприметное” упоминание… ни за чтобы сам быстро не нашел. Все собралось, вопрос решен.</p>
+<p><strong>NUM_JOBS</strong> - the parallelism specified as the top-level parallelism. This can be useful to pass a <code>-j</code> parameter to a system like <code>make</code> . Note that care should be taken when interpreting this environment variable. For historical purposes this is still provided but recent versions of Cargo, for example, do not need to run <code>make -j</code> as it’ll automatically happen. Cargo implements its own <a href="https://www.gnu.org/software/make/manual/html_node/Job-Slots.html" rel="nofollow noopener">jobserver</a> and will allow build scripts to inherit this information, so programs compatible with GNU make jobservers will already have appropriately configured parallelism.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">B</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/blandger" class="user-link">blandger</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Feb 15, 2019 3:25 PM">
+            <time itemprop="datePublished" datetime="2019-02-15 15:25:10 +0000">Feb 15, 2019</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="blandger" data-post="6" data-topic="770">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/b/8baadc/48.png" class="avatar"> blandger:</div>
+<blockquote>
+<p>ПК мертво вешает Линукс… думаю поможет ли какое-то ограничение кол-ва ядер. Core i7 не новый, но ядер 8 штук.</p>
+</blockquote>
+</aside>
+<p>Еще по прошествии времени выяснилось что такие фризы Линукса связаны с установленным SSD. Они проявляются при большой нагрузке на ПК, в том числе интенсивная компиляция данного проекта на Rust.<br>
+Лечиться одим из способов в статье.</p>
+<p>Делюсь, мало ли у кого еще встретиться… Давно грешил на SSD, как оказалось не зря.</p>
+<p><a href="http://www.howtoeverything.net/linux/hardware/ubuntu-freeze-issue-after-ssd-upgrade" class="onebox" target="_blank" rel="noopener nofollow ugc">http://www.howtoeverything.net/linux/hardware/ubuntu-freeze-issue-after-ssd-upgrade</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

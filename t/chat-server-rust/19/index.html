@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chat Server Rust - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Chat Server Rust</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Chat Server Rust</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Dec 1, 2015</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">H</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Hamia" class="user-link">Vladimir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Dec 1, 2015 3:03 PM">
+            <time itemprop="datePublished" datetime="2015-12-01 15:03:34 +0000">Dec 1, 2015</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>День добрый! Поздравляю вас с открытием данного форума, ведь это очень важно для развития русскоязычного сообщества Rust.</p>
+<p>Пожалуй, мне придется начать.</p>
+<p>Моя проблема:<br>
+Пишу я чат сервер на Rust. Попробовал написать его на чистом rust, используя его стандартные его функции из std, но понял что моей мудрости совсем недостаточно для этого дела(в то время пробовал старинным и неправильным способом создавать поток для каждого пользователя, обрабатывая его в нем, только после понял  недостатки этого способа).<br>
+До написания чат сервера на Rust, я написал мини аналог сервера на Dlang. Было достаточно просто, ведь в Dlang есть SocketSet, который похож на устройство MIO(о MIO в Rust я узнал чуточку позже).<br>
+Код конечно же прилагается:  [Кликай, тут сам код][1]</p>
+<p>Узнав про MIO и пытаясь понять его структуру, я понял что это то, что мне нужно. Далее попробовав поискать примеры по MIO, я понял, что их совсем не много, да и многие устарели(ибо версии 0.5 и 0.4 даже APIками отличаются). Если я не прав, и вы знаете много примеров по MIO, то кидайте их в комментарии к этой теме, либо же ЛС.</p>
+<p>Веду все к тому, что хочу перевести примерчик с Dlang, на Rust, но у меня это очень плохо получается. Так же знаю, что пользователь хабрахабра <span class="mention">@greedykid</span> выкладывал статейку по написанию чата, но это только часть 1, из которой у меня совершить это чудо не получилось. Поэтому прошу Вас, пользователи данного форума, помогите с переводом, если есть, то можно статейки интересные кинуть по этому поводу.</p>
+<p>Простите, что много текста.<br>
+Заранее спасибо!<br>
+[1]: <a href="http://pastebin.com/mP1GRJfZ" rel="nofollow noopener">http://pastebin.com/mP1GRJfZ</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Dec 1, 2015 4:34 PM">
+            <time itemprop="datePublished" datetime="2015-12-01 16:34:23 +0000">Dec 1, 2015</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Приветствую! С первым постом <img src="https://forum.rustycrate.ru/images/emoji/twitter/smile.png?v=12" title=":smile:" class="emoji" alt=":smile:" loading="lazy" width="20" height="20"></p>
+<aside class="quote no-group" data-username="Hamia" data-post="1" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/h/97f17d/48.png" class="avatar"> Hamia:</div>
+<blockquote>
+<p>в то время пробовал старинным и неправильным способом создавать поток для каждого пользователя, обрабатывая его в нем, только после понял  недостатки этого способа</p>
+</blockquote>
+</aside>
+<p>А в чём, кстати, недостатки? Из преимуществ - простота реализации и понятность такой модели.</p>
+<aside class="quote no-group" data-username="Hamia" data-post="1" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/h/97f17d/48.png" class="avatar"> Hamia:</div>
+<blockquote>
+<p>Если я не прав, и вы знаете много примеров по MIO, то кидайте их в комментарии к этой теме, либо же ЛС.</p>
+</blockquote>
+</aside>
+<p>Рекомендую ознакомиться <a href="http://hermanradtke.com/tags/mio.html">с этой серией</a>. К сожалению, пока на английском.</p>
+<aside class="quote no-group" data-username="Hamia" data-post="1" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/h/97f17d/48.png" class="avatar"> Hamia:</div>
+<blockquote>
+<p>из которой у меня совершить это чудо не получилось</p>
+</blockquote>
+</aside>
+<p>А есть какие-то конкретные проблемы? Непонятно как сделать, или не работает как пробуете? Не компилируется что-то?</p>
+<p>Прошу прощения, что я не сильно по существу.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">H</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Hamia" class="user-link">Vladimir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Dec 1, 2015 5:20 PM">
+            <time itemprop="datePublished" datetime="2015-12-01 17:20:35 +0000">Dec 1, 2015</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="mkpankov" data-post="2" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/mkpankov/48/18_2.png" class="avatar"> mkpankov:</div>
+<blockquote>
+<p>А в чём, кстати, недостатки? Из преимуществ - простота реализации и понятность такой модели.</p>
+</blockquote>
+</aside>
+<p>Цитирую прямо из статьи Никиты Баксаляра.</p>
+<blockquote>
+<p>Недостатком данного подхода, несмотря на его относительную простоту, является повышенное потребление памяти — каждый поток при его создании резервирует некоторую часть памяти для стека[6]. Помимо того, дело усложняется необходимостью в переключении контекста выполнения — в современных серверных процессорах обычно есть от 8 до 16 ядер, и если мы создаем больше потоков, чем позволяет “железо”, то планировщик ОС перестает справляться с переключением задач с достаточной скоростью.</p>
+</blockquote>
+<aside class="quote no-group" data-username="mkpankov" data-post="2" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/mkpankov/48/18_2.png" class="avatar"> mkpankov:</div>
+<blockquote>
+<p>Рекомендую ознакомиться с этой серией. К сожалению, пока на английском.</p>
+</blockquote>
+</aside>
+<p>Спасибо, почитаю.</p>
+<aside class="quote no-group" data-username="mkpankov" data-post="2" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/mkpankov/48/18_2.png" class="avatar"> mkpankov:</div>
+<blockquote>
+<p>А есть какие-то конкретные проблемы? Непонятно как сделать, или не работает как пробуете? Не компилируется что-то?</p>
+</blockquote>
+</aside>
+<ol>
+<li>Не понятно как именно это реализовать.</li>
+<li>MIO примеры просто не компилируются. <a href="https://github.com/carllerche/mio/blob/getting-started/doc/getting-started.md" rel="noopener nofollow ugc">Взять к примеру пример из репозитория</a><br>
+<img src="https://forum.rustycrate.ru/uploads/default/original/1X/77ff6e17d11e915104248a062050a4c0e2dddc30.png" width="689" height="350"><br>
+Это с версией MIO на 0.4.4</li>
+</ol>
+<p>В версии 0.5 pre была совсем другая ошибка.<br>
+Тут вдруг понимаешь, что ошибка из MIO версии 0.5 pre более адекватна и мы сами можем справиться с ею.</p>
+<pre><code>fn main() {
+    let address = "0.0.0.0:6567".parse().unwrap();
+    let server = TcpListener::bind(&amp;address).unwrap();
+
+    let mut event_loop = mio::EventLoop::new().unwrap();
+    event_loop.register(&amp;server, SERVER);
+
+    println!("running pingpong server");
+    event_loop.run(&amp;mut Pong { server: server });
+}
+</code></pre>
+<p>Меняем на</p>
+<pre><code>fn main() {
+    let address = "0.0.0.0:6567".parse().unwrap();
+    let server = TcpListener::bind(&amp;address).unwrap();
+
+    let mut event_loop = mio::EventLoop::new().unwrap();
+    event_loop.register(&amp;server_socket,
+                        Token(0),
+                        EventSet::readable(),
+                        PollOpt::edge()).unwrap();
+
+    println!("running pingpong server");
+    event_loop.run(&amp;mut Pong { server: server });
+}
+</code></pre>
+<p>Только тогда начинает хоть что то работать.</p>
+<p>Поэтому, это немного пугает. Тот же Dlang осваиваешь за пару дней(до этого я просто программировал на С++), а тут такое.<br>
+Хотелось бы дельной информации, качественных доков.</p>
+<p>Тема актуальна, буду рад любой помощи.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Dec 2, 2015 9:07 AM">
+            <time itemprop="datePublished" datetime="2015-12-02 09:07:18 +0000">Dec 2, 2015</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="Hamia" data-post="3" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/h/97f17d/48.png" class="avatar"> Hamia:</div>
+<blockquote>
+<p>Недостатком данного подхода, несмотря на его относительную простоту, является повышенное потребление памяти — каждый поток при его создании резервирует некоторую часть памяти для стека[6]. Помимо того, дело усложняется необходимостью в переключении контекста выполнения — в современных серверных процессорах обычно есть от 8 до 16 ядер, и если мы создаем больше потоков, чем позволяет “железо”, то планировщик ОС перестает справляться с переключением задач с достаточной скоростью.</p>
+</blockquote>
+</aside>
+<p>Уважаю Никиту, но это не так примитивно, как он пишет. У вас постоянно на машине работают сотни и тысячи потоков и вы этого даже не замечаете. Например, у меня сейчас работает 545 потоков, по данным htop.</p>
+<p>Простой тест на создание 10000 потоков и работу по TCP из них на рядовом линуксе работает (главное препятствие - ulimit). Про другие ОС не знаю.</p>
+<p>Потребление памяти при этом составило ~150МБ, т.е. примерно 15кБ на поток. Это, наверное, больше, чем позволяет достигнуть mio, но и реализовать это в разы проще.</p>
+<aside class="quote no-group" data-username="Hamia" data-post="3" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/h/97f17d/48.png" class="avatar"> Hamia:</div>
+<blockquote>
+<p>MIO примеры просто не компилируются. Взять к примеру пример из репозитория</p>
+</blockquote>
+</aside>
+<p>mio просто <a href="https://github.com/carllerche/mio/blob/getting-started/doc/getting-started.md">не поддерживает</a> Windows:</p>
+<blockquote>
+<p>Note: As of the time of writing, Mio does not support Windows<br>
+(though support is currently in progress).</p>
+</blockquote>
+<p>Судя по тому, что вас интересует Windows, но это вроде как больше для обучения, а не для боевого кода, я бы пока не замахивался на 10000 одновременных подключений и попробовал сделать тупо ~100 потоков, по потоку на клиента.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Dec 2, 2015 9:08 AM">
+            <time itemprop="datePublished" datetime="2015-12-02 09:08:22 +0000">Dec 2, 2015</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Кстати, ещё есть вторая часть из цикла статей от Никиты, но она пока тоже только <a href="http://nbaksalyar.github.io/2015/11/09/rust-in-detail-2.html">на английском</a>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/soos" class="user-link">soos</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Dec 16, 2015 1:40 PM">
+            <time itemprop="datePublished" datetime="2015-12-16 13:40:15 +0000">Dec 16, 2015</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В mio много возни с контекстами. Попробуйте <a href="https://github.com/dpc/mioco" rel="nofollow noopener">https://github.com/dpc/mioco</a> или <a href="https://github.com/tailhook/rotor" rel="nofollow noopener">https://github.com/tailhook/rotor</a>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/soos" class="user-link">soos</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Dec 18, 2015 11:52 AM">
+            <time itemprop="datePublished" datetime="2015-12-18 11:52:43 +0000">Dec 18, 2015</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>А по поводу Dlang, у меня очень чёткая аналогия D+vibe.d - Rust+mio, помнится тоже не всё гладко было и с API и с доками.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">N</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/nbaksalyar" class="user-link">Nikita Baksalyar</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Dec 21, 2015 1:05 PM">
+            <time itemprop="datePublished" datetime="2015-12-21 13:05:24 +0000">Dec 21, 2015</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Привет всем!</p>
+<aside class="quote no-group" data-username="Hamia" data-post="1" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/h/97f17d/48.png" class="avatar"> Hamia:</div>
+<blockquote>
+<p>в то время пробовал старинным и неправильным способом создавать поток для каждого пользователя, обрабатывая его в нем, только после понял  недостатки этого способа</p>
+</blockquote>
+</aside>
+<p>Этот способ никак не является “неправильным”. Скорее, не очень масштабируемым и не совсем подходящим для реалтаймовых задач (коей можно считать и чатик). Так или иначе, треды масштабируются достаточно неплохо в повседневном использовании (читай - большинство проектов не сталкивается со значительной нагрузкой). Но я еще напишу бенчмарки для сравнения этих подходов.</p>
+<aside class="quote no-group" data-username="Hamia" data-post="1" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/h/97f17d/48.png" class="avatar"> Hamia:</div>
+<blockquote>
+<p>примеры по MIO, я понял, что их совсем не много, да и многие устарели(ибо версии 0.5 и 0.4 даже APIками отличаются).</p>
+</blockquote>
+</aside>
+<p>Да, поэтому желательно использовать master-ветку до выхода версии 1.0. Однако, Carl Lerche, автор mio, говорит, что версия 0.5 - по сути 1.0 beta, и API значительно меняться уже не будет.</p>
+<aside class="quote no-group" data-username="Hamia" data-post="1" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/h/97f17d/48.png" class="avatar"> Hamia:</div>
+<blockquote>
+<p>но это только часть 1, из которой у меня совершить это чудо не получилось</p>
+</blockquote>
+</aside>
+<p>С какими сложностями столкнулись? Пишите, помогу по мере сил.<br>
+На перевод второй части пока, к сожалению, совсем не хватает времени.</p>
+<aside class="quote no-group" data-username="mkpankov" data-post="4" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/mkpankov/48/18_2.png" class="avatar"> mkpankov:</div>
+<blockquote>
+<p>но это не так примитивно, как он пишет. У вас постоянно на машине работают сотни и тысячи потоков и вы этого даже не замечаете</p>
+</blockquote>
+</aside>
+<p>Согласен, я про это не совсем корректно написал, т.к. может создаться впечатление, что треды использовать - ни-ни.<br>
+Но все же, для тех случаев, когда у нас висит много-много пользователей, и только часть из них иногда просыпается и обменивается сообщениями, применение тредов не очень оправдано - даже если чисто логически посудить, без бенчмарков. Достаточно представить, как оно внутри устроено, и чем занимается планировщик ОС при поступлении нового сообщения в сокет, и как это отличается от event loop’а.</p>
+<aside class="quote no-group" data-username="soos" data-post="6" data-topic="19">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/soos/48/39_2.png" class="avatar"> soos:</div>
+<blockquote>
+<p>В mio много возни с контекстами</p>
+</blockquote>
+</aside>
+<p>Все верно, потому что это низкоуровневая библиотека, и задумывалась таковой - как аналог libuv, только предназначенный для проектов на Rust’е.<br>
+Но поверх нее можно построить вполне удобоваримый внешний интерфейс, который не сильно будет отличаться от пресловутых тредов. У меня к третьей части статьи по разработке вебсокетного чата должно получиться как-то так: <a href="https://github.com/nbaksalyar/rust-chat/blob/master/src/main.rs" class="inline-onebox" rel="noopener nofollow ugc">rust-chat/src/main.rs at master · nbaksalyar/rust-chat · GitHub</a> (это еще не окончательный вариант).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">H</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Hamia" class="user-link">Vladimir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Feb 7, 2016 5:40 PM">
+            <time itemprop="datePublished" datetime="2016-02-07 17:40:49 +0000">Feb 7, 2016</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Тема актуальна. Вот код, дальше пробовал писать, но до конца не понимаю что и как: <a href="https://play.rust-lang.org/?gist=78f78bc812c13a0db4bf&amp;version=stable" rel="nofollow noopener">https://play.rust-lang.org/?gist=78f78bc812c13a0db4bf&amp;version=stable</a>   (вариант написания без MIO, чисто TcpStream)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Feb 8, 2016 9:45 AM">
+            <time itemprop="datePublished" datetime="2016-02-08 09:45:47 +0000">Feb 8, 2016</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_9">Replying to #9</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Первая ошибка говорит о недоступности метода</p>
+<pre><code class="lang-auto">&lt;anon&gt;:19:16: 19:33 error: no method named `read` found for type `std::io::buffered::BufReader&lt;std::net::tcp::TcpStream&gt;` in the current scope
+&lt;anon&gt;:19         reader.read(&amp;mut buffer).unwrap();
+                         ^~~~~~~~~~~~~~~~~
+</code></pre>
+<p>и компилятор тут же подсказывает решение:</p>
+<pre><code class="lang-auto">&lt;anon&gt;:19:16: 19:33 help: items from traits can only be used if the trait is in scope; the following trait is implemented but not in scope, perhaps add a `use` for it:
+&lt;anon&gt;:19:16: 19:33 help: candidate #1: use `std::io::Read`
+</code></pre>
+<p>Так что импортируем типаж Read:</p>
+<pre><code class="lang-rust">use std::io::{self, Read, BufRead, BufReader};
+</code></pre>
+<p>Появляется новая ошибка:</p>
+<pre><code class="lang-auto">
+&lt;anon&gt;:19:21: 19:32 error: mismatched types:
+ expected `&amp;mut [u8]`,
+    found `&amp;mut collections::string::String`
+(expected slice,
+    found struct `collections::string::String`) [E0308]
+&lt;anon&gt;:19         reader.read(&amp;mut buffer).unwrap();
+                              ^~~~~~~~~~~
+</code></pre>
+<p>Это потому, что <code>.read</code> требует <code>&amp;mut [u8]</code>, а если мы хотим читать сразу в <code>String</code>, нужно использовать <code>.read_to_string</code>:</p>
+<pre><code class="lang-auto">        reader.read_to_string(&amp;mut buffer).unwrap();
+</code></pre>
+<p>Следующая ошибка: опять не найденный метод:</p>
+<pre><code class="lang-auto">&lt;anon&gt;:47:44: 47:55 error: no method named `try_clone` found for type `(std::net::tcp::TcpStream, std::net::addr::SocketAddr)` in the current scope
+&lt;anon&gt;:47                 self::handle_client(stream.try_clone().unwrap(),clients); // последний в списке, данная нумерация будет его ID
+                                                     ^~~~~~~~~~~
+</code></pre>
+<p>И это потому, что stream - это кортеж (компилятор сам говорит <code>(std::net::tcp::TcpStream, std::net::addr::SocketAddr)</code>). Соответственно, делаем так:</p>
+<pre><code class="lang-auto">                self::handle_client(stream.0.try_clone().unwrap(),clients); // последний в списке, данная нумерация будет его ID
+</code></pre>
+<p>Далее</p>
+<pre><code class="lang-auto">&lt;anon&gt;:47:67: 47:74 error: mismatched types:
+ expected `alloc::arc::Arc&lt;std::sync::mutex::Mutex&lt;collections::vec::Vec&lt;std::net::tcp::TcpStream&gt;&gt;&gt;`,
+    found `std::sync::mutex::MutexGuard&lt;'_, collections::vec::Vec&lt;std::net::tcp::TcpStream&gt;&gt;`
+(expected struct `alloc::arc::Arc`,
+    found struct `std::sync::mutex::MutexGuard`) [E0308]
+&lt;anon&gt;:47                 self::handle_client(stream.0.try_clone().unwrap(),clients); // последний в списке, данная нумерация будет его ID
+                                                                            ^~~~~~~
+</code></pre>
+<p><code>clients</code> - это <code>MutexGuard</code>, и он преобразуется в <code>&amp;Mutex</code>, но вообще это так не будет работать, т.к. ты пытаешься позаимствовать <code>self.clients</code> с правом изменения, а затем ещё отдать кому-то ссылку в другой поток ниже, когда делаешь <code>thread::spawn</code>. Нужно ограничить время жизни изменяемой ссылки так, что когда ты отдаёшь ссылку на <code>clients</code> в другой поток, ссылка на них с правом изменения уже не существует.</p>
+<p>Поэтому, с одной стороны, переписываем функцию</p>
+<pre><code class="lang-auto">    fn client_loop(&amp;self) {
+        let mut listener = TcpListener::bind("127.0.0.1:5653").unwrap();
+        loop {
+            let mut stream = listener.accept().unwrap();
+            let len;
+            {
+                let mut clients = self.clients.lock().unwrap();
+                clients.push(stream.0);
+                len = clients.len() - 1 as usize;
+            }
+
+            thread::spawn(move || {
+                self::handle_client(stream.0.try_clone().unwrap(), &amp;*self.clients);
+            });
+        }
+    }
+</code></pre>
+<p>а с другой, меняем сигнатуру <code>handle_client</code> на</p>
+<pre><code class="lang-auto">fn handle_client(client:TcpStream, clients: &amp;Mutex&lt;Vec&lt;TcpStream&gt;&gt;) {
+</code></pre>
+<p>Ну и упираемся в ошибку времени жизни:</p>
+<pre><code class="lang-auto">&lt;anon&gt;:49:13: 49:26 error: the type `[closure@&lt;anon&gt;:49:27: 51:14 stream:(std::net::tcp::TcpStream, std::net::addr::SocketAddr), self:&amp;server]` does not fulfill the required lifetime [E0477]
+&lt;anon&gt;:49             thread::spawn(move || {
+                      ^~~~~~~~~~~~~
+note: type must outlive the static lifetime
+</code></pre>
+<p>Поскольку окружение замыкания должно иметь время жизни <code>'static</code> (т.к. другой поток может пережить функцию, откуда он запускается), нельзя давать ссылку напрямую на поле структуры. Можно было бы попытаться положить <code>self.clients</code> в <code>Arc</code>, но это вызвало бы перемещение, и структура стала бы частично не валидной - компилятор этого не допустит.</p>
+<p>Поэтому вопрос: зачем потоку обработки клиента иметь доступ ко всему вектору клиентов? Я бы ожидал, что он должен иметь ссылку только на 1 <code>TcpStream</code>.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_11"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E04136; width: 45px; height: 45px">H</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Hamia" class="user-link">Vladimir</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_11" title="Feb 8, 2016 4:24 PM">
+            <time itemprop="datePublished" datetime="2016-02-08 16:24:11 +0000">Feb 8, 2016</time>
+          </a>
+          <span class="post-number">#11</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_10">Replying to #10</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Я передаю вектор клиентов, дабы поток знал кому отправлять сообщения. То бишь, мы получаешь сообщение от client, после через iter() проходим по clients, и всем clients отправляем полученное сообщение.<br>
+Поэтому я и передаю вектор с TcpStream.</p>
+<p>Если такой вариант не подходит, то как рассылать полученное сообщение?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_12"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_12" title="Feb 10, 2016 9:55 AM">
+            <time itemprop="datePublished" datetime="2016-02-10 09:55:50 +0000">Feb 10, 2016</time>
+          </a>
+          <span class="post-number">#12</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_11">Replying to #11</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Думаю, проще всего вынести вектор <code>TcpStream</code> из поля в обычную переменную в <code>main</code> и положить его в <code>Arc</code>, по крайней мере для начала.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_13"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">M</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/mkpankov" class="user-link">Михаил Панков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_13" title="Mar 5, 2016 12:41 PM">
+            <time itemprop="datePublished" datetime="2016-03-05 12:41:28 +0000">Mar 5, 2016</time>
+          </a>
+          <span class="post-number">#13</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Вот <a class="mention" href="/u/nbaksalyar/index.html">@nbaksalyar</a> написал <a href="https://habrahabr.ru/post/278635/">вторую часть</a> о масштабируемом чате с нуля</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

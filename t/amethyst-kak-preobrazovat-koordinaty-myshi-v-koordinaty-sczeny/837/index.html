@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Amethyst: как преобразовать координаты мыши в координаты сцены? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Amethyst: как преобразовать координаты мыши в координаты сцены?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Amethyst: как преобразовать координаты мыши в координаты сцены?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Mar 5, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vessd" class="user-link">Сергей Веселков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Mar 5, 2019 5:24 AM">
+            <time itemprop="datePublished" datetime="2019-03-05 05:24:08 +0000">Mar 5, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Подскажите, пожалуйста, формулу или литературу где её взять.<br>
+Собственно есть:</p>
+<ul>
+<li>координаты мыши с (0,0) в левом верхнем углу окна</li>
+<li>ортогональная проекция камеры в виде матрицы 4x4</li>
+<li>глобальное положение камеры в виде матрицы 4x4</li>
+<li>ширина и высота окна</li>
+</ul>
+<p>У камеры (0,0) в левом нижнем углу.<br>
+Как преобразовать координаты мыши в координаты камеры (сцены) с учётом положения и поворота камеры?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/ozkriff" class="user-link">Андрей Леснико́в</a>
+          </span>
+          
+            <span class="post-user-title">альфа-сектант</span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Mar 5, 2019 12:57 PM">
+            <time itemprop="datePublished" datetime="2019-03-05 12:57:13 +0000">Mar 5, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Прямо так взять экранную точку и преобразовать в точку в мировом пространстве не выйдет, потому что одно это 2д, другое 3д. Так можно только луч получить, исходящий из наблюдателя. Потом уже можно искать с чем там этот луч сталкивается. Тебе луч нужен или?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vessd" class="user-link">Сергей Веселков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Mar 5, 2019 1:45 PM">
+            <time itemprop="datePublished" datetime="2019-03-05 13:45:38 +0000">Mar 5, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Нет, без луча, просто проекция. Что-то вроде <a href="https://docs.unity3d.com/ScriptReference/Camera.ScreenToWorldPoint.html" rel="nofollow noopener">Camera.ScreenToWorldPoint</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/omni-viral" class="user-link">Zakarum</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Mar 5, 2019 1:53 PM">
+            <time itemprop="datePublished" datetime="2019-03-05 13:53:16 +0000">Mar 5, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Ну так эта функция принимает 3 координаты, а у тебя только 2.<br>
+Точке на экране соответсвует бесконечное количество точек сцены (луч).</p>
+<p>Вообще, в лоб, то, кажется, как-то так</p>
+<pre><code class="lang-auto">struct Camera {
+    view: Projective3&lt;f32&gt;,
+    proj: Perspective3&lt;f32&gt;,
+}
+
+fn world_from_mouse(pos: Point2&lt;f32&gt;, camera: &amp;Camera) -&gt; Point3&lt;f32&gt; {
+  let x = pos[0];
+  let y = 1. 0 - pos[1]; // Переворачиваем потому что `У камеры (0,0) в левом нижнем углу` а `координаты мыши с (0,0) в левом верхнем углу окна`.
+  // Хотя я б ожидал, что у камеры (0,0) в центре.
+  let pos = Point3::new(x, y, 0.0).to_homogeneous();
+  Point3::from_homogeneous(camera.view.to_homogeneous() * camera.projection.inverse() * pos)
+}
+</code></pre>
+<p>На выходе будет точка на near-plane камеры.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vessd" class="user-link">Сергей Веселков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Mar 5, 2019 3:24 PM">
+            <time itemprop="datePublished" datetime="2019-03-05 15:24:15 +0000">Mar 5, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="omni-viral" data-post="4" data-topic="837">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/o/50afbb/48.png" class="avatar"> omni-viral:</div>
+<blockquote>
+<p>Ну так эта функция принимает 3 координаты, а у тебя только 2.<br>
+Точке на экране соответсвует бесконечное количество точек сцены (луч).</p>
+</blockquote>
+</aside>
+<p>Так там в примере за z берётся некий cam.nearClipPlane, полагаю его можно заменить на 1.0</p>
+<aside class="quote no-group" data-username="omni-viral" data-post="4" data-topic="837">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/o/50afbb/48.png" class="avatar"> omni-viral:</div>
+<blockquote>
+<p>Хотя я б ожидал, что у камеры (0,0) в центре.</p>
+</blockquote>
+</aside>
+<p>У камеры в аметисте у меня выходит в левом нижнем углу, если я что-то не путаю конечно.</p>
+<p>Я что-то делаю не так</p>
+<pre><code class="lang-auto">fn screen_to_2d_scene(
+    position: (f64, f64),
+    camera_transform: &amp;GlobalTransform,
+    camera: &amp;Camera,
+    screen_dim: &amp;ScreenDimensions,
+) -&gt; (f32, f32) {
+    let projection = Orthographic3::from_matrix_unchecked(camera.proj);
+    let perspective = Perspective3::from_matrix_unchecked(camera_transform.0);
+
+    let screen_x = position.0 as f32;
+    let screen_y = position.1 as f32;
+
+    let pos = Point3::new(screen_x, -screen_y, 1.0).to_homogeneous();
+
+    let world = Point3::from_homogeneous(perspective.to_homogeneous() * projection.inverse() * pos)
+        .unwrap();
+
+    (world.x, world.y)
+}
+</code></pre>
+<p>выдаёт далеко не то что хотелось бы.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vessd" class="user-link">Сергей Веселков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Mar 5, 2019 7:41 PM">
+            <time itemprop="datePublished" datetime="2019-03-05 19:41:02 +0000">Mar 5, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Не получается у меня что-то, размер сцены 409х230 а координаты мыши на выходе получаются<br>
+от (205, 115) до (409, 230)<br>
+То есть правый верхний угол попадает, а нижний левый нет.</p>
+<pre><code class="lang-rust">fn screen_to_2d_scene(
+    position: (f64, f64),
+    camera_transform: &amp;GlobalTransform,
+    camera: &amp;Camera,
+    screen_dim: &amp;ScreenDimensions,
+) -&gt; (f32, f32) {
+    let screen_x = position.0 as f32 / screen_dim.width();
+    let screen_y = 1.0 - position.1 as f32 / screen_dim.height();
+
+    let screen_point = Point3::new(screen_x, screen_y, 0.0).to_homogeneous();
+
+    let matrix = camera_transform.0 * camera.proj.try_inverse().unwrap();
+    
+    let world_point = matrix * screen_point;
+
+    (world_point.x, world_point.y)
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vessd" class="user-link">Сергей Веселков</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Mar 6, 2019 5:26 AM">
+            <time itemprop="datePublished" datetime="2019-03-06 05:26:14 +0000">Mar 6, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Всё, разобрался, всем спасибо</p>
+<pre><code class="lang-auto">fn screen_to_2d_scene(
+    position: (f64, f64),
+    camera_transform: &amp;GlobalTransform,
+    camera: &amp;Camera,
+    screen_dim: &amp;ScreenDimensions,
+) -&gt; Point3&lt;f32&gt; {
+    let screen_x = 2.0 * position.0 as f32 / screen_dim.width() - 1.0;
+    let screen_y = 1.0 - 2.0 * position.1 as f32 / screen_dim.height();
+    let screen_point = Point3::new(screen_x, screen_y, 0.0).to_homogeneous();
+
+    let world_point = camera_transform.0 * camera.proj.try_inverse().unwrap() * screen_point;
+
+    Point3::from_homogeneous(world_point).unwrap()
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

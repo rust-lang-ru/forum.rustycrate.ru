@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIGSEGV or UB in Safe Code? - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">SIGSEGV or UB in Safe Code?</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">SIGSEGV or UB in Safe Code?</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Mar 16, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/oySerg" class="user-link">Sergey Korotaev</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Mar 16, 2018 4:39 PM">
+            <time itemprop="datePublished" datetime="2018-03-16 16:39:43 +0000">Mar 16, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>В rustc 1.15.1 столкнулся с сегментацией, либо непонятным(неопределенным) поведением в зависимости от типа сборки. Прошу прощения, не понял как включить нормальное форматирование кода. Вот он:</p>
+<pre><code>struct Struct;
+
+// do it with warnings
+//impl Into&lt;i64&gt; for Struct {
+//    fn into(self) -&gt; i64 {
+//        self.into()
+//    }
+//}
+
+// do it without warnings
+impl From&lt;Struct&gt; for i64 {
+    fn from(v: Struct) -&gt; i64 {
+        v.into()
+    }
+} 
+
+// rust version, build type, channel may change behavior (may be UB?)
+fn main() {
+    let i: i64 = Struct.into();
+    println!("{}", i);
+}
+</code></pre>
+<p>В <a href="https://play.rust-lang.org/?gist=0091d5a359be29af8f69f63ef0911dc4&amp;version=stable" rel="nofollow noopener">песочнице</a> не могу получить сегментацию, видимо пофиксили переполнение стека.<br>
+Но результат все ещё зависит от типа сборки и типа компилятора.</p>
+<p>Баг ли?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vitvakatu" class="user-link">Илья Богданов</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Mar 16, 2018 6:55 PM">
+            <time itemprop="datePublished" datetime="2018-03-16 18:55:58 +0000">Mar 16, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Добрый день. Очень интересный баг, я был в восторге, когда увидел. Пока что этот способ лидирует в моем личном списке “как сломать компилятор максимально незаметным способом”.</p>
+<p>Если вы написали этот код не намеренно, то я объясню. Типажи <code>From</code> и <code>Into</code>, служащие для конвертации разных типов между собой, очень тесно связаны. Любой тип, реализующий <code>From&lt;SomeType&gt;</code> автоматически создает соответсвующую реализацию <code>Into&lt;SomeType&gt;</code>. Таким образом, реализации <code>From</code> достаточно в 99% случаев. <code>Into</code> рекомендуется реализовывать вручную только в исключительных случаях.</p>
+<p>Если взглянуть на исходники стандартной библиотеки, можно обнаружить вот такой фрагмент:</p>
+<pre><code class="lang-rust">// From implies Into
+#[stable(feature = "rust1", since = "1.0.0")]
+impl&lt;T, U&gt; Into&lt;U&gt; for T where U: From&lt;T&gt;
+{
+    fn into(self) -&gt; U {
+        U::from(self)
+    }
+}
+</code></pre>
+<p>Таким образом, приведенный вами код создает простейшую рекурсию из взаимных вызовов <code>From::from</code> и <code>Into::into</code>. Что особенно смешно, компилятор даже не способен об этом предупредить, потому что названия методов формально не совпадают.</p>
+<p>Различное поведение на разных версиях компилятора, разных каналах и в разных режимах сборки объясняется, очевидно, различными оптимизациями, которые применяет LLVM. Объяснить это поведение без тщательного анализа довольно сложно. И да, я легко получаю segmentation fault в песочнице на стабильном канале в дебаг режиме.</p>
+<p>Сложно назвать это багом компилятора, с его стороны тут никаких проблем нет. Не знаю, можно ли назвать это UB.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="4 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          4
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #67B03A; width: 45px; height: 45px">O</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/oySerg" class="user-link">Sergey Korotaev</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Mar 16, 2018 8:07 PM">
+            <time itemprop="datePublished" datetime="2018-03-16 20:07:25 +0000">Mar 16, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Желая понять <a href="https://rustycrate.ru/%D0%BE%D0%B1%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5/2016/09/20/peano.html">это</a>, начал править код примеров. Моя ошибка в типе аргумента привела к рекурсии, а она к сигментации. Тут более менее понятно.</p>
+<p>Есть ощущение, что в новых версиях сегментацию пофиксили - да здраствует stack overflow.</p>
+<p>Однако в release иногда программа отрабатывает, но дает разные результаты в зависимости от сборки компилятора.</p>
+<p>Замена результата бесконечной рекурсии числом(различным) при оптимизации выглядит как UB.<br>
+Вне зависимости от того породил ли это llvm.<br>
+Впрочем, это лишь моё мнение на данный счет.</p>
+<p>vitvakatu, благодарю за объяснение From/Into. Я это знал, но всё равно приятно. Похоже это то, что называется доброжелательностью сообщества rust :).</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Быстрый getter или странный бэнч - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Быстрый getter или странный бэнч</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Быстрый getter или странный бэнч</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Feb 28, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/sese" class="user-link">Serg</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Feb 28, 2019 11:29 PM">
+            <time itemprop="datePublished" datetime="2019-02-28 23:29:37 +0000">Feb 28, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Товарищи, объясните мне пожалуйста такую вот штуку</p>
+<p>Стелал я бэнчмарки и получил для себя очень странный результат<br>
+<a href="https://play.rust-lang.org/?version=nightly&amp;mode=release&amp;edition=2018&amp;gist=f6ef21667f99a0372d0d20a4096e1da5" rel="nofollow noopener">https://play.rust-lang.org/?version=nightly&amp;mode=release&amp;edition=2018&amp;gist=f6ef21667f99a0372d0d20a4096e1da5</a></p>
+<p>Кто ответит на вопрос?<br>
+Почему чтение поля структуры медленнее чем чтение длины вектора структуры?</p>
+<p>ПС: если надо инлайнить то как? у меня не молучилось</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/sese" class="user-link">Serg</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Feb 28, 2019 11:33 PM">
+            <time itemprop="datePublished" datetime="2019-02-28 23:33:28 +0000">Feb 28, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Как только запостил так сразу и понял в чем беда))</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Mar 1, 2019 12:33 AM">
+            <time itemprop="datePublished" datetime="2019-03-01 00:33:40 +0000">Mar 1, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Кстати, о птичках: в реализации структуры (<code>impl</code>) можно использовать алиас <code>Self</code> не только в позиции возвращаемого значения метода, но и в его теле:</p>
+<pre><code class="lang-rust">impl MyVec {
+    fn new(...) -&gt; Self {
+        Self {...}
+    }
+}
+</code></pre>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Stanislav-Lapata" class="user-link">Stanislav</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Mar 2, 2019 8:47 PM">
+            <time itemprop="datePublished" datetime="2019-03-02 20:47:52 +0000">Mar 2, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Было бы хорошо дать ответ <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=6" title=":slight_smile:" class="emoji" alt=":slight_smile:"><br>
+Я например раст и более низкоуровневые вещи чем ruby плохо знаю и не только я <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=6" title=":slight_smile:" class="emoji" alt=":slight_smile:"><br>
+Спасибо <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=6" title=":slight_smile:" class="emoji" alt=":slight_smile:"></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Mar 2, 2019 11:32 PM">
+            <time itemprop="datePublished" datetime="2019-03-02 23:32:02 +0000">Mar 2, 2019</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Судя по смайлам, всё дело в невнимательности: результат первого теста выдается с размерностью <strong>нано</strong>секунд, а второго — <strong>милли</strong>секунд. Если этого не заметить…</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="1 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          1
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Stanislav-Lapata" class="user-link">Stanislav</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Mar 3, 2019 1:01 AM">
+            <time itemprop="datePublished" datetime="2019-03-03 01:01:59 +0000">Mar 3, 2019</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_5">Replying to #5</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Спасибо за вашу “помощь”, сам разобрался</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_7"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_7" title="Mar 3, 2019 5:05 AM">
+            <time itemprop="datePublished" datetime="2019-03-03 05:05:18 +0000">Mar 3, 2019</time>
+          </a>
+          <span class="post-number">#7</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Это хорошо. А теперь разберитесь еще вот в чем: всё, что я упомянул — невнимательность и текстовые смайлы, касалось ТС, и не было попыткой глумления над любопытствующим рубистом. Поэтому агриться на меня совершенно не нужно.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_8"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vitvakatu" class="user-link">Илья Богданов</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_8" title="Mar 3, 2019 4:03 PM">
+            <time itemprop="datePublished" datetime="2019-03-03 16:03:51 +0000">Mar 3, 2019</time>
+          </a>
+          <span class="post-number">#8</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_6">Replying to #6</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p><a class="mention" href="/u/virtuos86/index.html">@Virtuos86</a> <a class="mention" href="/u/stanislav-lapata/index.html">@Stanislav-Lapata</a></p>
+<p>Уважаемый <a class="mention" href="/u/virtuos86/index.html">@Virtuos86</a> не прав, дело совсем не в размерности (как раз таки по размерности видно потрясающую разницу в производительности). Посмотрите на этот пример: <a href="https://play.rust-lang.org/?version=nightly&amp;mode=release&amp;edition=2018&amp;gist=81e7d1bdf5f4d20af1b71590475e2ac3" rel="nofollow noopener">https://play.rust-lang.org/?version=nightly&amp;mode=release&amp;edition=2018&amp;gist=81e7d1bdf5f4d20af1b71590475e2ac3</a></p>
+<p>Подсказка - with_capacity не устанавливает длину вектора.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_9"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #3AB5E6; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Virtuos86" class="user-link">Vitaly</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_9" title="Mar 3, 2019 7:18 PM">
+            <time itemprop="datePublished" datetime="2019-03-03 19:18:07 +0000">Mar 3, 2019</time>
+          </a>
+          <span class="post-number">#9</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Большое спасибо за наводку. Я действительно не обратил внимание на это обстоятельство.<br>
+Но, как справедливо заметили выше, было бы неплохо объяснить в чём тут собака зарыта.<br>
+Зайду издалека. Поскольку Rust хоть и высокоуровневый язык, но всё же язык системного программирования, даже не опускаясь, благодаря его высокоуровневым абстракциям, до ручного выделения памяти, мы можем в некоторых случаях гибко выбирать, сколько памяти выделять при создании экземпляров структур данных, если эти типы данных контейнеры, хранящие в себе другие данные.<br>
+Как можно вкратце ознакомиться в той части стандартной документации, <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html" rel="nofollow noopener">которая посвящена такой структуре данных, как вектор Vec</a>, вектор имеет две таких смежных характеристики, как длина <code>length</code> и емкость <code>capacity</code>.<br>
+Первая указывает, сколько элементов выбранного типа хранится в векторе <em>на текущий момент</em>, вторая показывает, сколько элементов в нем вообще может храниться без переаллокации. Емкость равняется произведению размера типа элементов, которые в нем хранятся, на Н-ое их количество и определяет количество памяти, которое выделено вектору для хранения данных. Что дает емкость? Она позволяет избавиться от переаллокаций. Если длина вектора превысит его емкость, соответственно вектор не сможет разместить элементы в выделенном ему пространстве и запросит другой, более емкий кусок памяти, в котором по новой переразместятся его данные. Это и называется переаллокацией, когда уже существующие данные меняют свою прописку. Процесс этот, разумеется, небыстрый, и его желательно избегать. Как это можно сделать? Заранее определить, какая емкость потребуется вектору и выделить память под нее единоразово. Эту возможность и дает метод-конструктор <code>Vec::with_capacity</code>. Что важно понимать, так это то, что в этом случае создается вектор указанной емкости, но <strong>нулевой</strong> длины.<br>
+Почему же бенчмарк ввел в заблуждение?<br>
+Обратим внимание на первый цикл:</p>
+<pre><code class="lang-rust">for _ in 0..iters {
+        ...
+        for i in 0..v.len() {
+</code></pre>
+<p><code>v.len()</code> раскрывается в <code>v.inner.len()</code>. Поскольку вектор изначально пустой (см. выше), то внутренний цикл будет выполняться 0 раз.<br>
+Во втором же примере</p>
+<pre><code class="lang-rust">for _ in 0..iters {
+    ...
+    for i in 0..v.other_len() {
+</code></pre>
+<p><code>v.other_len()</code> раскрывается в <code>v.len</code>, и внутренний цикл будет постоянно “бегать” от 0 до 1000, таким образом бенчмарк измеряет неидентичные с алгоритмической точки зрения куски кода и, следовательно, дает неверный результат.</p>
+<p>cast <a class="mention" href="/u/stanislav-lapata/index.html">@Stanislav-Lapata</a><br>
+// Даже здесь умудрился напутать с выводами, но исправился.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_10"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #F0A523; width: 45px; height: 45px">S</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/sese" class="user-link">Serg</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_10" title="Mar 3, 2019 7:36 PM">
+            <time itemprop="datePublished" datetime="2019-03-03 19:36:20 +0000">Mar 3, 2019</time>
+          </a>
+          <span class="post-number">#10</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_8">Replying to #8</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>да все верно. в итоге в одном случае замерял время по вектору с длиной 0</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

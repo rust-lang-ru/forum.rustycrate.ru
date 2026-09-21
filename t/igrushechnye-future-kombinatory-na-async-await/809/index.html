@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Игрушечные Future комбинаторы на async/await - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/ssylki/7/index.html">Ссылки</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Игрушечные Future комбинаторы на async/await</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Игрушечные Future комбинаторы на async/await</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/ssylki/7" class="category-badge" style="--cat-color: #0E76BD"><span class="category-bullet" aria-hidden="true"></span>Ссылки</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Feb 21, 2019</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Feb 21, 2019 6:30 PM">
+            <time itemprop="datePublished" datetime="2019-02-21 18:30:02 +0000">Feb 21, 2019</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="onebox whitelistedgeneric">
+  <header class="source">
+      <img src="https://forum.rustycrate.ru/uploads/default/original/1X/a70ab5d077374748901898cfcd9c7a09b8a303a9.png" class="site-icon" width="192" height="192">
+      <a href="https://www.reddit.com/r/rust/comments/at6gh7/toy_future_combinators_with_asyncawait_syntax/" target="_blank" rel="nofollow noopener">reddit</a>
+  </header>
+  <article class="onebox-body">
+    <img src="https://forum.rustycrate.ru/uploads/default/original/1X/274c9c9adff8fd4d9f299a42ed86c864b9f48024.jpeg" class="thumbnail onebox-avatar" width="400" height="400">
+
+<h3><a href="https://www.reddit.com/r/rust/comments/at6gh7/toy_future_combinators_with_asyncawait_syntax/" target="_blank" rel="nofollow noopener">r/rust - Toy Future combinators with async/await syntax</a></h3>
+
+<p>0 votes and 0 comments so far on Reddit</p>
+
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>Все мы знакомы с Future комбинаторами и их запутанным кодом. Я могу только представить, как новички реагируют на исходники <code>FutureExt::then</code> :</p>
+<pre><code class="lang-auto">trait FutureExt
+{
+    fn then&lt;...&gt;(self, f) -&gt; Then&lt;...&gt;
+    {
+        Then::new(self, f)
+    }
+}
+
+impl Then
+{
+    fn poll(self, waker) -&gt; Poll&lt;...&gt; {
+        self.as_mut().chain().poll(waker, |output, f| f(output))
+    }
+}
+
+impl Chain
+{
+    fn poll(self, waker, f) -&gt; Poll&lt;...&gt;
+    {
+        let mut f = Some(f);
+
+        // Safe to call `get_unchecked_mut` because we won't move the futures.
+        let this = unsafe { Pin::get_unchecked_mut(self) };
+
+        loop {
+            let (output, data) = match this {
+                Chain::First(fut1, data) =&gt; {
+                    match unsafe { Pin::new_unchecked(fut1) }.poll(waker) {
+                        Poll::Pending =&gt; return Poll::Pending,
+                        Poll::Ready(output) =&gt; (output, data.take().unwrap()),
+                    }
+                }
+                Chain::Second(fut2) =&gt; {
+                    return unsafe { Pin::new_unchecked(fut2) }.poll(waker);
+                }
+                Chain::Empty =&gt; unreachable!()
+            };
+
+            *this = Chain::Empty; // Drop fut1
+            let fut2 = (f.take().unwrap())(output, data);
+            *this = Chain::Second(fut2)
+        }
+    }
+}
+</code></pre>
+<p>Я понимаю причины, по которым комбинаторы были так написаны. И все же кода в них слишком много, чтобы ухватить суть сходу.</p>
+<p>Сравните с переписанным вариантом с использованием async/await синтаксиса:</p>
+<pre><code class="lang-auto">pub async fn then&lt;...&gt;(future, f) -&gt; ...
+{
+    let future_result = await!(future);
+    let new_future = f(future_result);
+    await!(new_future)
+}
+</code></pre>
+<p>Я надеюсь мой проект даст вам понимание того, как устроены комбинаторы и как они могли бы быть написаны (цель проекта как <a href="https://github.com/polachok/fahrenheit" rel="nofollow noopener">fahrenheit</a> для futures executor).</p>
+<p>Вот ссылка на проект <a href="https://github.com/kpp/futures-async-combinators" rel="nofollow noopener">futures-async-combinators</a>, жду пул реквестов!</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/Cergo" class="user-link">Cergo</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Feb 22, 2019 4:29 AM">
+            <time itemprop="datePublished" datetime="2019-02-22 04:29:04 +0000">Feb 22, 2019</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>где почитать про синтаксис &lt;…&gt;  ?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">V</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/vitvakatu" class="user-link">Илья Богданов</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Feb 22, 2019 9:46 AM">
+            <time itemprop="datePublished" datetime="2019-02-22 09:46:09 +0000">Feb 22, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Это не синтаксис, просто пропущены фрагменты кода</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="3 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          3
+        </span>
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

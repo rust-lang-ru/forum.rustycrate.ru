@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Futures: низкая производительность однопоточного executor&#39;a - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Futures: низкая производительность однопоточного executor&#39;a</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Futures: низкая производительность однопоточного executor&#39;a</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Dec 8, 2018</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Dec 8, 2018 7:50 AM">
+            <time itemprop="datePublished" datetime="2018-12-08 07:50:35 +0000">Dec 8, 2018</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>С помощью футур, решал задачу загрузки данных в микроконтроллер и параллельного опроса его состояния. И первое и второе это две отдельные задачи которые выполняет<br>
+<a href="https://docs.rs/tokio/0.1.13/tokio/runtime/current_thread/struct.Runtime.html" rel="nofollow noopener">tokio::runtime::current_thread::Runtime</a></p>
+<p>Так вот, если каждый io оборачивать в <a href="https://docs.rs/futures/0.1.25/futures/future/struct.FutureResult.html" rel="nofollow noopener">FutureResult</a>, то производительность загрузки данных в микроконтроллер была низкой.<br>
+Здесь критерием производительности был тот факт - что микроконтроллер “останавливался” когда данные вовремя не поступали, когда внутренний буфер оказывался пустым.</p>
+<p>Я стал постепенно группировать io - увеличивая долю <code>std::io::Result</code> и уменьшая <code>FutureResult</code> в коде, пока не добился приемлемой производительности.</p>
+<p>код который работает медленно:</p>
+<pre><code class="lang-auto">pub fn load&lt;'a&gt;(
+    cnc: Rc&lt;RefCell&lt;Controller&gt;&gt;,
+    blocks: Option&lt;Blocks&gt;,
+) -&gt; impl Future&lt;Item = Option&lt;Blocks&gt;, Error = Error&gt; + 'a {
+    enum LocalErrorKind {
+        Empty,
+        Cnc(Error),
+    }
+    result(blocks.ok_or(LocalErrorKind::Empty))
+        .and_then(move |blocks| {
+            loop_fn(iter_ok::&lt;_, ()&gt;(blocks).into_future(), move |future| {
+                let cnc_clone = cnc.clone();
+                future
+                    .map_err(|_| LocalErrorKind::Empty)
+                    .and_then(|(block, stream)| {
+                        block
+                            .ok_or(LocalErrorKind::Empty)
+                            .map(move |block| (block, stream))
+                    }).and_then(move |(block, stream)| {
+                        let r = cnc_clone.borrow_mut().raw_load(&amp;block);
+                        result(r).then(move |r| match r {
+                            Ok(_) =&gt; Ok(Loop::Continue(stream.into_future())),
+                            Err(Error(ErrorKind::DeviceBusy, _)) =&gt; {
+                                let blocks: Blocks = stream.collect().wait().unwrap().into();
+                                info!(
+                                    "Out of controller memory, loading will be delayed, left {}",
+                                    blocks.len()
+                                );
+                                Ok(Loop::Break(Some(blocks)))
+                            }
+                            Err(err) =&gt; Err(LocalErrorKind::Cnc(err)),
+                        })
+                    })
+            })
+        }).or_else(|err| match err {
+            LocalErrorKind::Empty =&gt; Ok(None),
+            LocalErrorKind::Cnc(err) =&gt; Err(err),
+        })
+}
+
+pub fn run_blocks(
+    cnc: Rc&lt;RefCell&lt;Controller&gt;&gt;,
+    blocks: Blocks,
+) -&gt; impl Future&lt;Item = (), Error = Error&gt; {
+    enum LocalErrorKind {
+        Timer(tokio::timer::Error),
+        Cnc(Error),
+        Stopped,
+    }
+    let cnc_start = cnc.clone();
+    let cnc_pre_load = cnc.clone();
+    let cnc_load = cnc.clone();
+    result(
+        cnc.borrow_mut()
+            .free()
+            .map_err(|err| LocalErrorKind::Cnc(err)),
+    ).and_then(move |_| load(cnc_pre_load, Some(blocks)).map_err(|err| LocalErrorKind::Cnc(err)))
+    .and_then(move |blocks| {
+        let r = cnc_start.borrow_mut().start();
+        r.map_err(|err| LocalErrorKind::Cnc(err))
+            .map(move |_| blocks)
+    }).and_then(move |blocks| {
+        loop_fn(blocks, move |blocks| {
+            let cnc_load_clone = cnc_load.clone();
+            Interval::new_interval(Duration::from_secs(1))
+                .into_future()
+                .map_err(|(err, _)| LocalErrorKind::Timer(err))
+                .and_then(move |_| {
+                    load(cnc_load_clone, blocks).map_err(|err| LocalErrorKind::Cnc(err))
+                }).and_then(|blocks| match blocks {
+                    None =&gt; Ok(Loop::Break(())),
+                    e @ _ =&gt; Ok(Loop::Continue(e)),
+                })
+        })
+    }).or_else(|err| match err {
+        LocalErrorKind::Cnc(err) =&gt; Err(err),
+        LocalErrorKind::Timer(err) =&gt; {
+            error!("Timer error: {}", err);
+            Ok(())
+        }
+        LocalErrorKind::Stopped =&gt; {
+            error!("Controller stopped, load blocks is not necessary");
+            Ok(())
+        }
+    })
+}
+</code></pre>
+<p>прошу не цепляться к <code>let blocks: Blocks = stream.collect().wait().unwrap().into();</code>, было и по другому но с производительностью те-же проблемы.</p>
+<p>теперь код который имеет приемлемую производительность:</p>
+<pre><code class="lang-auto">pub fn full_load(
+    cnc: &amp;mut Controller,
+    blocks: Option&lt;Blocks&gt;,
+) -&gt; Result&lt;(Option&lt;Blocks&gt;, Duration), Error&gt; {
+    let mut duration = Duration::new(0, 0);
+    if let Some(mut blocks) = blocks {
+        let mut counter = 0;
+        for block in blocks.iter() {
+            match cnc.raw_load(&amp;block) {
+                Ok(_) =&gt; {
+                    counter += 1;
+                    duration = duration
+                        .checked_add(block.runtime())
+                        .unwrap_or(Duration::from_secs(std::u64::MAX));
+                }
+                Err(Error(ErrorKind::DeviceBusy, _)) =&gt; {
+                    debug!(
+                        "Loaded {}-blocks - {:?}, loading will be delayed",
+                        counter, duration
+                    );
+                    break;
+                }
+                Err(err) =&gt; {
+                    return Err(err);
+                }
+            }
+        }
+
+        blocks.remove_front(counter);
+        if blocks.is_empty() {
+            Ok((None, duration))
+        } else {
+            Ok((Some(blocks), duration))
+        }
+    } else {
+        Ok((None, duration))
+    }
+}
+
+pub fn run_blocks(
+    cnc: Rc&lt;RefCell&lt;Controller&gt;&gt;,
+    blocks: Blocks,
+) -&gt; impl Future&lt;Item = (), Error = Error&gt; {
+    enum LocalErrorKind {
+        Timer(tokio::timer::Error),
+        Cnc(Error),
+        Stopped,
+    }
+    let cnc_load = cnc.clone();
+    result({
+        let mut cnc = cnc.borrow_mut();
+        cnc.deref_mut()
+            .free()
+            .and_then(|_| full_load(cnc.deref_mut(), Some(blocks)))
+            .and_then(|load| cnc.deref_mut().start().map(|_| load))
+            .map_err(|err| LocalErrorKind::Cnc(err))
+    })
+    .and_then(move |loaded| {
+        loop_fn(loaded, move |(blocks, runtime)| {
+            let now = Instant::now();
+            let cnc_load_clone = cnc_load.clone();
+            let sleep = runtime / 2;
+            debug!("Load will be delay: {:?}", sleep);
+            Delay::new(Instant::now() + sleep)
+                .map_err(|err| LocalErrorKind::Timer(err))
+                .and_then(move |_| {
+                    let mut cnc = cnc_load_clone.borrow_mut();
+                    cnc.deref_mut()
+                        .get_state()
+                        .map_err(|err| LocalErrorKind::Cnc(err))
+                        .and_then(|state| {
+                            if state.is_run() {
+                                Ok(())
+                            } else {
+                                Err(LocalErrorKind::Stopped)
+                            }
+                        })
+                        .and_then(|_| {
+                            full_load(cnc.deref_mut(), blocks)
+                                .map_err(|err| LocalErrorKind::Cnc(err))
+                        })
+                        .map(|(blocks, time)| match blocks {
+                            None =&gt; {
+                                debug!("All block is loaded");
+                                Loop::Break(())
+                            }
+                            e @ _ =&gt; Loop::Continue((
+                                e,
+                                runtime
+                                    .checked_add(time)
+                                    .or(Some(Duration::from_secs(std::u64::MAX)))
+                                    .and_then(|sum| sum.checked_sub(now.elapsed()))
+                                    .unwrap_or(Duration::new(0, 0)),
+                            )),
+                        })
+                })
+        })
+    })
+    .or_else(|err| match err {
+        LocalErrorKind::Cnc(err) =&gt; Err(err),
+        LocalErrorKind::Timer(err) =&gt; {
+            error!("Timer error: {}", err);
+            Ok(())
+        }
+        LocalErrorKind::Stopped =&gt; {
+            error!("Controller stopped, load blocks is not necessary");
+            Ok(())
+        }
+    })
+}
+</code></pre>
+<p>Может кто-нибудь это прокомментировать?</p>
+<p>И по поводу стратегии выполнения <a href="https://docs.rs/futures/0.1.25/futures/future/struct.AndThen.html" rel="nofollow noopener">AndThen&lt;A, B, F&gt;</a>, я правильно понимаю что если <code>A.poll()</code> вернула <code>Async::Ready()</code>, тут-же будет вызвано <code>B.poll()</code> без передачи управления executor’у?<br>
+<a href="https://github.com/rust-lang-nursery/futures-rs/blob/0.1/src/future/chain.rs#L20L48" rel="nofollow noopener">код</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="2 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          2 replies
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Dec 10, 2018 9:06 PM">
+            <time itemprop="datePublished" datetime="2018-12-10 21:06:11 +0000">Dec 10, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="chessnokov" data-post="1" data-topic="686">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chessnokov/48/164_2.png" class="avatar"> chessnokov:</div>
+<blockquote>
+<p>И по поводу стратегии выполнения <a href="https://docs.rs/futures/0.1.25/futures/future/struct.AndThen.html" rel="noopener nofollow ugc">AndThen&lt;A, B, F&gt; </a>, я правильно понимаю что если <code>A.poll()</code> вернула <code>Async::Ready()</code> , тут-же будет вызвано <code>B.poll()</code> без передачи управления executor’у?</p>
+</blockquote>
+</aside>
+<p>Будет вызван <code>match f(a_result, data)? {</code> без передачи управления executor’у</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Dec 10, 2018 9:43 PM">
+            <time itemprop="datePublished" datetime="2018-12-10 21:43:52 +0000">Dec 10, 2018</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Сложно так сходу сказать. Подскажи, верно ли я понимаю:</p>
+<p>Медленный случай:</p>
+<pre><code class="lang-auto">Tick(1 second) -&gt; 
+  future::loop for block in blocks -&gt;
+    controller.raw_load(block) while !DeviceBusy
+    blocks.pop_front()
+</code></pre>
+<p>Быстрый случай:</p>
+<pre><code class="lang-auto">Tick(1 second) -&gt;
+  count = 0
+  for block in blocks
+    controller.raw_load(block) while !DeviceBusy
+    count += 1
+  blocks.pop_front(count)
+</code></pre>
+<p>Если есть возможность портировать код на десктом, то можно посмотреть на кол-во событий tokio. Там дофига трейсов внутри. Ну и нам было бы неплохо посмотреть на логи.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">C</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/chessnokov" class="user-link">Andrey Chesnokov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Dec 10, 2018 10:35 PM">
+            <time itemprop="datePublished" datetime="2018-12-10 22:35:41 +0000">Dec 10, 2018</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <blockquote>
+<p>Будет вызван  <code>match f(a_result, data)? {</code>  без передачи управления executor’у</p>
+</blockquote>
+<p>Здесь нужен все-таки какой-то выбор стратегии - часто переключатся между задачами плохо, потому-что происходит переключение контекста, но и не переключатся тоже плохо потомучто растет очередь входных событий</p>
+<blockquote>
+<p>Медленный случай:</p>
+</blockquote>
+<p>да в принципе все так, небольшая поправка:</p>
+<pre><code class="lang-auto">Tick(1 second) -&gt; 
+  future::loop for block in blocks -&gt;
+    future::result controller.raw_load(block) while !DeviceBusy
+    blocks.pop_front()
+</code></pre>
+<blockquote>
+<p>Если есть возможность портировать код на десктом, то можно посмотреть на кол-во событий tokio. Там дофига трейсов внутри. Ну и нам было бы неплохо посмотреть на логи.</p>
+</blockquote>
+<p>Портировать можно если написать заглушку.</p>
+<blockquote>
+<p>Ну и нам было бы неплохо посмотреть на логи.</p>
+</blockquote>
+<p>речь о perf?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_5"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_5" title="Dec 10, 2018 10:38 PM">
+            <time itemprop="datePublished" datetime="2018-12-10 22:38:28 +0000">Dec 10, 2018</time>
+          </a>
+          <span class="post-number">#5</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_4">Replying to #4</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="chessnokov" data-post="4" data-topic="686">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chessnokov/48/164_2.png" class="avatar"> chessnokov:</div>
+<blockquote>
+<p>речь о perf?</p>
+</blockquote>
+</aside>
+<p>Речь идет о RUST_LOG=tokio=trace ./a.out. Ну или как-то так, уже забыл синтаксис. <a href="https://docs.rs/env_logger/0.6.0/env_logger/" class="inline-onebox" rel="noopener nofollow ugc">env_logger - Rust</a></p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_6"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #E8611A; width: 45px; height: 45px">K</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/kpp" class="user-link">Roman Proskuryakov</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_6" title="Dec 10, 2018 10:40 PM">
+            <time itemprop="datePublished" datetime="2018-12-10 22:40:01 +0000">Dec 10, 2018</time>
+          </a>
+          <span class="post-number">#6</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="chessnokov" data-post="1" data-topic="686">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/user_avatar/forum.rustycrate.ru/chessnokov/48/164_2.png" class="avatar"> chessnokov:</div>
+<blockquote>
+<p>Здесь критерием производительности был тот факт - что микроконтроллер “останавливался” когда данные вовремя не поступали, когда внутренний буфер оказывался пустым.</p>
+</blockquote>
+</aside>
+<p>А можно подробнее? Я что-то не допёр)</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>

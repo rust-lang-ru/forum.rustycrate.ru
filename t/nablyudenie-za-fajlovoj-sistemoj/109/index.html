@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Наблюдение за файловой системой - Форум rust-lang.ru</title>
+  
+  <meta name="description" content="Русскоязычный форум языка программирования Rust">
+  
+  
+  <link rel="icon" href="/uploads/default/original/1X/f1e698075137f6d46567b9f9d9a79e7076a7ff1e.png">
+  
+  <link rel="stylesheet" href="/assets/css/archive.css">
+  <link rel="stylesheet" href="/assets/css/topic-list.css">
+  <link rel="stylesheet" href="/assets/css/topic.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+</head>
+<body class="topic-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/index.html" class="site-logo">
+        
+        <img src="/uploads/default/original/1X/83fa698b6f9e229410782ea0eb90eee0211a1158.png" alt="Форум rust-lang.ru" class="logo-img">
+        
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="site-nav" role="navigation">
+        <a href="/index.html" class="nav-link">Latest</a>
+        <a href="/categories/index.html" class="nav-link">Categories</a>
+        <a href="/search/index.html" class="nav-link">Search</a>
+      </nav>
+    </div>
+  </header>
+
+  
+  <nav class="breadcrumbs" aria-label="Breadcrumbs">
+    <div class="breadcrumbs-inner">
+      <a href="/index.html">Home</a>
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <a href="/c/teh-voprosy/10/index.html">Тех.вопросы</a>
+        
+      
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        
+        <span class="breadcrumb-current" aria-current="page">Наблюдение за файловой системой</span>
+        
+      
+    </div>
+  </nav>
+  
+
+  
+
+  <main class="site-main">
+    <div class="main-inner" data-pagefind-body>
+      <article class="topic" itemscope itemtype="http://schema.org/DiscussionForumPosting">
+  <header class="topic-header">
+    <h1 class="topic-title" itemprop="name">Наблюдение за файловой системой</h1>
+
+    <div class="topic-meta">
+      
+        <a href="/c/teh-voprosy/10" class="category-badge" style="--cat-color: #3AB54A"><span class="category-bullet" aria-hidden="true"></span>Тех.вопросы</a>
+      
+
+      
+
+      <div class="topic-stats">
+        <span class="stat" title="Created">Jul 26, 2016</span>
+        
+        
+      </div>
+    </div>
+  </header>
+
+  <div class="post-stream">
+    
+    <div class="post" id="post_1"
+         itemprop="articleBody"
+         >
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">P</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/petia2013" class="user-link">Petia2013</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_1" title="Jul 26, 2016 8:53 AM">
+            <time itemprop="datePublished" datetime="2016-07-26 08:53:41 +0000">Jul 26, 2016</time>
+          </a>
+          <span class="post-number">#1</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Привет, может немного не по адресу, но вроде тут очень разная аудитория…<br>
+Мне вот интересно в природе существуют нормальные либы (высокоуровневае) для отслеживания изменения файлов?</p>
+<p>Когда-то долго пытался добиться нужного результата на C# (file system watcher). В итоге из багов и лимитов так и не вылез. Потом другие вотчеры смотрел… Вот недавно решил посмотреть что там в rust (rsnotify) - те же грабли.</p>
+<p>Я так понял что задача не решима на уровне системного апи и решается только полингом.<br>
+Может я чего-то не понимаю?</p>
+<p>Задача вроде бы казалось банальная:<br>
+Допустим есть некий конфиг. Из него выдираются пути к файлам(потенциально много, допустим несколько тысяч).<br>
+При изменении файла - производится некой действие.<br>
+Все что хочется - это корректной обработки исключений!!! И тут начинается…<br>
+В конфиге стоит путь: D:/test/test.txt<br>
+Я переименовываю test в test2 - в итоге новый путь казалось бы уже не имеет отношения к делу, но файл продолжает мониториться…</p>
+<p>Как я пытался решит проблему:</p>
+<ol>
+<li>тупо ставить мониторинг на корень, но так вообще ахтунг по перформэнсу особенно если на системный диск поставить вотчер <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=5" title=":slight_smile:" class="emoji" alt=":slight_smile:">
+</li>
+<li>по списку фалов строить дерево(аля shadow file system) и вешать витчеры по какому то хитрому механизму на его ноды.</li>
+</ol>
+<p>2-й вариант вроде бы более менее приемлемый но куча нюансов:<br>
+а. изначальный список(по которому строится дерево) может часто меняться<br>
+б. дерево должно поддерживать многопоточность (в купе с 1-м тоже по перформэнсу бьёт)<br>
+в. есть вроде лимит в некоторых ОС на кол-во отрытых файловых дескрипторов (то есть в какой то момент все мот перестать работать)<br>
+г. дерево все равно не защищает от потенциального затыка по перформэнсу(в какой то ноде мот быть большое число файлов с которыми работают другие программы).</p>
+<p>Я вот только не понимаю как с этим борются в IDE. Что если у меня проект на 100500 файлов все тупо полится будут?</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_2"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #BD78D7; width: 45px; height: 45px">Q</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/QuarkDoe" class="user-link">Quark Doe</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_2" title="Jul 20, 2018 5:39 PM">
+            <time itemprop="datePublished" datetime="2018-07-20 17:39:44 +0000">Jul 20, 2018</time>
+          </a>
+          <span class="post-number">#2</span>
+        </div>
+      </div>
+
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="quote no-group" data-username="petia2013" data-post="1" data-topic="109">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forum.rustycrate.ru/letter_avatar_proxy/v4/letter/p/9de053/48.png" class="avatar"> petia2013:</div>
+<blockquote>
+<p>При изменении файла - производится некой действие.<br>
+Все что хочется - это корректной обработки исключений!!! И тут начинается…<br>
+В конфиге стоит путь: D:/test/test.txt<br>
+Я переименовываю test в test2 - в итоге новый путь казалось бы уже не имеет отношения к делу, но файл продолжает мониториться…</p>
+</blockquote>
+</aside>
+<p>Под Виндой? Есть же стандартный виндовозный api. Чему бы самому не сделать к нему биндинги, если их ещё нет.<br>
+И использовать напрямую.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstchangenotificationa">
+  <header class="source">
+
+      <a href="https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstchangenotificationa" target="_blank" rel="noopener nofollow ugc">learn.microsoft.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/362;"><img src="https://learn.microsoft.com/en-us/media/open-graph-image.png" class="thumbnail" width="690" height="362"></div>
+
+<h3><a href="https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstchangenotificationa" target="_blank" rel="noopener nofollow ugc">FindFirstChangeNotificationA function (fileapi.h) - Win32 apps</a></h3>
+
+  <p>Creates a change notification handle and sets up initial change notification filter conditions. (ANSI)</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+<p>
+FILE_NOTIFY_CHANGE_FILE_NAME</p>
+      </div>
+
+      <div class="post-footer">
+        
+        <span class="post-likes" title="2 likes">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 14s-5.5-3.5-5.5-7A3.5 3.5 0 0 1 8 4a3.5 3.5 0 0 1 5.5 3c0 3.5-5.5 7-5.5 7z"/>
+          </svg>
+          2
+        </span>
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_3"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #47BDB5; width: 45px; height: 45px">P</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/petia2013" class="user-link">Petia2013</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_3" title="Apr 8, 2019 11:50 AM">
+            <time itemprop="datePublished" datetime="2019-04-08 11:50:34 +0000">Apr 8, 2019</time>
+          </a>
+          <span class="post-number">#3</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_2">Replying to #2</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <p>Позволю себе продолжить беседу <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"><br>
+Если я не ошибаюсь тот же сишарповский вотчер по сути тоже биндинг к винапи. Проблема в том что ему нужна так сказать точка(директория) от которой он же работает. А в том как я себе такой вотчер представляю, этой точки быть не может(наверное можно сказать что это не вотчер файлов а вотчер путей). Даже для вотчера с одним путем/файлом:</p>
+<pre><code>watcher.add(["D:/test/test.txt"]);
+</code></pre>
+<p>Допустим файл такой существует.<br>
+Переименовываем директорию test/анмаунтим диск D - вотчер сигнализирует что файл по такому пути отвалился.<br>
+Делаем обратное действие - вотчер сигнализирует что файл доступен.</p>
+<p>Как я понял чтоб сделать такое надо драйвер свой писать и приуныл <img src="https://forum.rustycrate.ru/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<blockquote>
+<p>Под Виндой?</p>
+</blockquote>
+<p>Не, это просто я видусятник. Так кросплатформ хотелось.</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+        <span class="post-replies" title="1 replies">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M6 9l-4 4V1h12v8H6z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          1 reply
+        </span>
+        
+      </div>
+    </div>
+    
+    <div class="post" id="post_4"
+         itemprop="comment"
+         itemscope itemtype="http://schema.org/Comment">
+
+      <div class="post-header">
+        <div class="post-avatar">
+          <span class="avatar avatar--letter" style="--avatar-color: #97BF64; width: 45px; height: 45px">P</span>
+        </div>
+        <div class="post-author">
+          <span class="post-username" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <a href="/u/poor" class="user-link">poor</a>
+          </span>
+          
+        </div>
+        <div class="post-date">
+          <a href="#post_4" title="Apr 25, 2019 1:46 PM">
+            <time itemprop="datePublished" datetime="2019-04-25 13:46:59 +0000">Apr 25, 2019</time>
+          </a>
+          <span class="post-number">#4</span>
+        </div>
+      </div>
+
+      
+      <div class="post-reply-indicator">
+        <a href="#post_3">Replying to #3</a>
+      </div>
+      
+
+      <div class="post-body cooked" itemprop="text">
+        <aside class="onebox whitelistedgeneric">
+  <header class="source">
+      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" width="32" height="32">
+      <a href="https://github.com/notify-rs/notify" target="_blank" rel="nofollow noopener">GitHub</a>
+  </header>
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/402;"><img src="https://repository-images.githubusercontent.com/27861978/7c9d6880-d9a6-11e9-80ca-ec8d153d0da5" class="thumbnail" width="690" height="402"></div>
+
+<h3><a href="https://github.com/notify-rs/notify" target="_blank" rel="nofollow noopener">notify-rs/notify</a></h3>
+
+<p>🔭 Cross-platform filesystem notification library for Rust.  - notify-rs/notify</p>
+
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+
+<p>Если уж надо смотреть за несуществующими файлами, то смотри корень диска и фильтруй события:</p>
+<pre><code>        Ok(notify::RawEvent {
+            path: Some(path),
+            op: Ok(op),
+            cookie,
+        }) =&gt; {
+            if path.starts_with("D:/test/") {
+                ...
+            }
+        }
+</code></pre>
+<p>Ты хочешь по сути того же самого, но зачем то в ядре. Работает такой вотчер очень быстро. У меня в тесте копирование тысяч мелких файлов на SSD съедает по мониторингу до 1% CPU.</p>
+<p>Также рекомендую почитать ответ:<br>
+<aside class="onebox stackexchange">
+  <header class="source">
+      <a href="https://unix.stackexchange.com/questions/154004/can-inotify-be-used-to-watch-for-a-specific-file-to-be-created-without-monitorin/312359#312359" target="_blank" rel="nofollow noopener">unix.stackexchange.com</a>
+  </header>
+  <article class="onebox-body">
+      <a href="https://unix.stackexchange.com/users/104210/dylan-frese" target="_blank" rel="nofollow noopener">
+    <img alt="Dylan Frese" src="https://forum.rustycrate.ru/uploads/default/original/1X/f408ce29f02073f2bcf805a5f8eb5108f82f539c.jpeg" class="thumbnail onebox-avatar" width="128" height="128">
+  </a>
+<h4>
+  <a href="https://unix.stackexchange.com/questions/154004/can-inotify-be-used-to-watch-for-a-specific-file-to-be-created-without-monitorin/312359#312359" target="_blank" rel="nofollow noopener">Can inotify be used to watch for a specific file to be created without monitoring the entire directory?</a>
+</h4>
+
+<div class="tags">
+  <strong>linux, inotify</strong>
+</div>
+
+<div class="date">
+  
+  answered by
+  <a href="https://unix.stackexchange.com/users/104210/dylan-frese" target="_blank" rel="nofollow noopener">
+    Dylan Frese
+  </a>
+  on <a href="https://unix.stackexchange.com/questions/154004/can-inotify-be-used-to-watch-for-a-specific-file-to-be-created-without-monitorin/312359#312359" target="_blank" rel="nofollow noopener">08:38AM - 26 Sep 16 UTC</a>
+</div>
+
+  </article>
+  <div class="onebox-metadata">
+    
+    
+  </div>
+  <div style="clear: both"></div>
+</aside>
+</p>
+      </div>
+
+      <div class="post-footer">
+        
+        
+      </div>
+    </div>
+    
+  </div>
+
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Archive of <strong>Форум rust-lang.ru</strong> &mdash; Generated as a static archive</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/archive.js"></script>
+</body>
+</html>
